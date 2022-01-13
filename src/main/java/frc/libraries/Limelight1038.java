@@ -100,6 +100,10 @@ public class Limelight1038 {
         return y;
     }
 
+    public void limelightDistance() {
+        //gets the angle the limelight is at relative to the hub triangle doohicky
+    }
+
     public void changeLEDStatus(LEDStates state) {
         table.getEntry("ledMode").setDouble(state.value);
     }
