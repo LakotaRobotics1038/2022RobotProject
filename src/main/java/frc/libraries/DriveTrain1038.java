@@ -4,11 +4,12 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
+
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-import frc.libraries.TalonSRX1038;
+import frc.libraries.TalonFX1038;
 
 public class DriveTrain1038 implements Subsystem {
     public enum DriveModes {
@@ -29,10 +30,10 @@ public class DriveTrain1038 implements Subsystem {
     //Change these numbers for each new robot       ^
 
     
-    final TalonSRX1038 leftFrontTalon = new TalonSRX1038(LEFT_FRONT_PORT);
-    final TalonSRX1038 rightFrontTalon = new TalonSRX1038(RIGHT_FRONT_PORT);
-    final TalonSRX1038 leftBackTalon = new TalonSRX1038(LEFT_BACK_PORT); 
-    final TalonSRX1038 rightBackTalon = new TalonSRX1038(RIGHT_BACK_PORT); 
+    final TalonFX1038 leftFrontTalon = new TalonFX1038(LEFT_FRONT_PORT);
+    final TalonFX1038 rightFrontTalon = new TalonFX1038(RIGHT_FRONT_PORT);
+    final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT); 
+    final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT); 
 
 
     public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(LOW_GEAR_PORT, HIGH_GEAR_PORT);
