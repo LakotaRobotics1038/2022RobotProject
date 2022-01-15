@@ -4,16 +4,18 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
+
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-import frc.libraries.CANSpark1038;
+import frc.libraries.TalonFX1038;
 
 public class DriveTrain1038 implements Subsystem {
     public enum DriveModes {
         tankDrive, singleArcadeDrive, dualArcadeDrive
-    };
+    }
+
 
     public DriveModes currentDriveMode = DriveModes.dualArcadeDrive;
 
@@ -21,23 +23,23 @@ public class DriveTrain1038 implements Subsystem {
     public final double WHEEL_DIAMETER = 4;
     private final int HIGH_GEAR_PORT = 3;
     private final int LOW_GEAR_PORT = 2;
-    private final static int RIGHT_FRONT_PORT = 53;
-    private final static int RIGHT_BACK_PORT = 54;
-    private final static int LEFT_FRONT_PORT = 51;
-    private final static int LEFT_BACK_PORT = 52;
+    private final static int RIGHT_FRONT_PORT = 0;
+    private final static int RIGHT_BACK_PORT = 0;
+    private final static int LEFT_FRONT_PORT = 0;
+    private final static int LEFT_BACK_PORT = 0;
     //Change these numbers for each new robot       ^
+
+    
+    final TalonFX1038 leftFrontTalon = new TalonFX1038(LEFT_FRONT_PORT);
+    final TalonFX1038 rightFrontTalon = new TalonFX1038(RIGHT_FRONT_PORT);
+    final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT); 
+    final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT); 
 
 
     public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(LOW_GEAR_PORT, HIGH_GEAR_PORT);
     public boolean isHighGear = false;
 
-    public static CANSpark1038 CANSparkRightFront = new CANSpark1038(RIGHT_FRONT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSpark1038 CANSparkRightBack = new CANSpark1038(RIGHT_BACK_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSpark1038 CANSparkLeftFront = new CANSpark1038(LEFT_FRONT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static CANSpark1038 CANSparkLeftBack = new CANSpark1038(LEFT_BACK_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    public CANEncoder CANSparkRightEncoder = CANSparkRightBack.getEncoder(); //To get an encoder use CANSpark__.getEncoder()
-    public CANEncoder CANSparkLeftEncoder = CANSparkLeftBack.getEncoder();
+    
 
     private DifferentialDrive differentialDrive;
     private static DriveTrain1038 driveTrain;
@@ -50,44 +52,25 @@ public class DriveTrain1038 implements Subsystem {
         return driveTrain;
     }
 
-    private DriveTrain1038() {
-        CANSparkLeftBack.restoreFactoryDefaults();
-        CANSparkLeftFront.restoreFactoryDefaults();
-        CANSparkRightBack.restoreFactoryDefaults();
-        CANSparkRightFront.restoreFactoryDefaults();
-
-        CANSparkLeftBack.setInverted(true);
-        CANSparkLeftFront.setInverted(true);
-        CANSparkRightBack.setInverted(true);
-        CANSparkRightFront.setInverted(true);
-
-        CANSparkLeftBack.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        CANSparkLeftFront.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        CANSparkRightBack.setIdleMode(CANSparkMax.IdleMode.kCoast);
-        CANSparkRightFront.setIdleMode(CANSparkMax.IdleMode.kCoast);
-
-        CANSparkRightFront.follow(CANSparkRightBack);
-        CANSparkLeftFront.follow(CANSparkLeftBack);
-        
-        differentialDrive = new DifferentialDrive(CANSparkLeftBack, CANSparkRightBack);
+    public DriveTrain1038() {
     }
 
     // Get and return distance driven by the left of the robot in inches
     public double getLeftDriveEncoderDistance() {
-        return CANSparkLeftEncoder.getPosition() * Math.PI * WHEEL_DIAMETER;
+        return leftFrontTalon.getPosition() * Math.PI * WHEEL_DIAMETER;
     }
 
     // Get and return distance driven by the right of the robot in inches
     public double getRightDriveEncoderDistance() {
-        return CANSparkRightEncoder.getPosition() * Math.PI * WHEEL_DIAMETER;
+        return rightFrontTalon.getPosition() * Math.PI * WHEEL_DIAMETER;
     }
 
     public double getCANSparkRightEncoder() {
-        return -CANSparkRightEncoder.getPosition();
+        return -leftFrontTalon.getPosition();
     }
 
     public double getCANSparkLeftEncoder() {
-        return -CANSparkLeftEncoder.getPosition();
+        return -rightFrontTalon.getSelectedSensorPosition();
     }
 
     // Pneumatics
@@ -102,8 +85,8 @@ public class DriveTrain1038 implements Subsystem {
     }
 
     public void resetEncoders() {
-        CANSparkRightEncoder.setPosition(0);
-        CANSparkLeftEncoder.setPosition(0);
+        leftFrontTalon.resetPosition();
+        rightFrontTalon.resetPosition();
     }
 
     // Switch between drive modes
