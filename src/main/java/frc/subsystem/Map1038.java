@@ -26,7 +26,7 @@ public class Map1038 implements Subsystem {
         drivetrain.resetEncoders();
     }
     
-    public distanceChange() {
+    public void distanceChange() {
         gryoPos = gryo.getAngle;
         if (0 <= gryoPos || gryoPos < 90) {
              xChange = encoderChange * sin(gryoPos);
