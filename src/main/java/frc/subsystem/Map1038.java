@@ -6,7 +6,6 @@ import frc.libraries.DriveTrain1038;
 import frc.libraries.Gyro1038;
 import java.lang.Math;
 
-//this is a change
 
 public class Map1038 implements Subsystem {
     private Limelight1038 limelight = Limelight1038.getInstance();
@@ -23,6 +22,15 @@ public class Map1038 implements Subsystem {
 
     private double encoderChange = 0;
 
+    private static Map1038 map;
+
+    public static Map1038 getInstance() {
+        if(map == null) {
+            System.out.println("creating a new acquisition");
+            map = new Map1038();
+        }
+        return map;
+    }
     
     public void resetSensor() {
         gyro.reset();
