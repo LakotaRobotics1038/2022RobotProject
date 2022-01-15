@@ -1,4 +1,4 @@
-package frc.libraries;
+package frc.subsystem;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.libraries.Limelight1038;
@@ -49,12 +49,21 @@ public class Map1038 implements Subsystem {
         pos1Y += yChange;
     }
 
-    public void turretAngle(double currentAngle) {
-        atan(pos1X/pos1Y); //absolute angle that the turret needs. This is only correct if the robot hasn't turned. 
+    public void turretAngle(double currentTurretPos) {
+        gyroPos = gyro.getAngle();
+        targetAngle = atan(pos1X/pos1Y) - gyroPos;
+        moveAngle = currentTurretPos - targetAngle; //turngle
     }
 
-    public void resetCoords() {
+    public void resetCoords(double limelightAngle) {
+        a *= pos1X/Math.abs(pos1X);
+        b *= pos1Y/Math.abs(pos1Y);
+        pos1X = a;
+        pos1Y = b;
+    }
 
+    public double readTurretAngle() {
+        return targetAngle;
     }
 
 
