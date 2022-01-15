@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.libraries.Limelight1038;
 
 public class Shooter implements Subsystem {
-
     private final int SHOOTER_MOTOR_PORT1 = 0;
     private final int SHOOTER_MOTOR_PORT2 = 0;
     private final int HOOD_MOTOR_PORT = 0;
