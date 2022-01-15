@@ -11,7 +11,7 @@ public class Dashboard {
 
     private DriverStation driverStation = DriverStation.getInstance();
     //private Shooter shooter = Shooter.getInstance(); //no shooter code 
-    //private Limelight limelight = Limelight.getInstance(); //no shooter code
+    private Limelight1038 limelight = Limelight1038.getInstance(); //no shooter code
 
     private final int CAMERA_EXPOSURE = 50;
 
