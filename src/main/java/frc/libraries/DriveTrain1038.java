@@ -57,16 +57,16 @@ public class DriveTrain1038 implements Subsystem {
 
     // Get and return distance driven by the left of the robot in inches
     public double getLeftDriveEncoderDistance() {
-        return leftFrontTalon.getSelectedSensorPosition() * Math.PI * WHEEL_DIAMETER;
+        return leftFrontTalon.getPosition() * Math.PI * WHEEL_DIAMETER;
     }
 
     // Get and return distance driven by the right of the robot in inches
     public double getRightDriveEncoderDistance() {
-        return rightFrontTalon.getSelectedSensorPosition() * Math.PI * WHEEL_DIAMETER;
+        return rightFrontTalon.getPosition() * Math.PI * WHEEL_DIAMETER;
     }
 
     public double getCANSparkRightEncoder() {
-        return -leftFrontTalon.getSelectedSensorPosition();
+        return -leftFrontTalon.getPosition();
     }
 
     public double getCANSparkLeftEncoder() {
@@ -85,8 +85,8 @@ public class DriveTrain1038 implements Subsystem {
     }
 
     public void resetEncoders() {
-        leftFrontTalon.setSelectedSensorPosition(0);
-        rightFrontTalon.setSelectedSensorPosition(0);
+        leftFrontTalon.resetPosition();
+        rightFrontTalon.resetPosition();
     }
 
     // Switch between drive modes

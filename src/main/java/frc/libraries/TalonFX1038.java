@@ -43,4 +43,13 @@ public class TalonFX1038 extends TalonFX implements SpeedController {
 	public void stopMotor() {
 		super.set(super.getControlMode(), 0);
 	}
+	public double getPosition() {
+		return super.getSelectedSensorPosition();
+	}
+	public void setPosition(int i) {
+		super.setSelectedSensorPosition(i);
+	}
+	public void resetPosition() {
+		setPosition(0);
+	}
 }
