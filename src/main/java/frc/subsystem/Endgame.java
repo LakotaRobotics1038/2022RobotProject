@@ -29,4 +29,21 @@ public class Endgame {
     public double getRotatorEncodePosition() {
         return rotateEncoder.getPosition(); //might need some extra weird math
     }
+
+    public void liftElevator() {
+
+    }
+
+    public void lowerElevator() {
+
+    }
+
+    public void rotateRight() {
+
+    }
+
+    public void rotateLeft() {
+
+    }
+    
 }
