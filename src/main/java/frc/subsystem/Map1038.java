@@ -1,4 +1,4 @@
-package frc.libraries;
+package frc.subsystem;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.libraries.Limelight1038;
@@ -60,6 +60,10 @@ public class Map1038 implements Subsystem {
         b *= pos1Y/Math.abs(pos1Y);
         pos1X = a;
         pos1Y = b;
+    }
+
+    public double readTurretAngle() {
+        return targetAngle;
     }
 
 
