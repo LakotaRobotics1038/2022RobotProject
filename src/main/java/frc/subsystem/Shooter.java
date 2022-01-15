@@ -31,6 +31,18 @@ public class Shooter implements Subsystem {
     public double getTurretEncoder() {
         return turretMotor.getPosition();
     }
+
+    public void shoot(){
+
+    }
+
+    public void aim() {
+
+    }
+
+    public void moveHood() {
+      
+    }
     // public boolean getHardStop() {
     //     return hardStop.get();
     // }
