@@ -4,6 +4,14 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 public class Acquisition {
+    private static Acquisition acquisition;
+    public static Acquisition getInstance() {
+    if(acquisition == null) {
+        System.out.println("Creating a new Acquisition");
+        acquisition = new Acquisition();
+    }
+    return acquisition;
+}
     //Motor ports *CHANGE THESE OR ROBOT GETS ANGRY!
 
     //TODO:Change ports
