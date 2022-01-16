@@ -3,6 +3,7 @@ package frc.libraries;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.subsystem.Map1038;
 
 /**
  * Add your docs here.
@@ -10,6 +11,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class Limelight1038 {
     // LimeLight instance
     private static Limelight1038 limelight;
+
+    private static Map1038 map;
 
     // Network table
     private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
@@ -100,8 +103,9 @@ public class Limelight1038 {
         return y;
     }
 
-    public void limelightDistance() {
+    public double limelightDistance(double limeLightMountAngle) {
         //gets the angle the limelight is at relative to the hub triangle doohicky
+        return Math.tan(limeLightMountAngle) * map.actualZ;
     }
 
     public void changeLEDStatus(LEDStates state) {
