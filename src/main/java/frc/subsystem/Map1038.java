@@ -14,11 +14,12 @@ public class Map1038 implements Subsystem {
 
     private double gyroPos = gyro.getAngle();
 
-    public double limelightZ = limelight.getYOffset();
+    //public double limelightZ = limelight.getYOffset();
+    final double LL_MOUNT_HEIGHT = 0;
     public double pos1X = 1;
     public double pos1Y = 1;
-    final double hubHeight = 8.8; //8 feet 8 inches
-    public double actualZ = hubHeight - limelightZ;
+    final double HUB_HEIGHT = 104; //8 feet 8 inches
+    public final double Z_DIFFERENCE = HUB_HEIGHT - LL_MOUNT_HEIGHT;
 
     private double encoderChange = 0;
 
@@ -26,7 +27,7 @@ public class Map1038 implements Subsystem {
 
     public static Map1038 getInstance() {
         if(map == null) {
-            System.out.println("creating a new acquisition");
+            System.out.println("creating a new map");
             map = new Map1038();
         }
         return map;

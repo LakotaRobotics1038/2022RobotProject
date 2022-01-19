@@ -3,13 +3,16 @@ package frc.libraries;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
+import frc.subsystem.Map1038;
 /**
  * Add your docs here.
  */
 public class Limelight1038 {
     // LimeLight instance
     private static Limelight1038 limelight;
+
+    // Map instance
+    private static Map1038 map = Map1038.getInstance();
 
     // Network table
     private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
@@ -24,8 +27,9 @@ public class Limelight1038 {
     private double x;
     private double y;
 
-    // offset default value
+    // Offset default value
     private int defaultOffset = 0;
+    private final double MOUNTED_ANGLE = 0;
 
     public enum LEDStates {
         On(0), Off(1);
@@ -100,8 +104,9 @@ public class Limelight1038 {
         return y;
     }
 
-    public void limelightDistance() {
+    public double limelightDistance() {
         //gets the angle the limelight is at relative to the hub triangle doohicky
+        return map.Z_DIFFERENCE / Math.tan(MOUNTED_ANGLE + getYOffset());
     }
 
     public void changeLEDStatus(LEDStates state) {
