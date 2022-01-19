@@ -105,7 +105,7 @@ public class Limelight1038 {
 
     public double limelightDistance(double limeLightMountAngle) {
         //gets the angle the limelight is at relative to the hub triangle doohicky
-        return Math.tan(limeLightMountAngle) * map.actualZ;
+        return Math.tan(limeLightMountAngle + getYOffset()) * map.actualZ;
     }
 
     public void changeLEDStatus(LEDStates state) {
