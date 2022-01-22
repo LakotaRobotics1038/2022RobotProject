@@ -165,5 +165,15 @@ public class SerialComs implements Subsystem {
     public int getAcqAccelerometerVal() {
         return acquisitionAccelerometerData;
     }
+
+    public void testRead(){
+
+        while (serialPort.getBytesReceived() != 0) {
+            arduinoOutput = serialPort.readString();
+            System.out.println(arduinoOutput);
+
+        }
+
+    }
     
 }
