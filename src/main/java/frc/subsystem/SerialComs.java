@@ -52,7 +52,7 @@ public class SerialComs implements Subsystem {
      * Creates serial port listener
      */
     public void initialize() {
-        serialPort = new SerialPort(115200, SerialPort.Port.kMXP);
+        serialPort = new SerialPort(9600, SerialPort.Port.kMXP);
         System.out.println("Created new arduino reader");
     }
 
