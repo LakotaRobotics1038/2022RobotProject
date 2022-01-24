@@ -20,6 +20,5 @@ public class Auton extends SequentialCommandGroup {
      * Creates a new auton without data
      */
     public Auton() {
-
     }
 }

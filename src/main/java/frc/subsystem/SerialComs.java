@@ -167,12 +167,10 @@ public class SerialComs implements Subsystem {
 
     public void testRead() {
 
-        if (serialPort.getBytesReceived() != 0) {
+        while (serialPort.getBytesReceived() != 0) {
             arduinoOutput = serialPort.readString();
-            System.out.println("\n \n \n" + arduinoOutput + "\n \n \n");
+            System.out.println(arduinoOutput);
 
-        } else {
-            System.out.println("AHHHHHHHHGH");
         }
 
     }

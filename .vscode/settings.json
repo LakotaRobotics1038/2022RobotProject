@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
   "files.exclude": {
@@ -27,3 +28,12 @@
   ],
   "java.test.defaultConfig": "WPIlibUnitTests"
 }
+=======
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    }
+}
+>>>>>>> 9026a50f5c5d3a236fa10047e5e8529503954f9a
