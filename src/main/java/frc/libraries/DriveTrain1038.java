@@ -53,12 +53,12 @@ public class DriveTrain1038 implements Subsystem {
 
     // Get and return distance driven by the left of the robot in inches
     public double getLeftDriveEncoderDistance() {
-        return leftFrontTalon.getPosition() * Math.PI * WHEEL_DIAMETER;
+        return leftFrontTalon.getRotations() * Math.PI * WHEEL_DIAMETER;
     }
 
     // Get and return distance driven by the right of the robot in inches
     public double getRightDriveEncoderDistance() {
-        return rightFrontTalon.getPosition() * Math.PI * WHEEL_DIAMETER;
+        return rightFrontTalon.getRotations() * Math.PI * WHEEL_DIAMETER;
     }
 
     public double getCANSparkRightEncoder() {
