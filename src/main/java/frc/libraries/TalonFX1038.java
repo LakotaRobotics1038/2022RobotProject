@@ -3,6 +3,9 @@ package frc.libraries;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.SpeedController;
+/*Make Robot Mechanical
+*-Kalab Kingman
+*/
 
 public class TalonFX1038 extends TalonFX implements SpeedController {
     public TalonFX1038 (int address) {
@@ -51,5 +54,8 @@ public class TalonFX1038 extends TalonFX implements SpeedController {
 	}
 	public void resetPosition() {
 		setPosition(0);
+	}
+	public double getRotations() {
+		return getPosition() / 360;
 	}
 }
