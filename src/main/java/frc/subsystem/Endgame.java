@@ -3,7 +3,7 @@ package frc.subsystem;
 import frc.libraries.TalonFX1038;
 import frc.libraries.*;
 import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
 
 public class Endgame {
     public static Endgame endgame;
@@ -22,7 +22,7 @@ public class Endgame {
 
     // Initalize objects
     final CANSpark1038 rotator = new CANSpark1038(ELEVATOR_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-    final CANEncoder rotateEncoder = rotator.getEncoder();
+    final RelativeEncoder rotateEncoder = rotator.getEncoder();
     final TalonFX1038 elevator = new TalonFX1038(ROTATOR_PORT);
 
     // Encoders for the Motors

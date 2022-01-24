@@ -1,7 +1,7 @@
 package frc.subsystem;
 
 import frc.libraries.*;
-import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel;
 
 public class Acquisition {
@@ -25,7 +25,7 @@ public class Acquisition {
     final CANSpark1038 motor2 = new CANSpark1038(MOTOR2_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
     final CANSpark1038 motor3 = new CANSpark1038(MOTOR3_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
     // Encoder????
-    public CANEncoder motor1Encoder = motor1.getEncoder();
-    public CANEncoder motor2Encoder = motor2.getEncoder();
-    public CANEncoder motor3Encoder = motor3.getEncoder();
+    public RelativeEncoder motor1Encoder = motor1.getEncoder();
+    public RelativeEncoder motor2Encoder = motor2.getEncoder();
+    public RelativeEncoder motor3Encoder = motor3.getEncoder();
 }
