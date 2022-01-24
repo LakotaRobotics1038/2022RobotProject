@@ -1,14 +1,13 @@
 package frc.libraries;
 
-import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.libraries.TalonFX1038;
 
 public class DriveTrain1038 implements Subsystem {
@@ -16,10 +15,9 @@ public class DriveTrain1038 implements Subsystem {
         tankDrive, singleArcadeDrive, dualArcadeDrive
     }
 
-
     public DriveModes currentDriveMode = DriveModes.dualArcadeDrive;
 
-    //Change these numbers for each new robot       v
+    // Change these numbers for each new robot v
     public final double WHEEL_DIAMETER = 4;
     private final int HIGH_GEAR_PORT = 3;
     private final int LOW_GEAR_PORT = 2;
@@ -27,21 +25,19 @@ public class DriveTrain1038 implements Subsystem {
     private final static int RIGHT_BACK_PORT = 0;
     private final static int LEFT_FRONT_PORT = 0;
     private final static int LEFT_BACK_PORT = 0;
-    //Change these numbers for each new robot       ^
+    // Change these numbers for each new robot ^
 
-    
     final TalonFX1038 leftFrontTalon = new TalonFX1038(LEFT_FRONT_PORT);
     final TalonFX1038 rightFrontTalon = new TalonFX1038(RIGHT_FRONT_PORT);
-    final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT); 
-    final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT); 
+    final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT);
+    final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT);
 
-
-    public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(LOW_GEAR_PORT, HIGH_GEAR_PORT);
+    // TODO: Look into pneumatic types
+    public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, LOW_GEAR_PORT,
+            HIGH_GEAR_PORT);
     public boolean isHighGear = false;
 
-    
-
-    private DifferentialDrive differentialDrive;
+    private DifferentialDrive differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
     private static DriveTrain1038 driveTrain;
 
     public static DriveTrain1038 getInstance() {
@@ -92,18 +88,18 @@ public class DriveTrain1038 implements Subsystem {
     // Switch between drive modes
     public void driveModeToggler() {
         switch (currentDriveMode) {
-        case tankDrive:
-            currentDriveMode = DriveModes.singleArcadeDrive;
-            break;
-        case singleArcadeDrive:
-            currentDriveMode = DriveModes.dualArcadeDrive;
-            break;
-        case dualArcadeDrive:
-            currentDriveMode = DriveModes.tankDrive;
-            break;
-        default:
-            System.out.println("Help I have fallen and I can't get up!");
-            break;
+            case tankDrive:
+                currentDriveMode = DriveModes.singleArcadeDrive;
+                break;
+            case singleArcadeDrive:
+                currentDriveMode = DriveModes.dualArcadeDrive;
+                break;
+            case dualArcadeDrive:
+                currentDriveMode = DriveModes.tankDrive;
+                break;
+            default:
+                System.out.println("Help I have fallen and I can't get up!");
+                break;
         }
     }
 

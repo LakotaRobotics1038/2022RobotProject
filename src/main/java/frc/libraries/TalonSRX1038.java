@@ -2,14 +2,13 @@ package frc.libraries;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
-public class TalonSRX1038 extends TalonSRX implements SpeedController {
-    public TalonSRX1038 (int address) {
+public class TalonSRX1038 extends TalonSRX implements MotorController {
+	public TalonSRX1038(int address) {
 		super(address);
 	}
-	
-	@Override
+
 	public void pidWrite(double output) {
 		set(output);
 	}

@@ -12,7 +12,8 @@ public class Limelight1038 {
     // LimeLight instance
     private static Limelight1038 limelight;
 
-    private static Map1038 map;
+    // Map instance
+    private static Map1038 map = Map1038.getInstance();
 
     // Network table
     private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
@@ -27,17 +28,22 @@ public class Limelight1038 {
     private double x;
     private double y;
 
-    // offset default value
+    // Offset default value
     private int defaultOffset = 0;
+    private final double MOUNTED_ANGLE = 0;
 
     public enum LEDStates {
         On(0), Off(1);
-        private int value; 
-        private LEDStates(int value) { this.value = value; }
+
+        private int value;
+
+        private LEDStates(int value) {
+            this.value = value;
+        }
     };
 
     private void Limelight() {
-       changeLEDStatus(LEDStates.Off);
+        changeLEDStatus(LEDStates.Off);
     }
 
     /**
@@ -87,25 +93,27 @@ public class Limelight1038 {
 
     /**
      * returns how far from center vertically the robot is
+     * 
      * @return distance from center vertically
      */
     public double getYOffset() {
-        /* if they tell me what to do i wont do it	
-         * it ha been 5 minutes since they told me to do something	
-         * i am starting to wonder if they are all idiots. 	
-         * drew and sam are talking nerd talk	
-         * sam is slacking but still talking nerd	
-         * i am very bored and want chocy milk	
-         * i won the war over the yard stick	
-         * they still have not noticed              -Shawn Tomas
+        /*
+         * if they tell me what to do i wont do it
+         * it ha been 5 minutes since they told me to do something
+         * i am starting to wonder if they are all idiots.
+         * drew and sam are talking nerd talk
+         * sam is slacking but still talking nerd
+         * i am very bored and want chocy milk
+         * i won the war over the yard stick
+         * they still have not noticed -Shawn Tomas
          */
         y = ty.getDouble(defaultOffset);
         return y;
     }
 
-    public double limelightDistance(double limeLightMountAngle) {
-        //gets the angle the limelight is at relative to the hub triangle doohicky
-        return Math.tan(limeLightMountAngle) * map.actualZ;
+    public double limelightDistance() {
+        // gets the angle the limelight is at relative to the hub triangle doohicky
+        return map.Z_DIFFERENCE / Math.tan(MOUNTED_ANGLE + getYOffset());
     }
 
     public void changeLEDStatus(LEDStates state) {

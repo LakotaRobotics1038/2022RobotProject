@@ -6,14 +6,15 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
+import frc.subsystem.*;
 
 import edu.wpi.first.wpilibj.Joystick;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.libraries.TalonSRX1038;
-
 
 /*
  * The VM is configured to automatically run this class, and to call the
@@ -23,60 +24,61 @@ import frc.libraries.TalonSRX1038;
  * project.
  */
 
-  public class Robot extends TimedRobot {
-    Joystick1038 driverJoystick = new Joystick1038(0);
-    Joystick1038 operatorJoystick = new Joystick1038(1);
-    
-    private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
+public class Robot extends TimedRobot {
+  Joystick1038 driverJoystick = new Joystick1038(0);
+  Joystick1038 operatorJoystick = new Joystick1038(1);
+  public SerialComs rpiComs = SerialComs.getInstance();
 
-    /*
-     * This function is run when the robot is first started up and should be used
-     * for any initialization code.
-     */
-  
-    @Override
-    public void robotInit() {
-    }
-  
-    @Override
-    public void robotPeriodic() {
-    }
-  
-    public void teleopInit() {
-    }
-  
-    public void teleopPeriodic() {
-      driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical() * -.8, driverJoystick.getRightJoystickVertical() * -.8);
-      
-      //final int talonTesting_port_1 = 55
-      
-    }
-  
-             
-  
-    public void autonomousInit() {
-    }
-  
-    public void autonomousPeriodic() {
-    }
-  
-    public void disabledInit() {
-    }
-  
-    public void disabledPeriodic() {
-    }
-  
-    /**
-     * This function is called periodically during test mode.
-     */
-    @Override
-    public void testInit() {
-    }
-  
-    @Override
-    public void testPeriodic() {
-    }
-  
-  
- }
+  private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
 
+  /*
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
+   */
+
+  @Override
+  public void robotInit() {
+  }
+
+  @Override
+  public void robotPeriodic() {
+  }
+
+  public void teleopInit() {
+    SerialComs.getInstance().initialize();
+  }
+
+  public void teleopPeriodic() {
+    driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical() * -.8,
+        driverJoystick.getRightJoystickVertical() * -.8);
+
+    SerialComs.getInstance().testRead();
+
+    // final int talonTesting_port_1 = 55
+
+  }
+
+  public void autonomousInit() {
+  }
+
+  public void autonomousPeriodic() {
+  }
+
+  public void disabledInit() {
+  }
+
+  public void disabledPeriodic() {
+  }
+
+  /**
+   * This function is called periodically during test mode.
+   */
+  @Override
+  public void testInit() {
+  }
+
+  @Override
+  public void testPeriodic() {
+  }
+
+}

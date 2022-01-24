@@ -1,12 +1,12 @@
 package frc.libraries;
 
-import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.I2C;
 
-public class Gyro1038 extends GyroBase {
+public class Gyro1038 extends AnalogGyro {
 
-	//Variables
-	private final int SENSOR_ID_CODE = 0x02;
+	// Variables
+	public final int SENSOR_ID_CODE = 0x02;
 	private final int COMMAND = 0x03;
 	private final int HEADING_DATA = 0x04;
 	private final int INTEGRATED_Z_VALUE = 0x06;
@@ -20,14 +20,19 @@ public class Gyro1038 extends GyroBase {
 	private final int RESET_Z_AXIS_INTEGRATOR = 0x52;
 	private double gyroVal;
 
-	//Objects
+	// Objects
 	private I2C I2CBus;
 	private static Gyro1038 gyroSensor;
 
 	/**
-	 * Initializes the gyro to listen to the onboard I2C port at the set address and calibrates the gyro
+	 * Initializes the gyro to listen to the onboard I2C port at the set address and
+	 * calibrates the gyro
 	 */
+
+	// TODO: Make sure i2c gyro works with analogGyro class
+
 	private Gyro1038() {
+		super(0);
 		I2CBus = new I2C(I2C.Port.kOnboard, DEVICE_ADDRESS);
 		calibrate();
 	}
@@ -99,6 +104,7 @@ public class Gyro1038 extends GyroBase {
 		return 0;
 	}
 
-    @Override
-    public void close() throws Exception {}
+	@Override
+	public void close() {
+	}
 }

@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class SerialComs implements Subsystem {
-    //Variables
+    // Variables
     private String arduinoOutput;
     public String arduinoDataMap[];
     public boolean stringRead = false;
@@ -15,7 +15,7 @@ public class SerialComs implements Subsystem {
     private String line;
     private double number = 0;
 
-    //Sensors
+    // Sensors
     public int frontLaserSensorData = 0;
     public double lineFollowerData = 0;
     public int rearLaserSensorData = 0;
@@ -24,7 +24,7 @@ public class SerialComs implements Subsystem {
     public int scoringAccelerometerData = 0;
     public int acquisitionAccelerometerData = 0;
 
-    //Objects
+    // Objects
     private static SerialPort serialPort;
     private static SerialComs rpiCom;
 
@@ -40,7 +40,6 @@ public class SerialComs implements Subsystem {
         return rpiCom;
     }
 
-    
     /**
      * Initializes the arduino reader (empty currently)
      */
@@ -52,7 +51,7 @@ public class SerialComs implements Subsystem {
      * Creates serial port listener
      */
     public void initialize() {
-        serialPort = new SerialPort(115200, SerialPort.Port.kMXP);
+        serialPort = new SerialPort(9600, SerialPort.Port.kMXP);
         System.out.println("Created new arduino reader");
     }
 
@@ -165,5 +164,15 @@ public class SerialComs implements Subsystem {
     public int getAcqAccelerometerVal() {
         return acquisitionAccelerometerData;
     }
-    
+
+    public void testRead() {
+
+        while (serialPort.getBytesReceived() != 0) {
+            arduinoOutput = serialPort.readString();
+            System.out.println(arduinoOutput);
+
+        }
+
+    }
+
 }
