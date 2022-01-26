@@ -3,8 +3,14 @@ package frc.subsystem;
 import frc.libraries.*;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-public class Acquisition {
+public class Acquisition implements Subsystem{
     private static Acquisition acquisition;
 
     public static Acquisition getInstance() {
@@ -16,16 +22,45 @@ public class Acquisition {
     }
     // Motor ports *CHANGE THESE OR ROBOT GETS ANGRY!
 
-    // TODO:Change ports
-    private final static int MOTOR1_PORT = 0;
-    private final static int MOTOR2_PORT = 0;
-    private final static int MOTOR3_PORT = 0;
-    // Initializing the motors
-    final CANSpark1038 motor1 = new CANSpark1038(MOTOR1_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-    final CANSpark1038 motor2 = new CANSpark1038(MOTOR2_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-    final CANSpark1038 motor3 = new CANSpark1038(MOTOR3_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
-    // Encoder????
-    public RelativeEncoder motor1Encoder = motor1.getEncoder();
-    public RelativeEncoder motor2Encoder = motor2.getEncoder();
-    public RelativeEncoder motor3Encoder = motor3.getEncoder();
+    //Ports
+    private final int beaterBarPort = 54;
+    //Solenoid channels
+    private final int PUSH_OUT_ACQUISITION_CHANNEL = 0;
+    private final int PULL_IN_ACQUISITION_CHANNEL = 0;
+    final CANSpark1038 beaterBar = new CANSpark1038(beaterBarPort, CANSparkMaxLowLevel.MotorType.kBrushless);
+    // Initializing the
+     private DoubleSolenoid acquisitionSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, PUSH_OUT_ACQUISITION_CHANNEL, PULL_IN_ACQUISITION_CHANNEL);
+    private AcquisitionStates acquisitionState = AcquisitionStates.In;
+    private enum AcquisitionStates {
+        In, Out
+    }
+    // Encoder
+    public RelativeEncoder motor1Encoder = beaterBar.getEncoder();
+    //Motor Speeds
+    private final static double BEATER_BAR_SPEED = 0.65;
+
+    public void toggleAcquisitionPosition() {
+        switch (acquisitionState) {
+            case In:
+                acquisitionSolenoid.set(Value.kReverse);
+                acquisitionState = AcquisitionStates.Out;
+                break;
+
+            case Out:
+                acquisitionSolenoid.set(Value.kForward);
+                acquisitionState = AcquisitionStates.In;
+                break;
+        }
+}
+    public void runBeaterBarFwd() {
+        beaterBar.set(BEATER_BAR_SPEED);
+    }
+    
+    public void runBeaterBarRev() {
+        beaterBar.set(-BEATER_BAR_SPEED);
+    }
+
+    public void stopBeaterBar() {
+        beaterBar.set(0);
+    }
 }
