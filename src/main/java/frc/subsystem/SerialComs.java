@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class SerialComs implements Subsystem {
     // Variables
-    private String arduinoOutput;
-    public String arduinoDataMap[];
+    private String rpiOutput;
+    public String rpiDataMap[];
     public boolean stringRead = false;
     public BufferedReader bufferedReader;
     private static String inputBuffer = "";
@@ -29,9 +29,9 @@ public class SerialComs implements Subsystem {
     private static SerialComs rpiCom;
 
     /**
-     * Returns the arduino instance created when the robot starts
+     * Returns the rpi instance created when the robot starts
      * 
-     * @return Arduino instance
+     * @return rpi instance
      */
     public static SerialComs getInstance() {
         if (rpiCom == null) {
@@ -41,7 +41,7 @@ public class SerialComs implements Subsystem {
     }
 
     /**
-     * Initializes the arduino reader (empty currently)
+     * Initializes the rpi reader (empty currently)
      */
     private SerialComs() {
 
@@ -52,22 +52,22 @@ public class SerialComs implements Subsystem {
      */
     public void initialize() {
         serialPort = new SerialPort(9600, SerialPort.Port.kMXP);
-        System.out.println("Created new arduino reader");
+        System.out.println("Created new rpi reader");
     }
 
     /**
-     * Updates arduino values and reads arduino serial port
+     * Updates rpi values and reads rpi serial port
      */
-    public void readArduino() {
+    public void readrpi() {
         try {
             stringRead = false;
-            while (serialPort.getBytesReceived() != 0) {
-                arduinoOutput = serialPort.readString();
-                inputBuffer = inputBuffer + arduinoOutput;
+            if (serialPort.getBytesReceived() != 0) {
+                rpiOutput = serialPort.readString();
+                inputBuffer = inputBuffer + rpiOutput;
                 stringRead = true;
             }
             line = "";
-            while (inputBuffer.indexOf("\r") != -1) {
+            if (inputBuffer.indexOf("\r") != -1) {
                 int point = inputBuffer.indexOf("\r");
                 line = inputBuffer.substring(0, point);
                 if (inputBuffer.length() > point + 1) {
@@ -77,13 +77,13 @@ public class SerialComs implements Subsystem {
                 }
             }
             if (line != "") {
-                arduinoDataMap = line.split(",");
-                frontLaserSensorData = Integer.parseInt(arduinoDataMap[0]);
-                rearLaserSensorData = Integer.parseInt(arduinoDataMap[1]);
-                frontLeftLaserSensorData = Integer.parseInt(arduinoDataMap[2]);
-                frontRightLaserSensorData = Integer.parseInt(arduinoDataMap[3]);
-                acquisitionAccelerometerData = Integer.parseInt(arduinoDataMap[4]);
-                scoringAccelerometerData = Integer.parseInt(arduinoDataMap[5]);
+                rpiDataMap = line.split(",");
+                frontLaserSensorData = Integer.parseInt(rpiDataMap[0]);
+                rearLaserSensorData = Integer.parseInt(rpiDataMap[1]);
+                frontLeftLaserSensorData = Integer.parseInt(rpiDataMap[2]);
+                frontRightLaserSensorData = Integer.parseInt(rpiDataMap[3]);
+                acquisitionAccelerometerData = Integer.parseInt(rpiDataMap[4]);
+                scoringAccelerometerData = Integer.parseInt(rpiDataMap[5]);
             }
         } catch (NumberFormatException e2) {
         } catch (UncleanStatusException e) {
@@ -167,9 +167,9 @@ public class SerialComs implements Subsystem {
 
     public void testRead() {
 
-        while (serialPort.getBytesReceived() != 0) {
-            arduinoOutput = serialPort.readString();
-            System.out.println(arduinoOutput);
+        if (serialPort.getBytesReceived() != 0) {
+            rpiOutput = serialPort.readString();
+            System.out.println(rpiOutput);
 
         }
 
