@@ -45,14 +45,14 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopInit() {
-    SerialComs.getInstance().initialize();
+    rpiComs.initialize();
   }
 
   public void teleopPeriodic() {
     driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical() * -.8,
         driverJoystick.getRightJoystickVertical() * -.8);
 
-    SerialComs.getInstance().testRead();
+    rpiComs.testRead();
 
     // final int talonTesting_port_1 = 55
 
