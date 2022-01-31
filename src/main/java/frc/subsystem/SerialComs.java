@@ -167,11 +167,11 @@ public class SerialComs implements Subsystem {
 
     public void testRead() {
 
-        if (serialPort.getBytesReceived() != 0) {
-            rpiOutput = serialPort.readString();
-            System.out.println(rpiOutput);
+        // if (serialPort.getBytesReceived() != 0) {
+        rpiOutput = serialPort.readString();
+        System.out.println("\n\n\n" + rpiOutput + "\n\n\n");
 
-        }
+        // }
 
     }
 
