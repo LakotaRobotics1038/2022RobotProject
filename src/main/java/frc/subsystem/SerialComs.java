@@ -165,14 +165,16 @@ public class SerialComs implements Subsystem {
         return acquisitionAccelerometerData;
     }
 
+    private byte[] testOut;;
+
     public void testRead() {
 
-        if (serialPort.getBytesReceived() != 0) {
-            rpiOutput = serialPort.readString();
-            System.out.println("\n Will this work?" + rpiOutput + "\n");
+        // if (serialPort.getBytesReceived() != 0) {
+        testOut = serialPort.read(24);
+        rpiOutput = serialPort.readString();
+        System.out.println("\n \n Will this work?" + rpiOutput + "\n" + testOut.toString() + "\n \n");
 
-        }
+        // }
 
     }
-
 }
