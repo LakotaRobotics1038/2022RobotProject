@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
 import frc.subsystem.*;
 
-import edu.wpi.first.wpilibj.Joystick;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.libraries.TalonSRX1038;
+// import edu.wpi.first.wpilibj.Joystick;
+// import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// import frc.libraries.TalonSRX1038;
 
 /*
  * The VM is configured to automatically run this class, and to call the
@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopInit() {
+    // rpiComs.stopSerialPort();
     rpiComs.initialize();
   }
 
