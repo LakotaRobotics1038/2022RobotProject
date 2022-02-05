@@ -3,6 +3,8 @@ package frc.subsystem;
 import java.nio.charset.StandardCharsets;
 import java.text.Format;
 import java.io.BufferedReader;
+import java.net.PasswordAuthentication;
+
 import edu.wpi.first.hal.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -176,8 +178,15 @@ public class SerialComs implements Subsystem {
         // testOut = serialPort.read(1);
         rpiOutput = serialPort.readString();
         // rpiOutput = rpiOutput.format(rpiOutput, StandardCharsets.UTF_8);
+        String outputString = String.format(rpiOutput, StandardCharsets.UTF_8);
+        try {
+            int parsedInt = Integer.parseInt(outputString);
 
-        System.out.println("\n \n Will this work" + String.format(rpiOutput, StandardCharsets.UTF_8) + "\n \n");
+            System.out.println("\n \n Will this work " + parsedInt + "\n \n");
+        } catch (NumberFormatException ex) {
+            // ex.printStackTrace();
+            // System.out.println(ex);
+        }
 
         // }
 
