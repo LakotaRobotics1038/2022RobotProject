@@ -36,6 +36,7 @@ public class Acquisition implements Subsystem{
         In, Out
     }
     // Encoder
+    //github is dumb
     public RelativeEncoder motor1Encoder = beaterBar.getEncoder();
     //Motor Speeds
     private final static double BEATER_BAR_SPEED = 0.65;
