@@ -11,10 +11,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
 import frc.subsystem.*;
 
-// import edu.wpi.first.wpilibj.Joystick;
-// import com.revrobotics.CANSparkMax;
-// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-// import frc.libraries.TalonSRX1038;
+import edu.wpi.first.wpilibj.Joystick;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /*
  * The VM is configured to automatically run this class, and to call the
@@ -26,8 +29,15 @@ import frc.subsystem.*;
 
 public class Robot extends TimedRobot {
   Joystick1038 driverJoystick = new Joystick1038(0);
-  Joystick1038 operatorJoystick = new Joystick1038(1);
+  public Joystick1038 operatorJoystick = new Joystick1038(1);
   public SerialComs rpiComs = SerialComs.getInstance();
+
+  public int testIn = 0;
+  public int testOut = 1;
+  public int testMotorPort = 0;
+  public DoubleSolenoid testCylinder = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, testIn, testOut);
+
+  public TalonFX1038 testMotor = new TalonFX1038(testMotorPort);
 
   private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
 
@@ -80,6 +90,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-  }
+    if (operatorJoystick.getAButton()) {
+      testCylinder.set(Value.kForward);
+    } else if (operatorJoystick.getBButton()) {
+      testCylinder.set(Value.kReverse);
+    }
+    driveTrain.tankDrive(driverJoystick.getRightTrigger(), driverJoystick.getRightTrigger());
 
+  }
 }
