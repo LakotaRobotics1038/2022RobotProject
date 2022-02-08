@@ -32,13 +32,6 @@ public class Robot extends TimedRobot {
   public Joystick1038 operatorJoystick = new Joystick1038(1);
   public SerialComs rpiComs = SerialComs.getInstance();
 
-  public int testIn = 0;
-  public int testOut = 1;
-  public int testMotorPort = 0;
-  public DoubleSolenoid testCylinder = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, testIn, testOut);
-
-  public TalonFX1038 testMotor = new TalonFX1038(testMotorPort);
-
   private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
 
   /*
@@ -63,7 +56,7 @@ public class Robot extends TimedRobot {
     driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical() * -.8,
         driverJoystick.getRightJoystickVertical() * -.8);
 
-    rpiComs.testRead();
+    // rpiComs.testRead();
 
     // final int talonTesting_port_1 = 55
 
@@ -90,12 +83,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    if (operatorJoystick.getAButton()) {
-      testCylinder.set(Value.kForward);
-    } else if (operatorJoystick.getBButton()) {
-      testCylinder.set(Value.kReverse);
-    }
-    driveTrain.tankDrive(driverJoystick.getRightTrigger(), driverJoystick.getRightTrigger());
+    // if (operatorJoystick.getAButton()) {
+    // testCylinder.set(Value.kForward);
+    // } else if (operatorJoystick.getBButton()) {
+    // testCylinder.set(Value.kReverse);
+    // }
+    // driveTrain.tankDrive(driverJoystick.getRightTrigger(),
+    // driverJoystick.getRightTrigger());
 
   }
 }
