@@ -25,6 +25,8 @@ public class Joystick1038 extends Joystick {
 	private final int LEFT_TRIGGER = 2;
 	private final int RIGHT_TRIGGER = 3;
 
+	public enum PovPositions { Up, Down, Left, Right, None }
+
     /**
 	 * Creates a new Xbox joystick object
 	 * @param port USB port the joystick should be in 
@@ -39,7 +41,23 @@ public class Joystick1038 extends Joystick {
 	 * @return value of POV
 	 */
 	public int getPOV() {
-		return getPOV();
+		throw new Error("Use getPOVPosition");
+	}
+	public PovPositions getPOVPosition() {
+		int povVal = super.getPOV();
+		switch (povVal) {
+			case 0:
+				return PovPositions.Up;
+			case 90:
+				return PovPositions.Right;
+			case 180:
+				return PovPositions.Down;
+	        case 270:
+				return PovPositions.Left;
+			default:
+				return PovPositions.None;
+		}
+		
 	}
 
     /**

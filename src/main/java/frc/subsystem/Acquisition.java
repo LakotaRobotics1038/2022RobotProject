@@ -23,7 +23,7 @@ public class Acquisition implements Subsystem {
     // Motor ports *CHANGE THESE OR ROBOT GETS ANGRY!
 
     // Ports
-    private final int beaterBarPort = 54;
+    private final int beaterBarPort = 0;
     // Solenoid channels
     private final int PUSH_OUT_ACQUISITION_CHANNEL = 0;
     private final int PULL_IN_ACQUISITION_CHANNEL = 0;
@@ -31,18 +31,20 @@ public class Acquisition implements Subsystem {
     // Initializing the
     private DoubleSolenoid acquisitionSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
             PUSH_OUT_ACQUISITION_CHANNEL, PULL_IN_ACQUISITION_CHANNEL);
-    private AcquisitionStates acquisitionState = AcquisitionStates.In;
+    public AcquisitionStates acquisitionState = AcquisitionStates.In;
+    public boolean XIsPressed = false;
 
-    private enum AcquisitionStates {
+    public enum AcquisitionStates {
         In, Out
     }
 
     // Encoder
+    // github is dumb
     public RelativeEncoder motor1Encoder = beaterBar.getEncoder();
     // Motor Speeds
     private final static double BEATER_BAR_SPEED = 0.65;
 
-    public void toggleAcquisitionPosition() {
+    public void periodic() {
         switch (acquisitionState) {
             case In:
                 acquisitionSolenoid.set(Value.kReverse);
@@ -54,6 +56,20 @@ public class Acquisition implements Subsystem {
                 acquisitionState = AcquisitionStates.In;
                 break;
         }
+
+    }
+
+    public void toggleAcqPos() {
+        if (XIsPressed) {
+            acquisitionState = AcquisitionStates.In;
+            XIsPressed = false;
+        }
+
+        else {
+            acquisitionState = AcquisitionStates.Out;
+            XIsPressed = true;
+        }
+
     }
 
     public void runBeaterBarFwd() {
