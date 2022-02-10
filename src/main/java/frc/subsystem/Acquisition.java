@@ -60,13 +60,13 @@ public class Acquisition implements Subsystem{
         
     }
     public void toggleAcqPos() {
-        if((AcquisitionIsIn) && (joystick.getXButton()) && ((acquisitionSolenoid.get() != Value.kForward) || (acquisitionSolenoid.get() != Value.kReverse))) {
+        if((AcquisitionIsIn) && ((acquisitionSolenoid.get() != Value.kForward) || (acquisitionSolenoid.get() != Value.kReverse))) {
             acquisitionState = AcquisitionStates.Out;
             AcquisitionIsIn = false;
             
         }
 
-     else if((!AcquisitionIsIn) && (joystick.getXButton()) && ((acquisitionSolenoid.get() != Value.kForward) || (acquisitionSolenoid.get() != Value.kReverse))) {
+     else if((!AcquisitionIsIn) && ((acquisitionSolenoid.get() != Value.kForward) || (acquisitionSolenoid.get() != Value.kReverse))) {
             acquisitionState = AcquisitionStates.In;
             AcquisitionIsIn = true;
         }
