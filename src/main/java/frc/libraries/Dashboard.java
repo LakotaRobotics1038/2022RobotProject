@@ -10,7 +10,6 @@ import frc.subsystem.Shooter;
 public class Dashboard {
   private static Dashboard dashboard;
 
-  private DriverStation driverStation = DriverStation.getInstance();
   private Shooter shooter = Shooter.getInstance();
   private Limelight1038 limelight = Limelight1038.getInstance();
 
@@ -39,7 +38,7 @@ public class Dashboard {
     SmartDashboard.putNumber("Shooter Angle", shooter.getTurretEncoder());
     SmartDashboard.putBoolean("Limelight Can See Target", limelight.canSeeTarget());
     // SmartDashboard.putBoolean("Prox", shooter.getHardStop()); //We have no
-    // shooter code
+    // shooter codes
   }
 
   public String getPosition() {

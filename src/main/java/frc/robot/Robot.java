@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
   public SerialComs rpiComs = SerialComs.getInstance();
 
   private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
+  private final Acquisition acquisition = Acquisition.getInstance();
   
   /*
    * This function is run when the robot is first started up and should be used
@@ -54,10 +55,25 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopPeriodic() {
-    driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical() * -.8,
-        driverJoystick.getRightJoystickVertical() * -.8);
+    Driver();
+    Operator();
+  }
+  public void Driver() {
+    
+  }
+ 
+  public void Operator() {
+    if(operatorJoystick.getXButton()) {
+      acquisition.toggleAcqPos();
+    }
 
-    SerialComs.getInstance().testRead();
+    if(operatorJoystick.getRightButton()) {
+      acquisition.runspinnyBarFwd();
+    }
+
+    else if(operatorJoystick.getLeftButton()) {
+      acquisition.runspinnyBarRev();
+    }
 
   }
 
