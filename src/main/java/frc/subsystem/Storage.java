@@ -108,7 +108,7 @@ public void periodic() {
         }
         
     } 
-    
+
     else if (manualStorageForward) {
         shuttleMotor.set(shuttleMotorSpeed);
         shuttleMotor.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
