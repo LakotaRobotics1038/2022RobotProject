@@ -3,7 +3,7 @@ package frc.libraries;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.I2C;
 
-public class Gyro1038 extends AnalogGyro {
+public class Gyro1038 { // extends AnalogGyro
 
 	// Variables
 	public final int SENSOR_ID_CODE = 0x02;
@@ -32,7 +32,7 @@ public class Gyro1038 extends AnalogGyro {
 	// TODO: Make sure i2c gyro works with analogGyro class
 
 	private Gyro1038() {
-		super(0);
+		super();
 		I2CBus = new I2C(I2C.Port.kOnboard, DEVICE_ADDRESS);
 		calibrate();
 	}
@@ -50,7 +50,7 @@ public class Gyro1038 extends AnalogGyro {
 		return gyroSensor;
 	}
 
-	@Override
+	// // @Override
 	public double getAngle() {
 		readGyro();
 		return gyroVal;
@@ -83,20 +83,20 @@ public class Gyro1038 extends AnalogGyro {
 		}
 	}
 
-	@Override
+	// @Override
 	public void reset() {
 		I2CBus.write(COMMAND, RESET_Z_AXIS_INTEGRATOR);
 		I2CBus.write(SENSOR_ID_CODE, NORMAL_MEASUREMENT_MODE);
 	}
 
-	@Override
+	// @Override
 	public void calibrate() {
 		System.out.println("Gyro Calibrated");
 		I2CBus.write(COMMAND, GYRO_RECALIBRATE);
 		I2CBus.write(SENSOR_ID_CODE, NORMAL_MEASUREMENT_MODE);
 	}
 
-	@Override
+	// @Override
 	/**
 	 * This method is not currently implemented
 	 */
@@ -104,7 +104,7 @@ public class Gyro1038 extends AnalogGyro {
 		return 0;
 	}
 
-	@Override
+	// @Override
 	public void close() {
 	}
 }

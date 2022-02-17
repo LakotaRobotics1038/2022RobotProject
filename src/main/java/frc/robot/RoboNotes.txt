@@ -19,6 +19,8 @@ Shooter Notes:
     240 degrees of clearance for shooter turret
     Hood should change more than the wheel velocity
 
+    Data stored in .csv on the pi, roborio queries the pi for a set distance and it returns a velocity
+
 Endgame Notes:
     Auto endgame
     extend 34 inches tall

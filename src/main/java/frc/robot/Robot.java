@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
 import frc.subsystem.*;
 
-import edu.wpi.first.wpilibj.Joystick;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+// import edu.wpi.first.wpilibj.Joystick;
+// import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+// import edu.wpi.first.wpilibj.DoubleSolenoid;
+// import edu.wpi.first.wpilibj.PneumaticsControlModule;
+// import edu.wpi.first.wpilibj.PneumaticsModuleType;
+// import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /*
  * The VM is configured to automatically run this class, and to call the
@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    // rpiComs.stopSerialPort();
   }
 
   @Override
@@ -48,7 +49,6 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopInit() {
-    // rpiComs.stopSerialPort();
     rpiComs.initialize();
   }
 
@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
         driverJoystick.getRightJoystickVertical() * -.8);
 
     // rpiComs.testRead();
+    rpiComs.testSend();
 
     // final int talonTesting_port_1 = 55
 
