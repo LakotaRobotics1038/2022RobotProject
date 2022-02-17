@@ -31,11 +31,12 @@ import frc.libraries.Joystick1038;
 
 public class Robot extends TimedRobot {
   Joystick1038 driverJoystick = new Joystick1038(0);
-  Joystick1038 operatorJoystick = new Joystick1038(1);
+  public Joystick1038 operatorJoystick = new Joystick1038(1);
   public SerialComs rpiComs = SerialComs.getInstance();
 
   private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
-  
+  private final Acquisition acquisition = Acquisition.getInstance();
+
   /*
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -50,14 +51,31 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopInit() {
-    SerialComs.getInstance().initialize();
+    // rpiComs.stopSerialPort();
+    rpiComs.initialize();
   }
 
   public void teleopPeriodic() {
-    driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical() * -.8,
-        driverJoystick.getRightJoystickVertical() * -.8);
+    Driver();
+    Operator();
+  }
 
-    SerialComs.getInstance().testRead();
+  public void Driver() {
+
+  }
+
+  public void Operator() {
+    if (operatorJoystick.getXButton()) {
+      acquisition.toggleAcqPos();
+    }
+
+    if (operatorJoystick.getRightButton()) {
+      acquisition.runspinnyBarFwd();
+    }
+
+    else if (operatorJoystick.getLeftButton()) {
+      acquisition.runspinnyBarRev();
+    }
 
   }
 
@@ -78,12 +96,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testInit() {
-    
-    
+
   }
 
   @Override
   public void testPeriodic() {
-  }
+    // if (operatorJoystick.getAButton()) {
+    // testCylinder.set(Value.kForward);
+    // } else if (operatorJoystick.getBButton()) {
+    // testCylinder.set(Value.kReverse);
+    // }
+    // driveTrain.tankDrive(driverJoystick.getRightTrigger(),
+    // driverJoystick.getRightTrigger());
 
+  }
 }
