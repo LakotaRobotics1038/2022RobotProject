@@ -1,6 +1,10 @@
 package frc.subsystem;
 
+import java.nio.charset.StandardCharsets;
+import java.text.Format;
 import java.io.BufferedReader;
+import java.net.PasswordAuthentication;
+
 import edu.wpi.first.hal.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -8,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class SerialComs implements Subsystem {
     // Variables
     private String rpiOutput;
+    private int rpiTestOutput;
     public String rpiDataMap[];
     public boolean stringRead = false;
     public BufferedReader bufferedReader;
@@ -165,14 +170,25 @@ public class SerialComs implements Subsystem {
         return acquisitionAccelerometerData;
     }
 
+    private byte[] testOut;
+
     public void testRead() {
 
-        if (serialPort.getBytesReceived() != 0) {
-            rpiOutput = serialPort.readString();
-            System.out.println(rpiOutput);
+        // if (serialPort.getBytesReceived() != 0) {
+        // testOut = serialPort.read(1);
+        rpiOutput = serialPort.readString();
+        // rpiOutput = rpiOutput.format(rpiOutput, StandardCharsets.UTF_8);
+        String outputString = String.format(rpiOutput, StandardCharsets.UTF_8);
+        try {
+            int parsedInt = Integer.parseInt(outputString);
 
+            System.out.println("\n \n Will this work " + parsedInt + "\n \n");
+        } catch (NumberFormatException ex) {
+            // ex.printStackTrace();
+            // System.out.println(ex);
         }
 
-    }
+        // }
 
+    }
 }
