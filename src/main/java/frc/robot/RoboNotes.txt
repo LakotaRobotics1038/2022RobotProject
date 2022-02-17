@@ -1,0 +1,36 @@
+Laser in the top mid and bottom of storage/acq
+limelight is at 60.755 degrees
+255 mapping for moving around the field
+shooter needs lots of different math and pid, endgame will need trig
+balls will stop after they go thru the entire Laser
+three lasers on the robot, at least 1 limit switch
+controls board will go on the side of storage, need to find space for air tanks
+shoot and move at the same time
+
+Shooter Notes:
+    always rotating looking for target
+    once the laser had been triggered in storage start booster/shooter motors (should be fast)
+    Once the limelight has found the target do the math and then adjust all the systems accordingly
+    it'll run like:
+        Limelight lock
+        booster/shooter wheel
+        Move the hood
+        fire
+    240 degrees of clearance for shooter turret
+    Hood should change more than the wheel velocity
+
+    Data stored in .csv on the pi, roborio queries the pi for a set distance and it returns a velocity
+
+Endgame Notes:
+    Auto endgame
+    extend 34 inches tall
+    Rotating arm motor needs to be in brake mode
+    Endgame Process:
+        extend
+        Engage the ratchet and retract
+        Rotate the second arm to the bar and latch on
+        Slide arm retracts and free's it's self from the bar
+        begin rotating the robot
+        extend slide arm to grab second bar
+        retract slides and rotating arm will be free
+        Repeat until at the top

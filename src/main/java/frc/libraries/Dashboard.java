@@ -9,11 +9,7 @@ import frc.subsystem.Shooter;
 
 public class Dashboard {
   private static Dashboard dashboard;
-
-<<<<<<< HEAD
-=======
   private DriverStation driverStation;
->>>>>>> master
   private Shooter shooter = Shooter.getInstance();
   private Limelight1038 limelight = Limelight1038.getInstance();
 

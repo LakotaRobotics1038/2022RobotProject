@@ -3,16 +3,16 @@ package frc.subsystem;
 import java.nio.charset.StandardCharsets;
 import java.text.Format;
 import java.io.BufferedReader;
-import java.net.PasswordAuthentication;
 
 import edu.wpi.first.hal.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SerialPort.WriteBufferMode;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.libraries.Limelight1038;
 
 public class SerialComs implements Subsystem {
     // Variables
     private String rpiOutput;
-    private int rpiTestOutput;
     public String rpiDataMap[];
     public boolean stringRead = false;
     public BufferedReader bufferedReader;
@@ -21,17 +21,19 @@ public class SerialComs implements Subsystem {
     private double number = 0;
 
     // Sensors
-    public int frontLaserSensorData = 0;
+    public int storageLaser1 = 0;
     public double lineFollowerData = 0;
-    public int rearLaserSensorData = 0;
-    public int frontLeftLaserSensorData = 0;
-    public int frontRightLaserSensorData = 0;
-    public int scoringAccelerometerData = 0;
-    public int acquisitionAccelerometerData = 0;
+    public int storageLaser2 = 0;
+    public int storageLaser3 = 0;
+    public int limitSwitch1 = 0;
+    public int dio1 = 0;
+    public int dio2 = 0;
+    public int limitSwitch2 = 0;
 
     // Objects
     private static SerialPort serialPort;
     private static SerialComs rpiCom;
+    private Limelight1038 limelight = Limelight1038.getInstance();
 
     /**
      * Returns the rpi instance created when the robot starts
@@ -83,12 +85,13 @@ public class SerialComs implements Subsystem {
             }
             if (line != "") {
                 rpiDataMap = line.split(",");
-                frontLaserSensorData = Integer.parseInt(rpiDataMap[0]);
-                rearLaserSensorData = Integer.parseInt(rpiDataMap[1]);
-                frontLeftLaserSensorData = Integer.parseInt(rpiDataMap[2]);
-                frontRightLaserSensorData = Integer.parseInt(rpiDataMap[3]);
-                acquisitionAccelerometerData = Integer.parseInt(rpiDataMap[4]);
-                scoringAccelerometerData = Integer.parseInt(rpiDataMap[5]);
+                storageLaser1 = Integer.parseInt(rpiDataMap[0]);
+                storageLaser2 = Integer.parseInt(rpiDataMap[1]);
+                storageLaser3 = Integer.parseInt(rpiDataMap[2]);
+                limitSwitch1 = Integer.parseInt(rpiDataMap[3]);
+                limitSwitch2 = Integer.parseInt(rpiDataMap[4]);
+                dio1 = Integer.parseInt(rpiDataMap[5]);
+                dio2 = Integer.parseInt(rpiDataMap[6]);
             }
         } catch (NumberFormatException e2) {
         } catch (UncleanStatusException e) {
@@ -108,8 +111,8 @@ public class SerialComs implements Subsystem {
      * 
      * @return Distance to ground from front bottom laser in cm
      */
-    public int getFrontBottomLaserVal() {
-        return frontLaserSensorData;
+    public int getStorageLaser1Val() {
+        return storageLaser1;
     }
 
     /**
@@ -117,8 +120,8 @@ public class SerialComs implements Subsystem {
      * 
      * @return Distance to ground from rear bottom laser in cm
      */
-    public int getRearBottomLaserVal() {
-        number = rearLaserSensorData;
+    public int getStorageLaser2Val() {
+        number = storageLaser2;
         long longNumber = Math.round(number);
         int intNumber = Math.toIntExact(longNumber);
         return intNumber;
@@ -129,8 +132,8 @@ public class SerialComs implements Subsystem {
      * 
      * @return Distance to object from front left in cm
      */
-    public int getFrontLeftLaserVal() {
-        return frontLeftLaserSensorData;
+    public int getStorageLaser3Val() {
+        return storageLaser3;
     }
 
     /**
@@ -138,8 +141,8 @@ public class SerialComs implements Subsystem {
      * 
      * @return Distance to object from front right in cm
      */
-    public int getFrontRightLaserVal() {
-        return frontRightLaserSensorData;
+    public int getLimitSwitch1Val() {
+        return limitSwitch1;
     }
 
     /**
@@ -147,7 +150,7 @@ public class SerialComs implements Subsystem {
      * 
      * @return Middle of white tape as an average
      */
-    public double getLineFollowerVal() {
+    public double getLimitSwitch2Val() {
         return lineFollowerData;
     }
 
@@ -157,8 +160,12 @@ public class SerialComs implements Subsystem {
      * @return Angle of scoring arm by calculating from vertical and horizontal
      *         forces
      */
-    public int getScoringAccelerometerVal() {
-        return scoringAccelerometerData;
+    public int getDio1Val() {
+        return dio1;
+    }
+
+    public int getDio2Val() {
+        return dio2;
     }
 
     /**
@@ -167,7 +174,7 @@ public class SerialComs implements Subsystem {
      * @return Angle of wrist by calculating from vertical and horizontal forces
      */
     public int getAcqAccelerometerVal() {
-        return acquisitionAccelerometerData;
+        return limitSwitch2;
     }
 
     private byte[] testOut;
@@ -190,5 +197,12 @@ public class SerialComs implements Subsystem {
 
         // }
 
+    }
+
+    public void testSend() {
+        double distance = limelight.getYOffset();
+        String dString = Double.toString(distance);
+        // serialPort.setWriteBufferMode(WriteBufferMode.kFlushOnAccess);
+        serialPort.writeString("this is a test");
     }
 }

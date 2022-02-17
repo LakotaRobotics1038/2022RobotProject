@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    // rpiComs.stopSerialPort();
   }
 
   @Override
@@ -51,7 +52,6 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopInit() {
-    // rpiComs.stopSerialPort();
     rpiComs.initialize();
   }
 

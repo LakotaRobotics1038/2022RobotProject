@@ -101,16 +101,17 @@ public class Storage implements Subsystem {
         } else if (manualStorageReverse) {
             shuttleMotor.set(-shuttleMotorSpeed);
             shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
-        
-    } 
 
-    else if (manualStorageForward) {
-        shuttleMotor.set(shuttleMotorSpeed);
-        shuttleMotor.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
-    } 
-    
-    else if (manualStorageReverse) {
-        shuttleMotor.set(-shuttleMotorSpeed);
-        shuttleMotor.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
+        }
+
+        else if (manualStorageForward) {
+            shuttleMotor.set(shuttleMotorSpeed);
+            // shuttleMotor.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
+        }
+
+        else if (manualStorageReverse) {
+            shuttleMotor.set(-shuttleMotorSpeed);
+            // shuttleMotor.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
+        }
     }
 }
