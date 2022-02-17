@@ -23,8 +23,8 @@ public class Acquisition implements Subsystem {
         }
         return acquisition;
     }
-    // Motor ports *CHANGE THESE OR ROBOT GETS ANGRY!
 
+    // Motor ports *CHANGE THESE OR ROBOT GETS ANGRY!
     // Ports
     private final int spinnyBarPort = 0;
     // Solenoid channels
@@ -36,13 +36,12 @@ public class Acquisition implements Subsystem {
             PUSH_OUT_ACQUISITION_CHANNEL, PULL_IN_ACQUISITION_CHANNEL);
     public AcquisitionStates acquisitionState = AcquisitionStates.In;
     public boolean XIsPressed = false;
+    private final Joystick1038 joystick = Joystick1038.getInstance(0);
 
-    // private final Joystick1038 joystick = Joystick1038.getInstance(0);
     public enum AcquisitionStates {
         In, Out
     }
 
-    // Encoder
     // github is dumb
     public double motor1Encoder = spinnyBar.getPosition();
     // Motor Speeds
@@ -69,10 +68,25 @@ public class Acquisition implements Subsystem {
             acquisitionState = AcquisitionStates.Out;
             AcquisitionIsIn = false;
 
+            if ((AcquisitionIsIn) && ((acquisitionSolenoid.get() != Value.kForward)
+                    || (acquisitionSolenoid.get() != Value.kReverse))) {
+                acquisitionState = AcquisitionStates.Out;
+                AcquisitionIsIn = false;
+
+            }
+
+            else if ((!AcquisitionIsIn) && ((acquisitionSolenoid.get() != Value.kForward)
+                    || (acquisitionSolenoid.get() != Value.kReverse))) {
+                acquisitionState = AcquisitionStates.In;
+                AcquisitionIsIn = true;
+            }
+
         }
 
         else if ((!AcquisitionIsIn)
-                && ((acquisitionSolenoid.get() != Value.kForward) || (acquisitionSolenoid.get() != Value.kReverse))) {
+                && ((acquisitionSolenoid.get() != Value.kForward) || (acquisitionSolenoid.get() != Value.kReverse)))
+
+        {
             acquisitionState = AcquisitionStates.In;
             AcquisitionIsIn = true;
         }

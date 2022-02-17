@@ -10,15 +10,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
 import frc.subsystem.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
-// import edu.wpi.first.wpilibj.Joystick;
-// import com.revrobotics.CANSparkMax;
-// import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-// import edu.wpi.first.wpilibj.DoubleSolenoid;
-// import edu.wpi.first.wpilibj.PneumaticsControlModule;
-// import edu.wpi.first.wpilibj.PneumaticsModuleType;
-// import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator.Validity;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.libraries.TalonSRX1038;
+import frc.libraries.Joystick1038;
 /*
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -33,6 +35,7 @@ public class Robot extends TimedRobot {
   public SerialComs rpiComs = SerialComs.getInstance();
 
   private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
+  private final Acquisition acquisition = Acquisition.getInstance();
 
   /*
    * This function is run when the robot is first started up and should be used
@@ -53,13 +56,26 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopPeriodic() {
-    driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical() * -.8,
-        driverJoystick.getRightJoystickVertical() * -.8);
+    Driver();
+    Operator();
+  }
 
-    // rpiComs.testRead();
-    rpiComs.testSend();
+  public void Driver() {
 
-    // final int talonTesting_port_1 = 55
+  }
+
+  public void Operator() {
+    if (operatorJoystick.getXButton()) {
+      acquisition.toggleAcqPos();
+    }
+
+    if (operatorJoystick.getRightButton()) {
+      acquisition.runspinnyBarFwd();
+    }
+
+    else if (operatorJoystick.getLeftButton()) {
+      acquisition.runspinnyBarRev();
+    }
 
   }
 
@@ -80,6 +96,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testInit() {
+
   }
 
   @Override

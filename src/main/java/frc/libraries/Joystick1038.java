@@ -5,6 +5,15 @@ import edu.wpi.first.wpilibj.Joystick;
 
 
 public class Joystick1038 extends Joystick {
+	private static Joystick1038 joystick;
+
+    public static Joystick1038 getInstance(int portnum) {
+        if (joystick == null) {
+            System.out.println("Creating a new Acquisition");
+            joystick = new Joystick1038(portnum);
+        }
+        return joystick;
+    }
     // Button Locations
 	private final int X_BUTTON = 3;
 	private final int A_BUTTON = 1;
