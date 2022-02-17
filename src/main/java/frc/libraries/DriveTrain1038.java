@@ -10,14 +10,15 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.libraries.TalonFX1038;
 
+//Enum for each drive type
 public class DriveTrain1038 implements Subsystem {
     public enum DriveModes {
         tankDrive, singleArcadeDrive, dualArcadeDrive
     }
-
+    //Setting the currentDriveMode to dualArcadeDrive
     public DriveModes currentDriveMode = DriveModes.dualArcadeDrive;
 
-    // Change these numbers for each new robot v
+    //Ports for the motors
     public final double WHEEL_DIAMETER = 4;
     private final int HIGH_GEAR_PORT = 3;
     private final int LOW_GEAR_PORT = 2;
@@ -25,19 +26,25 @@ public class DriveTrain1038 implements Subsystem {
     private final static int RIGHT_BACK_PORT = 0;
     private final static int LEFT_FRONT_PORT = 0;
     private final static int LEFT_BACK_PORT = 0;
-    // Change these numbers for each new robot ^
-
+    
+    //Wheel Motors
     final TalonFX1038 leftFrontTalon = new TalonFX1038(LEFT_FRONT_PORT);
     final TalonFX1038 rightFrontTalon = new TalonFX1038(RIGHT_FRONT_PORT);
     final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT);
     final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT);
 
     // TODO: Look into pneumatic types
+    //Creating a new DoubleSoleniod
     public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, LOW_GEAR_PORT,
             HIGH_GEAR_PORT);
+    
+    //Setting isHighGear to false
     public boolean isHighGear = false;
 
+    //Creating a new Differential Drive
     private DifferentialDrive differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
+
+    //Creating a new DriveTrain Instance
     private static DriveTrain1038 driveTrain;
 
     public static DriveTrain1038 getInstance() {
@@ -71,16 +78,21 @@ public class DriveTrain1038 implements Subsystem {
 
     // Pneumatics
     public void highGear() {
+        //Doucment that the robot is in HighGear
         isHighGear = true;
+        //Change the Gear Solenoid to Forward
         GearChangeSolenoid.set(DoubleSolenoid.Value.kForward);
     }
 
     public void lowGear() {
+        //Document that the robot is in LowGear
         isHighGear = false;
+        //Change the Gear Solenoid to Reverse
         GearChangeSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void resetEncoders() {
+        //Reset the Motor encoders for driving
         leftFrontTalon.resetPosition();
         rightFrontTalon.resetPosition();
     }
