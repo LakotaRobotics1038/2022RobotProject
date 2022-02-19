@@ -30,7 +30,7 @@ import frc.libraries.Joystick1038;
  */
 
 public class Robot extends TimedRobot {
-  Joystick1038 driverJoystick = new Joystick1038(0);
+  public Joystick1038 driverJoystick = new Joystick1038(0);
   //TODO: Change this not from public, cause we dsajfkdsjf;ofdngfiofdjs
   public Joystick1038 operatorJoystick = new Joystick1038(1);
   public SerialComs rpiComs = SerialComs.getInstance();
