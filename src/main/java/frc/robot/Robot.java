@@ -10,16 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
 import frc.subsystem.*;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator.Validity;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.libraries.TalonSRX1038;
 import frc.libraries.Joystick1038;
 /*
  * The VM is configured to automatically run this class, and to call the

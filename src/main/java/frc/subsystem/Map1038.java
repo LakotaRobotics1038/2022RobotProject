@@ -15,11 +15,11 @@ public class Map1038 implements Subsystem {
 
     private double gyroPos = gyro.getAngle();
 
-    //public double limelightZ = limelight.getYOffset();
+    // public double limelightZ = limelight.getYOffset();
     final double LL_MOUNT_HEIGHT = 0;
     public double pos1X = 1;
     public double pos1Y = 1;
-    final double HUB_HEIGHT = 104; //8 feet 8 inches
+    final double HUB_HEIGHT = 104; // 8 feet 8 inches
     public final double Z_DIFFERENCE = HUB_HEIGHT - LL_MOUNT_HEIGHT;
 
     private double encoderChange = 0;
@@ -27,35 +27,32 @@ public class Map1038 implements Subsystem {
     private static Map1038 map;
 
     public static Map1038 getInstance() {
-        if(map == null) {
+        if (map == null) {
             System.out.println("creating a new map");
             map = new Map1038();
         }
         return map;
     }
-    
+
     public void resetSensor() {
         gyro.reset();
         drivetrain.resetEncoders();
     }
-    
+
     public void distanceChange() {
         double gyroPos = gyro.getAngle();
         double xChange = 0;
         double yChange = 0;
         if (0 <= gyroPos || gyroPos < 90) {
-             xChange = encoderChange * Math.sin(gyroPos);
-             yChange = -(encoderChange * Math.cos(gyroPos));
-        }
-        else if (90 <= gyroPos || gyroPos < 180) {
+            xChange = encoderChange * Math.sin(gyroPos);
+            yChange = -(encoderChange * Math.cos(gyroPos));
+        } else if (90 <= gyroPos || gyroPos < 180) {
             xChange = -(encoderChange * Math.cos(gyroPos - 90));
             yChange = -(encoderChange * Math.sin(gyroPos - 90));
-        }
-        else if (180 <= gyroPos || gyroPos < 270) {
+        } else if (180 <= gyroPos || gyroPos < 270) {
             xChange = -(encoderChange * Math.sin(gyroPos - 180));
             yChange = encoderChange * Math.cos(gyroPos - 180);
-        }
-        else {
+        } else {
             xChange = encoderChange * Math.cos(gyroPos - 270);
             yChange = encoderChange * Math.sin(gyroPos - 270);
         }
@@ -66,15 +63,15 @@ public class Map1038 implements Subsystem {
 
     public double turretAngle(double currentTurretPos) {
         gyroPos = gyro.getAngle();
-        double targetAngle = Math.atan(pos1X/pos1Y) - gyroPos;
-        return currentTurretPos - targetAngle; //turngle
+        double targetAngle = Math.atan(pos1X / pos1Y) - gyroPos;
+        return currentTurretPos - targetAngle; // turngle
     }
 
     public void resetCoords() {
         double a = limelight.getXOffset();
         double b = limelight.getYOffset();
-        a *= pos1X/Math.abs(pos1X);
-        b *= (pos1Y/Math.abs(pos1Y));
+        a *= pos1X / Math.abs(pos1X);
+        b *= (pos1Y / Math.abs(pos1Y));
         pos1X = a;
         pos1Y = b;
     }
