@@ -32,7 +32,7 @@ import frc.libraries.Joystick1038;
 public class Robot extends TimedRobot {
   public Joystick1038 driverJoystick = new Joystick1038(0);
   //TODO: Change this to a class and move input logic to that new class. 
-  //I don't want to be sensical blah blah blah
+ 
   public Joystick1038 operatorJoystick = new Joystick1038(1);
   public SerialComs rpiComs = SerialComs.getInstance();
 
