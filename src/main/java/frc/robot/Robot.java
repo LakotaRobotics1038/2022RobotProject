@@ -10,16 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
 import frc.subsystem.*;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator.Validity;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.libraries.TalonSRX1038;
 import frc.libraries.Joystick1038;
 /*
  * The VM is configured to automatically run this class, and to call the
@@ -31,8 +22,8 @@ import frc.libraries.Joystick1038;
 
 public class Robot extends TimedRobot {
   public Joystick1038 driverJoystick = new Joystick1038(0);
-  //TODO: Change this to a class and move input logic to that new class. 
- 
+  // TODO: Change this to a class and move input logic to that new class.
+
   public Joystick1038 operatorJoystick = new Joystick1038(1);
   public SerialComs rpiComs = SerialComs.getInstance();
 

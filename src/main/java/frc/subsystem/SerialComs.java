@@ -1,12 +1,10 @@
 package frc.subsystem;
 
 import java.nio.charset.StandardCharsets;
-import java.text.Format;
 import java.io.BufferedReader;
 
 import edu.wpi.first.hal.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.SerialPort.WriteBufferMode;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.libraries.Limelight1038;
 

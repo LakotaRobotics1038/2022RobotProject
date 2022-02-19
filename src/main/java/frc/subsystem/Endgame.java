@@ -1,9 +1,6 @@
 package frc.subsystem;
 
 import frc.libraries.TalonFX1038;
-import frc.libraries.*;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.RelativeEncoder;
 
 public class Endgame {
     public static Endgame endgame;
@@ -16,13 +13,16 @@ public class Endgame {
         return endgame;
     }
 
-    // Set Port numbers
+    private Endgame() {
+    }
+
+    // Ports and Constants
     private final int ELEVATOR_PORT = 0;
     private final int ROTATOR_PORT = 0;
 
-    // Initalize objects
-    final TalonFX1038 rotator = new TalonFX1038(ROTATOR_PORT);
-    final TalonFX1038 elevator = new TalonFX1038(ROTATOR_PORT);
+    // Inputs and Outputs
+    private final TalonFX1038 rotator = new TalonFX1038(ROTATOR_PORT);
+    private final TalonFX1038 elevator = new TalonFX1038(ROTATOR_PORT);
 
     // Encoders for the Motors
     public double getElevatorEncoderPosition() {
