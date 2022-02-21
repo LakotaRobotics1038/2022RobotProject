@@ -21,14 +21,9 @@ import frc.libraries.Joystick1038;
  */
 
 public class Robot extends TimedRobot {
-  public Joystick1038 driverJoystick = new Joystick1038(0);
-  // TODO: Change this to a class and move input logic to that new class.
-
-  public Joystick1038 operatorJoystick = new Joystick1038(1);
   public SerialComs rpiComs = SerialComs.getInstance();
 
   private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
-  private final Acquisition acquisition = Acquisition.getInstance();
 
   /*
    * This function is run when the robot is first started up and should be used
@@ -49,27 +44,8 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopPeriodic() {
-    Driver();
-    Operator();
-  }
-
-  public void Driver() {
-
-  }
-
-  public void Operator() {
-    if (operatorJoystick.getXButton()) {
-      acquisition.toggleAcqPos();
-    }
-
-    if (operatorJoystick.getRightButton()) {
-      acquisition.runspinnyBarFwd();
-    }
-
-    else if (operatorJoystick.getLeftButton()) {
-      acquisition.runspinnyBarRev();
-    }
-
+    Driver.getInstance().periodic();
+    Operator.getInstance().periodic();
   }
 
   public void autonomousInit() {
