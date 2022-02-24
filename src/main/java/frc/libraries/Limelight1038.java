@@ -111,10 +111,10 @@ public class Limelight1038 {
         return y;
     }
 
-    public double limelightDistance() {
-        // gets the angle the limelight is at relative to the hub triangle doohicky
-        return map.Z_DIFFERENCE / Math.tan(MOUNTED_ANGLE + getYOffset());
-    }
+    // public double limelightDistance() {
+    // // gets the angle the limelight is at relative to the hub triangle doohicky
+    // // return map.Z_DIFFERENCE / Math.tan(MOUNTED_ANGLE + getYOffset());
+    // }
 
     public void changeLEDStatus(LEDStates state) {
         table.getEntry("ledMode").setDouble(state.value);
