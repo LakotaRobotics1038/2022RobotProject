@@ -119,4 +119,14 @@ public class Limelight1038 {
     public void changeLEDStatus(LEDStates state) {
         table.getEntry("ledMode").setDouble(state.value);
     }
+
+    public double getShooterSetpoint() {
+        double setpoint = ty.getDouble(defaultOffset);
+        return (setpoint * -250 + 31000) / (4100.00);
+    }
+
+    public double getMotorPower() {
+        double power = ty.getDouble(defaultOffset);
+        return power * -.00417 + .55;
+    }
 }
