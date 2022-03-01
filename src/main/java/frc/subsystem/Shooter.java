@@ -2,6 +2,7 @@ package frc.subsystem;
 
 import frc.libraries.TalonSRX1038;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.libraries.Limelight1038;
 import frc.libraries.TalonFX1038;
@@ -48,7 +49,15 @@ public class Shooter implements Subsystem {
   public TalonFX1038 hoodMotor = new TalonFX1038(HOOD_MOTOR_PORT);
   public TalonFX1038 turretMotor = new TalonFX1038(TURRET_MOTOR_PORT);
 
-  // TODO: map angles to encoder counts, turret should go 160 degrees both ways.
+  // TODO: map angles to encoder counts, turret should go 160ish degrees both
+  // ways.
+
+  private final double hootSetpoint = 0.0;
+  private final double hoodTolerance = 1;
+  private final static double hoodP = 0.08;
+  private final static double hoodI = 0.0;
+  private final static double hoodD = 0.0;
+  private PIDController hoodPID = new PIDController(hoodP, hoodI, hoodD);
 
   private final double positionSetpoint = 0.0;
   private final double positionTolerance = 1;
@@ -78,6 +87,11 @@ public class Shooter implements Subsystem {
     speedPID.setSetpoint(speedSetpoint);
     speedPID.setTolerance(speedTolerance);
     speedPID.disableContinuousInput();
+
+    hoodPID.setSetpoint(hootSetpoint);
+    hoodPID.setTolerance(hoodTolerance);
+    hoodPID.disableContinuousInput();
+    hoodMotor.getSelectedSensorPosition(0);
   }
 
   /**
@@ -112,6 +126,12 @@ public class Shooter implements Subsystem {
   public void initialize() {
     positionPID.setSetpoint(positionSetpoint);
 
+  }
+
+  /** Aims the hood */
+  public void executeHoodPID() {
+    double power = hoodPID.calculate(limelight.getTargetDistance());
+    hoodMotor.set(power);
   }
 
   /**

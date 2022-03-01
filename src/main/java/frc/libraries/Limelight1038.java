@@ -42,6 +42,7 @@ public class Limelight1038 {
         }
     };
 
+    /** Changes the LED state to off. */
     private void Limelight() {
         changeLEDStatus(LEDStates.Off);
     }
@@ -120,13 +121,24 @@ public class Limelight1038 {
         table.getEntry("ledMode").setDouble(state.value);
     }
 
+    /**
+     * @returns the setpoint of the shooter. This is the target value for shooter.
+     */
     public double getShooterSetpoint() {
         double setpoint = ty.getDouble(defaultOffset);
         return (setpoint * -250 + 31000) / (4100.00);
     }
 
+    /** @return the motor power that limelight says it should be at. */
     public double getMotorPower() {
         double power = ty.getDouble(defaultOffset);
         return power * -.00417 + .55;
+    }
+
+    /** @return the distance from the limelight to the target. */
+    public double getTargetDistance() {
+        // get distance via trig, limelight angle, hub height - limelight height then
+        // trig it out
+        return 0;
     }
 }
