@@ -41,11 +41,6 @@ public class Shooter implements Subsystem {
   private final int COMPRESSION_MOTOR_PORT = 0;
   private final int HOOD_MOTOR_PORT = 0;
   private final int TURRET_MOTOR_PORT = 0;
-  private final int CONVERSION_NUM = 0;
-  private double stationaryShooterSpeed = 0;
-  private double shooterSpeed = 0;
-  private double hoodAngle = 0;
-  private double stationaryHoodAngle = 0;
 
   public TalonFX1038 shooterMotor1 = new TalonFX1038(SHOOTER_MOTOR_PORT1);
   public TalonFX1038 shooterMotor2 = new TalonFX1038(SHOOTER_MOTOR_PORT2);
