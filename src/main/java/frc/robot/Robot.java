@@ -10,16 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
 import frc.subsystem.*;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator.Validity;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import frc.libraries.TalonSRX1038;
 import frc.libraries.Joystick1038;
 /*
  * The VM is configured to automatically run this class, and to call the
@@ -30,12 +21,9 @@ import frc.libraries.Joystick1038;
  */
 
 public class Robot extends TimedRobot {
-  Joystick1038 driverJoystick = new Joystick1038(0);
-  public Joystick1038 operatorJoystick = new Joystick1038(1);
   public SerialComs rpiComs = SerialComs.getInstance();
 
   private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
-  private final Acquisition acquisition = Acquisition.getInstance();
 
   /*
    * This function is run when the robot is first started up and should be used
@@ -56,27 +44,8 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopPeriodic() {
-    Driver();
-    Operator();
-  }
-
-  public void Driver() {
-
-  }
-
-  public void Operator() {
-    if (operatorJoystick.getXButton()) {
-      acquisition.toggleAcqPos();
-    }
-
-    if (operatorJoystick.getRightButton()) {
-      acquisition.runspinnyBarFwd();
-    }
-
-    else if (operatorJoystick.getLeftButton()) {
-      acquisition.runspinnyBarRev();
-    }
-
+    Driver.getInstance().periodic();
+    Operator.getInstance().periodic();
   }
 
   public void autonomousInit() {

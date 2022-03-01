@@ -8,23 +8,21 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Storage implements Subsystem {
-    // ports
+    // Ports and Constants
     private final int SHUTTLE_MOTOR_PORT = 0;
     private final int START_LASER_PORT = 0;
     private final int END_LASER_PORT = 0;
     private final int MID_LASER_PORT = 0;
     private final int SHUTTLE_MOTOR_ENCODER_COUNTS = 47;
     private final int ENCODER_OFFSET = 500;
-
-    // shuttle motor and speed
-    private CANSpark1038 shuttleMotor = new CANSpark1038(SHUTTLE_MOTOR_PORT, MotorType.kBrushless);
-    private RelativeEncoder shuttleMotorEncoder = shuttleMotor.getEncoder();
     private final static double shuttleMotorSpeed = 1.0;
 
     // declares storage
     private static Storage storage;
 
-    // photoeyes
+    // Inputs and Outputs
+    private CANSpark1038 shuttleMotor = new CANSpark1038(SHUTTLE_MOTOR_PORT, MotorType.kBrushless);
+    private RelativeEncoder shuttleMotorEncoder = shuttleMotor.getEncoder();
     private DigitalInput laserStart = new DigitalInput(START_LASER_PORT);
     private DigitalInput laserEnd = new DigitalInput(END_LASER_PORT);
 

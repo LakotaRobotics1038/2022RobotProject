@@ -4,12 +4,12 @@ import frc.libraries.TalonSRX1038;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.libraries.Limelight1038;
 import frc.libraries.TalonFX1038;
 import frc.subsystem.Map1038;
 import frc.libraries.DriveTrain1038;
 import frc.subsystem.Storage;
 import frc.subsystem.Storage.ManualStorageModes;
+import frc.libraries.Limelight1038;
 
 //Everything is based off distance and runs in a PID loop, no need for mapping or drivetrain. 
 //Best case we can implement math that will allow us to shoot and drive. PID might be able to do that with some extra math
@@ -40,12 +40,14 @@ public class Shooter implements Subsystem {
     return shooter;
   }
 
+  // Ports and Constants
   private final int SHOOTER_MOTOR_PORT1 = 0;
   private final int SHOOTER_MOTOR_PORT2 = 0;
   private final int COMPRESSION_MOTOR_PORT = 0;
   private final int HOOD_MOTOR_PORT = 0;
   private final int TURRET_MOTOR_PORT = 0;
 
+  // Inputs and Outputs
   public TalonFX1038 shooterMotor1 = new TalonFX1038(SHOOTER_MOTOR_PORT1);
   public TalonFX1038 shooterMotor2 = new TalonFX1038(SHOOTER_MOTOR_PORT2);
   public TalonSRX1038 compressionMotor = new TalonSRX1038(COMPRESSION_MOTOR_PORT);
