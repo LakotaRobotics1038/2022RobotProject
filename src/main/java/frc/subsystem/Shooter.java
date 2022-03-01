@@ -11,11 +11,14 @@ import frc.libraries.DriveTrain1038;
 import frc.subsystem.Storage;
 import frc.subsystem.Storage.ManualStorageModes;
 
+//Everything is based off distance and runs in a PID loop, no need for mapping or drivetrain. 
+//Best case we can implement math that will allow us to shoot and drive. PID might be able to do that with some extra math
 public class Shooter implements Subsystem {
   private static Shooter shooter;
   private Storage storage = Storage.getInstance();
-  private Map1038 map = Map1038.getInstance();
-  private DriveTrain1038 drive = DriveTrain1038.getInstance();
+  // private Map1038 map = Map1038.getInstance(); Looks like we won't need drive
+  // or map.
+  // private DriveTrain1038 drive = DriveTrain1038.getInstance();
   private Limelight1038 limelight = Limelight1038.getInstance();
   private boolean isEnabled = false;
   private static double swivelSpeed = 0.2;
@@ -130,7 +133,7 @@ public class Shooter implements Subsystem {
 
   /** Aims the hood */
   public void executeHoodPID() {
-    double power = hoodPID.calculate(limelight.getTargetDistance());
+    double power = hoodPID.calculate(limelight.getTargetDistance()); // TODO: fine tune this PID
     hoodMotor.set(power);
   }
 
@@ -194,6 +197,7 @@ public class Shooter implements Subsystem {
   public void periodic() {
     if (isEnabled) {
       // executeAimPID();
+      executeHoodPID();
       executeSpeedPID();
     }
   }

@@ -27,6 +27,8 @@ public class Limelight1038 {
     private double valid_target;
     private double x;
     private double y;
+    private double actualHeight = 0; // TODO: Change both of these.
+    private double limelightAngle = 0;
 
     // Offset default value
     private int defaultOffset = 0;
@@ -139,6 +141,7 @@ public class Limelight1038 {
     public double getTargetDistance() {
         // get distance via trig, limelight angle, hub height - limelight height then
         // trig it out
-        return 0;
+        double distance = actualHeight / Math.tan(limelightAngle);
+        return distance;
     }
 }
