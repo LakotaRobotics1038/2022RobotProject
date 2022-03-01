@@ -34,3 +34,6 @@ Endgame Notes:
         extend slide arm to grab second bar
         retract slides and rotating arm will be free
         Repeat until at the top
+
+Hood and Turret will operate on position PID, hood will be based off the range the robot is at, 
+    turret will be trying to zero it's self against the gyro

@@ -6,12 +6,18 @@ import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.libraries.TalonFX1038;
 
 //Enum for each drive type
 public class DriveTrain1038 implements Subsystem {
+
+    private Accelerometer accelerometer = new BuiltInAccelerometer();
+    private int roboWeight = 120;
+
     public enum DriveModes {
         tankDrive, singleArcadeDrive, dualArcadeDrive
     }
@@ -129,5 +135,18 @@ public class DriveTrain1038 implements Subsystem {
     // Drive robot using 2 sticks (input ranges -1 to 1)
     public void dualArcadeDrive(double yaxis, double xaxis) {
         differentialDrive.arcadeDrive(yaxis, xaxis, true);
+    }
+
+    /**
+     * Returns the current robot speed in feet per second.
+     * 
+     * @return the current robot speed in feet per second.
+     */
+    public double roboSpeed() {
+        // to get feet per second, mark a spot on the wheeel, rotate the wheel one
+        // revolution, reset the encoder counts
+        leftFrontTalon.getSelectedSensorVelocity();
+
+        return accelerometer.getX();
     }
 }

@@ -27,6 +27,8 @@ public class Limelight1038 {
     private double valid_target;
     private double x;
     private double y;
+    private double actualHeight = 0; // TODO: Change both of these.
+    private double limelightAngle = 0;
 
     // Offset default value
     private int defaultOffset = 0;
@@ -42,6 +44,7 @@ public class Limelight1038 {
         }
     };
 
+    /** Changes the LED state to off. */
     private void Limelight() {
         changeLEDStatus(LEDStates.Off);
     }
@@ -111,12 +114,34 @@ public class Limelight1038 {
         return y;
     }
 
-    public double limelightDistance() {
-        // gets the angle the limelight is at relative to the hub triangle doohicky
-        return map.Z_DIFFERENCE / Math.tan(MOUNTED_ANGLE + getYOffset());
-    }
+    // public double limelightDistance() {
+    // // gets the angle the limelight is at relative to the hub triangle doohicky
+    // // return map.Z_DIFFERENCE / Math.tan(MOUNTED_ANGLE + getYOffset());
+    // }
 
     public void changeLEDStatus(LEDStates state) {
         table.getEntry("ledMode").setDouble(state.value);
+    }
+
+    /**
+     * @returns the setpoint of the shooter. This is the target value for shooter.
+     */
+    public double getShooterSetpoint() {
+        double setpoint = ty.getDouble(defaultOffset);
+        return (setpoint * -250 + 31000) / (4100.00);
+    }
+
+    /** @return the motor power that limelight says it should be at. */
+    public double getMotorPower() {
+        double power = ty.getDouble(defaultOffset);
+        return power * -.00417 + .55;
+    }
+
+    /** @return the distance from the limelight to the target. */
+    public double getTargetDistance() {
+        // get distance via trig, limelight angle, hub height - limelight height then
+        // trig it out
+        double distance = actualHeight / Math.tan(limelightAngle);
+        return distance;
     }
 }

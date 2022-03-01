@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.libraries.Limelight1038;
 import frc.libraries.DriveTrain1038;
 import frc.libraries.Gyro1038;
+import frc.subsystem.Shooter;
 import java.lang.Math;
 
 //TODO: NEED TO TALK WITH DREW ON ENCODER ISSUE. DISTANCE WILL BE SCREWED IF WE JUST USE ENCODER COUNTS
@@ -12,15 +13,22 @@ public class Map1038 implements Subsystem {
     private Limelight1038 limelight = Limelight1038.getInstance();
     private Gyro1038 gyro = Gyro1038.getInstance();
     private DriveTrain1038 drivetrain = DriveTrain1038.getInstance();
+    private Shooter shooter = Shooter.getInstance();
 
     private double gyroPos = gyro.getAngle();
+    private double distanceToHub = limelight.getYOffset();
+    private double speed = drivetrain.roboSpeed();
+    private int firstCircle = 120;
+    private int secondCircle = 240;
+    private int thirdCircle = 360;
+
+    private enum DistanceEnum {
+        Close, Middle, Far, Error
+    };
+    // private double speed = 0.0;
 
     // public double limelightZ = limelight.getYOffset();
-    final double LL_MOUNT_HEIGHT = 0;
-    public double pos1X = 1;
-    public double pos1Y = 1;
     final double HUB_HEIGHT = 104; // 8 feet 8 inches
-    public final double Z_DIFFERENCE = HUB_HEIGHT - LL_MOUNT_HEIGHT;
 
     private double encoderChange = 0;
 
@@ -39,40 +47,18 @@ public class Map1038 implements Subsystem {
         drivetrain.resetEncoders();
     }
 
-    public void distanceChange() {
-        double gyroPos = gyro.getAngle();
-        double xChange = 0;
-        double yChange = 0;
-        if (0 <= gyroPos || gyroPos < 90) {
-            xChange = encoderChange * Math.sin(gyroPos);
-            yChange = -(encoderChange * Math.cos(gyroPos));
-        } else if (90 <= gyroPos || gyroPos < 180) {
-            xChange = -(encoderChange * Math.cos(gyroPos - 90));
-            yChange = -(encoderChange * Math.sin(gyroPos - 90));
-        } else if (180 <= gyroPos || gyroPos < 270) {
-            xChange = -(encoderChange * Math.sin(gyroPos - 180));
-            yChange = encoderChange * Math.cos(gyroPos - 180);
-        } else {
-            xChange = encoderChange * Math.cos(gyroPos - 270);
-            yChange = encoderChange * Math.sin(gyroPos - 270);
+    public double turretAngle() {
+        return shooter.turretMotor.getRotations();
+    }
+
+    public DistanceEnum distanceDecision() {
+        if (distanceToHub <= firstCircle) {
+            return DistanceEnum.Close;
+        } else if (distanceToHub > firstCircle && secondCircle >= distanceToHub) {
+            return DistanceEnum.Middle;
+        } else if (distanceToHub > secondCircle && thirdCircle >= distanceToHub) {
+            return DistanceEnum.Far;
         }
-
-        pos1X += xChange;
-        pos1Y += yChange;
-    }
-
-    public double turretAngle(double currentTurretPos) {
-        gyroPos = gyro.getAngle();
-        double targetAngle = Math.atan(pos1X / pos1Y) - gyroPos;
-        return currentTurretPos - targetAngle; // turngle
-    }
-
-    public void resetCoords() {
-        double a = limelight.getXOffset();
-        double b = limelight.getYOffset();
-        a *= pos1X / Math.abs(pos1X);
-        b *= (pos1Y / Math.abs(pos1Y));
-        pos1X = a;
-        pos1Y = b;
+        return DistanceEnum.Error;
     }
 }
