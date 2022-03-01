@@ -131,6 +131,14 @@ public class Shooter implements Subsystem {
 
   }
 
+  public void zeroHood() {
+    if (hoodMotor.getSelectedSensorPosition() > 0) {
+      hoodMotor.set(-.5);
+    } else {
+      hoodMotor.set(0);
+    }
+  }
+
   /** Aims the hood */
   public void executeHoodPID() {
     double power = hoodPID.calculate(limelight.getTargetDistance()); // TODO: fine tune this PID
