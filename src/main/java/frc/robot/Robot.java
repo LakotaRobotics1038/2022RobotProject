@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Driver.getInstance().periodic();
     Operator.getInstance().periodic();
+    rpiComs.testRead();
   }
 
   public void autonomousInit() {

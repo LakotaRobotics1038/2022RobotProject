@@ -39,6 +39,7 @@ public class Shooter implements Subsystem {
     }
     return shooter;
   }
+  
 
   // Ports and Constants
   private final int SHOOTER_MOTOR_PORT1 = 0;
