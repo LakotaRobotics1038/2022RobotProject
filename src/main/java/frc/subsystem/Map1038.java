@@ -30,8 +30,6 @@ public class Map1038 implements Subsystem {
     // public double limelightZ = limelight.getYOffset();
     final double HUB_HEIGHT = 104; // 8 feet 8 inches
 
-    private double encoderChange = 0;
-
     private static Map1038 map;
 
     public static Map1038 getInstance() {
