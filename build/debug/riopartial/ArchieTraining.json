@@ -1,9 +1,0 @@
-[
-  {
-    "artifact": "frcJava (in project ArchieTraining)",
-    "target": "roborio",
-    "debugfile": "frcJava_roborio.debugconfig",
-    "project": "ArchieTraining",
-    "language": "java"
-  }
-]

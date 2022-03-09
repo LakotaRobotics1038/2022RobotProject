@@ -3,18 +3,8 @@ package frc.libraries;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
-
 public class Joystick1038 extends Joystick {
-	private static Joystick1038 joystick;
-
-    public static Joystick1038 getInstance(int portnum) {
-        if (joystick == null) {
-            System.out.println("Creating a new Acquisition");
-            joystick = new Joystick1038(portnum);
-        }
-        return joystick;
-    }
-    // Button Locations
+	// Button Locations
 	private final int X_BUTTON = 3;
 	private final int A_BUTTON = 1;
 	private final int B_BUTTON = 2;
@@ -34,16 +24,19 @@ public class Joystick1038 extends Joystick {
 	private final int LEFT_TRIGGER = 2;
 	private final int RIGHT_TRIGGER = 3;
 
-	public enum PovPositions { Up, Down, Left, Right, None }
-
-    /**
-	 * Creates a new Xbox joystick object
-	 * @param port USB port the joystick should be in 
-	 */
-    public Joystick1038(int port) {
-        super(port);
+	public enum PovPositions {
+		Up, Down, Left, Right, None
 	}
-	
+
+	/**
+	 * Creates a new Xbox joystick object
+	 * 
+	 * @param port USB port the joystick should be in
+	 */
+	public Joystick1038(int port) {
+		super(port);
+	}
+
 	/**
 	 * Returns the state of the POV on the controller
 	 * 
@@ -52,6 +45,7 @@ public class Joystick1038 extends Joystick {
 	public int getPOV() {
 		throw new Error("Use getPOVPosition");
 	}
+
 	public PovPositions getPOVPosition() {
 		int povVal = super.getPOV();
 		switch (povVal) {
@@ -61,24 +55,24 @@ public class Joystick1038 extends Joystick {
 				return PovPositions.Right;
 			case 180:
 				return PovPositions.Down;
-	        case 270:
+			case 270:
 				return PovPositions.Left;
 			default:
 				return PovPositions.None;
 		}
-		
+
 	}
 
-    /**
+	/**
 	 * Returns the state of the X button on the controller
 	 * 
 	 * @return is the X button pressed
 	 */
-    public boolean getXButton() {
-        return getRawButton(X_BUTTON);
-    }
+	public boolean getXButton() {
+		return getRawButton(X_BUTTON);
+	}
 
-    /**
+	/**
 	 * Returns the state of the A button on the controller
 	 * 
 	 * @return is the A button pressed
@@ -158,7 +152,7 @@ public class Joystick1038 extends Joystick {
 	public boolean getRightJoystickClick() {
 		return getRawButton(RIGHT_JOYSTICK_CLICK);
 	}
-	
+
 	/**
 	 * Returns the joystick axis value or 0 if less than deadband
 	 * 
@@ -167,8 +161,8 @@ public class Joystick1038 extends Joystick {
 	public double deadband(double value) {
 		return Math.abs(value) < 0.10 ? 0 : value;
 	}
-    
-    /**
+
+	/**
 	 * Returns the state of the left joystick on its vertical axis
 	 * 
 	 * @return value of the left joystick vertical axis, inverted so positive values
@@ -206,7 +200,7 @@ public class Joystick1038 extends Joystick {
 		return deadband(getRawAxis(RIGHT_STICK_HORIZONTAL));
 	}
 
-    /**
+	/**
 	 * Returns the state of the left trigger on its axis
 	 * 
 	 * @return value of the left trigger axis
@@ -222,37 +216,35 @@ public class Joystick1038 extends Joystick {
 	 */
 	public double getRightTrigger() {
 		return getRawAxis(RIGHT_TRIGGER);
-    }
-	
+	}
+
 	/**
 	 * Returns the state of the left trigger as on or off
 	 * 
 	 * @return value of the left trigger axis
 	 */
 	public boolean getLeftTriggerDigital() {
-		if(getRawAxis(LEFT_TRIGGER) > .5) {
-			return true; 
-		}
-		else{
+		if (getRawAxis(LEFT_TRIGGER) > .5) {
+			return true;
+		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Returns the state of the right trigger as on or off
 	 * 
 	 * @return value of the right trigger axis
 	 */
 	public boolean getRightTriggerDigital() {
-		if(getRawAxis(RIGHT_TRIGGER) > .5) {
-			return true; 
-		}
-		else{
+		if (getRawAxis(RIGHT_TRIGGER) > .5) {
+			return true;
+		} else {
 			return false;
 		}
 	}
-	
-    /**
+
+	/**
 	 * Sets the left rumble speed
 	 * 
 	 * @param speed the rumble speed between 0.0 and 1.0
