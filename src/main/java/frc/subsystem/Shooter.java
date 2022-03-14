@@ -1,12 +1,16 @@
 package frc.subsystem;
 
 import frc.libraries.TalonSRX1038;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.libraries.TalonFX1038;
 import frc.subsystem.Map1038;
 import frc.libraries.DriveTrain1038;
+import frc.libraries.Gyro1038;
 import frc.subsystem.Storage;
 import frc.subsystem.Storage.ManualStorageModes;
 import frc.libraries.Limelight1038;
@@ -20,6 +24,7 @@ public class Shooter implements Subsystem {
   // or map.
   // private DriveTrain1038 drive = DriveTrain1038.getInstance();
   private Limelight1038 limelight = Limelight1038.getInstance();
+  private Gyro1038 gryo = Gyro1038.getInstance();
   private boolean isEnabled = false;
   private static double swivelSpeed = 0.2;
   private final static int LEFT_STOP = 0; // TODO: Need to change both of these to repersent where we have to stop the
@@ -127,12 +132,15 @@ public class Shooter implements Subsystem {
 
   /**
    * sets the position setpoint
+   * 
+   * @deprecated DO NOT USE
    */
   public void initialize() {
     positionPID.setSetpoint(positionSetpoint);
 
   }
 
+  /** Zero's the hood */
   public void zeroHood() {
     if (hoodMotor.getSelectedSensorPosition() > 0) {
       hoodMotor.set(-.5);
@@ -177,11 +185,21 @@ public class Shooter implements Subsystem {
   }
 
   // checks if the speedPID is at the setpoint (What speed we want the shooter at)
+  /**
+   * 
+   * @return if the speed is at it's setpoint.
+   */
   public boolean speedOnTarget() {
     return speedPID.atSetpoint();
   }
 
   // sets the shooter to manual speed, disabling the PID
+  /**
+   * This is used to shoot manually.
+   * 
+   * @deprecated
+   * @param speed the shooter should be at
+   */
   public void shootManually(double speed) {
     shooterMotor1.set(speed);
     shooterMotor2.set(-speed);
@@ -189,6 +207,10 @@ public class Shooter implements Subsystem {
 
   // pass thru the turret direction you want, then this will set the turret to
   // that
+  /**
+   * @deprecated This shouldn't be used. Use turnTurret
+   * @param value turret direction you want to move to.
+   */
   public void setTurretDirection(TurretDirections value) {
     currentTurretDirection = value;
   }
@@ -239,13 +261,10 @@ public class Shooter implements Subsystem {
     return positionPID.atSetpoint() && limelight.canSeeTarget();
   }
 
-  /**
-   * limits shooter turn radius
-   */
-
   // moves the turret
-  public void turnTurret(double turnSpeed) {
-    turretMotor.set(turnSpeed);
+  public void turnTurret(double turnAngle) {
+    // TODO: Do Math here for converting angle to encoder counts
+    turretMotor.set(ControlMode.Position, turnAngle);
   }
 
   // switch case for what direction the turret spins
@@ -261,11 +280,19 @@ public class Shooter implements Subsystem {
   }
 
   // get's the turret current encoder value
+  /**
+   * @return The current direction in degrees of the turret.
+   */
   public double getTurretEncoder() {
     return turretMotor.getSelectedSensorPosition() * 180.00 / 82000.00; // converts radians to degrees
   }
 
   // gets the current shooter speed
+  /**
+   * This returns the current shooterSpeed.
+   * 
+   * @return The current shooter speed.
+   */
   public double getShooterSpeed() {
     return shooterMotor1.getSelectedSensorVelocity() / 4100.00; // converts to speed
   }
@@ -276,22 +303,34 @@ public class Shooter implements Subsystem {
   // }
 
   // this sets the turret encoder position to 0
+  /**
+   * This resets the encoder value back to 0 for the turret encoder.
+   */
   public void resetTurretEncoder() {
     turretMotor.setSelectedSensorPosition(0);
   }
 
   // stops the turret from moving
+  /**
+   * Stops the turret from moving.
+   */
   private void stopTurret() {
     turretMotor.set(0);
   }
 
   // returns the turret directions
+  /**
+   * Returns the current direction the turret is moving.
+   * 
+   * @return The turret Direction.
+   */
   public TurretDirections getTurretDirection() {
     return currentTurretDirection;
   }
 
   // code red mountain dew TODO: change this name to code red
-  public void goToCrashPosition() {
+  /** This was goToCrashPosition. This has been renamed to codeRed */
+  public void codeRed() {
     if (Math.abs(turretMotor.getSelectedSensorPosition()) < 1000) {
       stopTurret();
     } else if (turretMotor.getSelectedSensorPosition() > 0) {
@@ -304,11 +343,20 @@ public class Shooter implements Subsystem {
   }
 
   // hold the turret position
+  /**
+   * 
+   * This code holds the turret at the current position.
+   */
   public void holdPosition() {
-    turretMotor.set(0);
+    turretMotor.set(ControlMode.Velocity, 0);
   }
 
   // moves the turret
+  /**
+   * @deprecated
+   *             This code used to move the turret via a position PID, use
+   *             turnTurret now.
+   */
   public void move() {
     turretMotor.setSelectedSensorPosition(0);
 

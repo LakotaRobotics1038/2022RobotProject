@@ -143,8 +143,8 @@ public class DriveTrain1038 implements Subsystem {
      * @return the current robot speed in feet per second.
      */
     public double roboSpeed() {
-        // to get feet per second, mark a spot on the wheeel, rotate the wheel one
-        // revolution, reset the encoder counts
+        // to get feet per second, mark a spot on the wheeel, reset the encoder counts,
+        // rotate the wheel one revolution and then get the encoder counts
         leftFrontTalon.getSelectedSensorVelocity();
 
         return accelerometer.getX();

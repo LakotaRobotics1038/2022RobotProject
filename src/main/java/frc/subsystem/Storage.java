@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class Storage implements Subsystem {
     // Ports and Constants
     private final int SHUTTLE_MOTOR_PORT = 0;
-    private final int START_LASER_PORT = 0;
-    private final int END_LASER_PORT = 0;
-    private final int MID_LASER_PORT = 0;
+    private final int START_LASER_PORT = 1;
+    private final int END_LASER_PORT = 2;
+    private final int MID_LASER_PORT = 3;
     private final int SHUTTLE_MOTOR_ENCODER_COUNTS = 47;
     private final int ENCODER_OFFSET = 500;
     private final static double shuttleMotorSpeed = 1.0;
