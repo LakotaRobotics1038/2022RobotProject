@@ -59,6 +59,7 @@ public class Limelight1038 {
             System.out.println("Creating limelight");
             try {
                 limelight = new Limelight1038();
+                System.out.println("Limelight has been created.");
             } catch (NullPointerException e) {
                 System.out.println("uh-oh " + e);
             }

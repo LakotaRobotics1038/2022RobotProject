@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import java.util.Map;
+
+import javax.print.attribute.standard.MediaSize.Engineering;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
 import frc.subsystem.*;
@@ -21,9 +25,18 @@ import frc.libraries.Joystick1038;
  */
 
 public class Robot extends TimedRobot {
-  public SerialComs rpiComs = SerialComs.getInstance();
-
   private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
+  private final Acquisition acquisition = Acquisition.getInstance();
+  private final Shooter shooter = Shooter.getInstance();
+  private final Endgame endgame = Endgame.getInstance();
+  private final SerialComs rpiComs = SerialComs.getInstance();
+  private final Map1038 map = Map1038.getInstance();
+
+  private Joystick1038 driverJoystick = new Joystick1038(0);
+  private Joystick1038 operatorJoystick = new Joystick1038(1);
+
+  // private Driver driverJoystick = Driver.getInstance();
+  // private Operator operatorJoystick = Operator.getInstance();
 
   /*
    * This function is run when the robot is first started up and should be used
@@ -44,8 +57,21 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopPeriodic() {
-    Driver.getInstance().periodic();
-    Operator.getInstance().periodic();
+    boolean prevXButtonState = false;
+    driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical(), driverJoystick.getRightJoystickVertical());
+
+    if (operatorJoystick.getAButton()) {
+      acquisition.toggleAcqPos();
+    }
+
+    if (operatorJoystick.getXButton() && !prevXButtonState) {
+      endgame.liftElevator();
+      prevXButtonState = true;
+    } else {
+      endgame.lowerElevator();
+      prevXButtonState = false;
+    }
+
   }
 
   public void autonomousInit() {
