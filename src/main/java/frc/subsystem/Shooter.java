@@ -159,10 +159,14 @@ public class Shooter implements Subsystem {
    * aims turret towards target
    */
   public void executeAimPID() {
-    // System.out.println("PID");
+    // System.out.println("PID")
     double power = positionPID.calculate(limelight.getXOffset());
     System.out.println("x " + limelight.getXOffset());
-    turretMotor.set(power * 0.5);
+    if (turretMotor.getPosition() > LEFT_STOP || turretMotor.getPosition() < RIGHT_STOP) {
+      turretMotor.set(power * 0.5);
+    } else {
+      turretMotor.set(-power * 0.5);
+    }
   }
 
   /**
@@ -189,6 +193,7 @@ public class Shooter implements Subsystem {
    * 
    * @return if the speed is at it's setpoint.
    */
+
   public boolean speedOnTarget() {
     return speedPID.atSetpoint();
   }
