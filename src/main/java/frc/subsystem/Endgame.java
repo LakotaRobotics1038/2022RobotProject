@@ -44,6 +44,7 @@ public class Endgame {
     }
 
     private Endgame() {
+        this.engageRatchet();
     }
 
     // Encoders for the Motors
@@ -56,17 +57,13 @@ public class Endgame {
     }
 
     public void releaseRatchet() {
-        if (locked) {
-            ratchetSolenoid.set(Value.kForward);
-            locked = false;
-        }
+        ratchetSolenoid.set(Value.kForward);
+        locked = false;
     }
 
     public void engageRatchet() {
-        if (!locked) {
-            ratchetSolenoid.set(Value.kReverse);
-            locked = true;
-        }
+        ratchetSolenoid.set(Value.kReverse);
+        locked = true;
     }
 
     public void liftElevator() {
