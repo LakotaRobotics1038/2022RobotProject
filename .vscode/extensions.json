@@ -5,6 +5,8 @@
         "vscjava.vscode-java-debug",
         "vscjava.vscode-java-pack",
         "wpilibsuite.vscode-wpilib",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "gruntfuggly.todo-tree",
+        "wayou.vscode-todo-highlight"
     ]
 }

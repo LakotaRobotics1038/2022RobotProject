@@ -1,22 +1,17 @@
 package frc.libraries;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.libraries.TalonFX1038;
 
 //Enum for each drive type
 public class DriveTrain1038 implements Subsystem {
 
     private Accelerometer accelerometer = new BuiltInAccelerometer();
-    private int roboWeight = 120;
+    private final int ROBOT_WEIGHT = 120;
 
     public enum DriveModes {
         tankDrive, singleArcadeDrive, dualArcadeDrive
@@ -40,16 +35,16 @@ public class DriveTrain1038 implements Subsystem {
     final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT);
     final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT);
 
-    // TODO: Look into pneumatic types
-    // Creating a new DoubleSoleniod
-    public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, LOW_GEAR_PORT,
+    public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(
+            PneumaticsModuleType.REVPH,
+            LOW_GEAR_PORT,
             HIGH_GEAR_PORT);
 
     // Setting isHighGear to false
     public boolean isHighGear = false;
 
     // Creating a new Differential Drive
-    private DifferentialDrive differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
+    private DifferentialDrive differentialDrive;
 
     // Creating a new DriveTrain Instance
     private static DriveTrain1038 driveTrain;
@@ -63,6 +58,9 @@ public class DriveTrain1038 implements Subsystem {
     }
 
     public DriveTrain1038() {
+        leftBackTalon.follow(leftFrontTalon);
+        rightBackTalon.follow(rightFrontTalon);
+        differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
     }
 
     // Get and return distance driven by the left of the robot in inches
@@ -73,14 +71,6 @@ public class DriveTrain1038 implements Subsystem {
     // Get and return distance driven by the right of the robot in inches
     public double getRightDriveEncoderDistance() {
         return rightFrontTalon.getRotations() * Math.PI * WHEEL_DIAMETER;
-    }
-
-    public double getCANSparkRightEncoder() {
-        return -leftFrontTalon.getPosition();
-    }
-
-    public double getCANSparkLeftEncoder() {
-        return -rightFrontTalon.getSelectedSensorPosition();
     }
 
     // Pneumatics
@@ -139,14 +129,10 @@ public class DriveTrain1038 implements Subsystem {
 
     /**
      * Returns the current robot speed in feet per second.
-     * 
+     *
      * @return the current robot speed in feet per second.
      */
-    public double roboSpeed() {
-        // to get feet per second, mark a spot on the wheeel, reset the encoder counts,
-        // rotate the wheel one revolution and then get the encoder counts
-        leftFrontTalon.getSelectedSensorVelocity();
-
+    public double robotSpeed() {
         return accelerometer.getX();
     }
 }

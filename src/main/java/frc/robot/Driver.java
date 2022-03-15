@@ -1,7 +1,6 @@
 package frc.robot;
 
 import frc.libraries.DriveTrain1038;
-import frc.subsystem.*;
 
 import frc.libraries.Joystick1038;
 
@@ -9,7 +8,7 @@ public class Driver {
     private static Driver driver;
 
     private double drivePower = 0;
-    public double multiplyer = .8;
+    public double multiplier = .8;
 
     public static Driver getInstance() {
         if (driver == null) {
@@ -29,8 +28,8 @@ public class Driver {
     public void periodic() {
         switch (driveTrain.currentDriveMode) {
             case tankDrive:
-                driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical() * multiplyer,
-                        driverJoystick.getRightJoystickVertical() * multiplyer);
+                driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical() * multiplier,
+                        driverJoystick.getRightJoystickVertical() * multiplier);
                 break;
             case dualArcadeDrive:
                 if (driverJoystick.deadband(driverJoystick.getLeftJoystickVertical()) > 0) {
@@ -40,26 +39,26 @@ public class Driver {
                 } else {
                     drivePower = 0;
                 }
-                driveTrain.dualArcadeDrive(drivePower * multiplyer,
-                        driverJoystick.getRightJoystickHorizontal() * multiplyer);
+                driveTrain.dualArcadeDrive(drivePower * multiplier,
+                        driverJoystick.getRightJoystickHorizontal() * multiplier);
                 break;
             case singleArcadeDrive:
-                driveTrain.singleAracadeDrive(driverJoystick.getLeftJoystickVertical() * multiplyer,
-                        driverJoystick.getLeftJoystickHorizontal() * multiplyer);
+                driveTrain.singleAracadeDrive(driverJoystick.getLeftJoystickVertical() * multiplier,
+                        driverJoystick.getLeftJoystickHorizontal() * multiplier);
                 break;
         }
 
         if (driverJoystick.getRightButton() && driverJoystick.getRightTrigger() > .5) {
-            multiplyer = 1;
+            multiplier = 1;
             driveTrain.highGear();
         } else if (driverJoystick.getRightButton()) {
-            multiplyer = 1;
+            multiplier = 1;
             driveTrain.lowGear();
         } else if (driverJoystick.getRightTrigger() > .5) {
-            multiplyer = .8;
+            multiplier = .8;
             driveTrain.highGear();
         } else {
-            multiplyer = .8;
+            multiplier = .8;
             driveTrain.lowGear();
         }
     }

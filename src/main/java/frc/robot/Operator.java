@@ -35,6 +35,7 @@ public class Operator {
 
     public void periodic() {
         PovPositions povPosition = operatorJoystick.getPOVPosition();
+
         if (operatorJoystick.getYButton() && !prevYButtonState) {
             acquisition.toggleAcqPos();
             prevYButtonState = true;
@@ -44,9 +45,7 @@ public class Operator {
 
         if (operatorJoystick.getRightButton()) {
             acquisition.runFwd();
-        }
-
-        else if (operatorJoystick.getLeftButton()) {
+        } else if (operatorJoystick.getLeftButton()) {
             acquisition.runRev();
         }
 
@@ -64,39 +63,27 @@ public class Operator {
 
         if (operatorJoystick.getRightJoystickVertical() > 0) {
             storage.setManualStorage(ManualStorageModes.Forward);
-        }
-
-        if (operatorJoystick.getRightJoystickVertical() < 0) {
+        } else if (operatorJoystick.getRightJoystickVertical() < 0) {
             storage.setManualStorage(ManualStorageModes.Reverse);
-        }
-
-        if (operatorJoystick.getYButton()) {
-            storage.periodic();
+        } else {
+            storage.disableManualStorage();
         }
 
         if (operatorJoystick.getLeftTrigger() > -1) {
             shooter.executeAimPID();
-
         }
 
         if (operatorJoystick.getRightTrigger() > -1) {
-            shooter.executeSpeedPID(); // may need adjusting
+            shooter.executeSpeedPID(); // TODO: may need adjusting
             shooter.executeHoodPID();
         }
 
-        else if (operatorJoystick.getLeftButton()) {
-            acquisition.runRev();
-        }
         if (povPosition == PovPositions.Up) {
             storage.setManualStorage(ManualStorageModes.Forward);
-        }
-
-        if (povPosition == PovPositions.Down) {
+        } else if (povPosition == PovPositions.Down) {
             storage.setManualStorage(ManualStorageModes.Reverse);
-        }
-        if (povPosition == PovPositions.None) {
+        } else if (povPosition == PovPositions.None) {
             storage.disableManualStorage();
         }
-
     }
 }

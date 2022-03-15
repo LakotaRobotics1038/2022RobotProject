@@ -1,11 +1,12 @@
 package frc.subsystem;
 
-import frc.libraries.CANSpark1038;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+
+import frc.libraries.CANSpark1038;
 
 public class Storage implements Subsystem {
     // Ports and Constants
@@ -36,7 +37,7 @@ public class Storage implements Subsystem {
 
     /**
      * returns the storage instance when the robot starts
-     * 
+     *
      * @return storage instance
      */
     public static Storage getInstance() {
@@ -63,7 +64,7 @@ public class Storage implements Subsystem {
 
     /**
      * feeds the shooter
-     * 
+     *
      * @param power how fast to feed the shooter
      */
     public void feedShooter(double power) {

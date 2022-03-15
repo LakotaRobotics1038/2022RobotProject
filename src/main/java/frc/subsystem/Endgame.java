@@ -1,16 +1,14 @@
 package frc.subsystem;
 
-import frc.libraries.DigitalInput1038;
-import frc.libraries.TalonFX1038;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
+import frc.libraries.DigitalInput1038;
+import frc.libraries.TalonFX1038;
 
 public class Endgame {
 
@@ -37,7 +35,7 @@ public class Endgame {
 
     public static Endgame getInstance() {
         if (endgame == null) {
-            System.out.println("Creating a new Dashbard");
+            System.out.println("Creating a new Dashboard");
             endgame = new Endgame();
         }
         return endgame;
