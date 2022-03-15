@@ -31,5 +31,14 @@
     "java.test.defaultConfig": "WPIlibUnitTests",
     "editor.formatOnSave": true,
     "editor.detectIndentation": false,
-    "files.trimTrailingWhitespace": true
+    "files.trimTrailingWhitespace": true,
+    "cSpell.words": [
+        "auton",
+        "Coms",
+        "deadband",
+        "gryo",
+        "roborio",
+        "setpoint",
+        "teleop"
+    ]
 }

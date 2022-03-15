@@ -65,7 +65,7 @@ public class Map1038 implements Subsystem {
     public double turretAngle(double currentTurretPos) {
         gyroPos = gyro.getAngle();
         double targetAngle = Math.atan(pos1X / pos1Y) - gyroPos;
-        return currentTurretPos - targetAngle; // turngle
+        return currentTurretPos - targetAngle; // turn angle
     }
 
     public void resetCoords() {

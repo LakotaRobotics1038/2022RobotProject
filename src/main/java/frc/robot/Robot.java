@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 
-import frc.libraries.DriveTrain1038;
-import frc.libraries.Joystick1038;
 import frc.subsystem.SerialComs;
 
 /*
@@ -23,16 +21,12 @@ import frc.subsystem.SerialComs;
  * project.
  */
 public class Robot extends TimedRobot {
-    private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
-    private final SerialComs rpiComs = SerialComs.getInstance();
-    private final Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
-
-    private Joystick1038 driverJoystick = new Joystick1038(0);
-
-    // private Driver driverJoystick = Driver.getInstance();
-    // private Operator operatorJoystick = Operator.getInstance();
+    private final int PH_PORT = 1;
     private final int MIN_PRESSURE = 110;
     private final int MAX_PRESSURE = 120;
+
+    private final SerialComs rpiComs = SerialComs.getInstance();
+    private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
 
     /*
      * This function is run when the robot is first started up and should be used
@@ -54,7 +48,6 @@ public class Robot extends TimedRobot {
     }
 
     public void teleopPeriodic() {
-        driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical(), driverJoystick.getRightJoystickVertical());
         compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
         Operator.getInstance().periodic();
@@ -83,13 +76,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testPeriodic() {
-        // if (operatorJoystick.getAButton()) {
-        // testCylinder.set(Value.kForward);
-        // } else if (operatorJoystick.getBButton()) {
-        // testCylinder.set(Value.kReverse);
-        // }
-        // driveTrain.tankDrive(driverJoystick.getRightTrigger(),
-        // driverJoystick.getRightTrigger());
 
     }
 }

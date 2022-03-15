@@ -75,8 +75,7 @@ public class Storage implements Subsystem {
      */
     public void periodic() {
         if (selectedManualStorageMode == ManualStorageModes.None) {
-            if (shuttleMotorEncoder.getPosition() < SHUTTLE_MOTOR_ENCODER_COUNTS && !laserEnd.get()) // sensor
-            {
+            if (shuttleMotorEncoder.getPosition() < SHUTTLE_MOTOR_ENCODER_COUNTS && !laserEnd.get()) {
                 shuttleMotor.set(shuttleMotorSpeed);
             } else if (laserStart.get() && !laserEnd.get()) {
                 shuttleMotorEncoder.setPosition(0);

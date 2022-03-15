@@ -29,7 +29,9 @@ public class Endgame {
     private final DigitalInput1038 bottomLimit = new DigitalInput1038(LIMIT_SWITCH_PORT);
     private final TalonFX1038 rotator = new TalonFX1038(ROTATOR_PORT);
     private final TalonFX1038 elevator = new TalonFX1038(ELEVATOR_PORT);
-    private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RATCHET_ON_PORT,
+    private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(
+            PneumaticsModuleType.REVPH,
+            RATCHET_ON_PORT,
             RATCHET_OFF_PORT);
     public static Endgame endgame;
 

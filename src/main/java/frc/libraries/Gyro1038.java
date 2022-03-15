@@ -3,7 +3,7 @@ package frc.libraries;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 
-public class Gyro1038 implements Gyro { // extends AnalogGyro
+public class Gyro1038 implements Gyro {
 
     // Variables
     public final int SENSOR_ID_CODE = 0x02;
@@ -28,9 +28,6 @@ public class Gyro1038 implements Gyro { // extends AnalogGyro
      * Initializes the gyro to listen to the onboard I2C port at the set address and
      * calibrates the gyro
      */
-
-    // TODO: Make sure i2c gyro works with analogGyro class
-
     private Gyro1038() {
         super();
         I2CBus = new I2C(I2C.Port.kOnboard, DEVICE_ADDRESS);
@@ -107,6 +104,5 @@ public class Gyro1038 implements Gyro { // extends AnalogGyro
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub
-
     }
 }

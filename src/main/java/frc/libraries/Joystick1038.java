@@ -60,7 +60,6 @@ public class Joystick1038 extends Joystick {
             default:
                 return PovPositions.None;
         }
-
     }
 
     /**

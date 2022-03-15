@@ -24,7 +24,7 @@ public class Shooter implements Subsystem {
     private Gyro1038 gryo = Gyro1038.getInstance();
     private boolean isEnabled = false;
     private static double swivelSpeed = 0.2;
-    private final static int LEFT_STOP = 0; // TODO: Need to change both of these to repersent where we have to stop the
+    private final static int LEFT_STOP = 0; // TODO: Need to change both of these to represent where we have to stop the
                                             // turret.
     private final static int RIGHT_STOP = 0;
     // Turret

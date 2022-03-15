@@ -16,7 +16,7 @@ public class Dashboard {
 
     public static Dashboard getInstance() {
         if (dashboard == null) {
-            System.out.println("Creating a new Dashbard");
+            System.out.println("Creating a new Dashboard");
             dashboard = new Dashboard();
         }
         return dashboard;
