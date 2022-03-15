@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     }
 
     public void teleopInit() {
-        rpiComs.initialize();
+
     }
 
     public void teleopPeriodic() {

@@ -48,7 +48,7 @@ public class SerialComs implements Subsystem {
      * Initializes the rpi reader (empty currently)
      */
     private SerialComs() {
-
+        this.initialize();
     }
 
     /**
