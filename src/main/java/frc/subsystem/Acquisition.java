@@ -1,6 +1,9 @@
 package frc.subsystem;
 
 import frc.libraries.*;
+
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -22,29 +25,27 @@ public class Acquisition implements Subsystem {
 
     // Motor ports *CHANGE THESE OR ROBOT GETS ANGRY!
     // Ports and Constants
-    private final int SPINNY_BAR_PORT = 0;
-    private final int PUSH_OUT_ACQUISITION_CHANNEL = 0;
-    private final int PULL_IN_ACQUISITION_CHANNEL = 0;
-    private final static double BEATER_BAR_SPEED = 0.65;
+    private final int ACQUISITION_MOTOR_PORT = 9;
+    private final int PUSH_OUT_ACQUISITION_CHANNEL = 2;
+    private final int PULL_IN_ACQUISITION_CHANNEL = 3;
+    private final static double ACQUISITION_MOTOR_SPEED = 0.65;
 
     // States
-    private boolean acquisitionIsIn = true;
     public AcquisitionStates acquisitionState = AcquisitionStates.In;
     public boolean XIsPressed = false;
 
     // Inputs and Outputs
-    private final TalonFX1038 spinnyBar = new TalonFX1038(SPINNY_BAR_PORT);
-    private DoubleSolenoid acquisitionSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
+    private final CANSpark1038 acquisitionMotor = new CANSpark1038(ACQUISITION_MOTOR_PORT, MotorType.kBrushless);
+    private DoubleSolenoid acquisitionSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
             PUSH_OUT_ACQUISITION_CHANNEL, PULL_IN_ACQUISITION_CHANNEL);
 
     public enum AcquisitionStates {
         In, Out
     }
 
-    public double motor1Encoder = spinnyBar.getPosition();
     // Motor Speeds
 
-    public void periodic() {
+    public void toggleAcqPos() {
         switch (acquisitionState) {
             case In:
                 acquisitionSolenoid.set(Value.kReverse);
@@ -56,50 +57,18 @@ public class Acquisition implements Subsystem {
                 acquisitionState = AcquisitionStates.In;
                 break;
         }
-
     }
 
-    public void toggleAcqPos() {
-        if ((acquisitionIsIn)
-                && ((acquisitionSolenoid.get() != Value.kForward) || (acquisitionSolenoid.get() != Value.kReverse))) {
-            acquisitionState = AcquisitionStates.Out;
-            acquisitionIsIn = false;
-
-            if ((acquisitionIsIn) && ((acquisitionSolenoid.get() != Value.kForward)
-                    || (acquisitionSolenoid.get() != Value.kReverse))) {
-                acquisitionState = AcquisitionStates.Out;
-                acquisitionIsIn = false;
-
-            }
-
-            else if ((!acquisitionIsIn) && ((acquisitionSolenoid.get() != Value.kForward)
-                    || (acquisitionSolenoid.get() != Value.kReverse))) {
-                acquisitionState = AcquisitionStates.In;
-                acquisitionIsIn = true;
-            }
-
-        }
-
-        else if ((!acquisitionIsIn)
-                && ((acquisitionSolenoid.get() != Value.kForward) || (acquisitionSolenoid.get() != Value.kReverse)))
-
-        {
-            acquisitionState = AcquisitionStates.In;
-            acquisitionIsIn = true;
-        }
-
-    }
-
-    public void runspinnyBarFwd() {
+    public void runFwd() {
         // If motor is not moving
-        spinnyBar.set(BEATER_BAR_SPEED);
+        acquisitionMotor.set(ACQUISITION_MOTOR_SPEED);
     }
 
-    public void runspinnyBarRev() {
-        spinnyBar.set(-BEATER_BAR_SPEED);
+    public void runRev() {
+        acquisitionMotor.set(-ACQUISITION_MOTOR_SPEED);
     }
 
-    public void stopspinnyBar() {
-        spinnyBar.set(0);
+    public void stop() {
+        acquisitionMotor.set(0);
     }
 }

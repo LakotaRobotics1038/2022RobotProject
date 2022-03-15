@@ -11,7 +11,7 @@ public class Dashboard {
   private static Dashboard dashboard;
   private DriverStation driverStation;
   private Shooter shooter = Shooter.getInstance();
-  private Limelight1038 limelight = Limelight1038.getInstance();
+  // private Limelight1038 limelight = Limelight1038.getInstance();
 
   private final int CAMERA_EXPOSURE = 50;
 
@@ -36,7 +36,8 @@ public class Dashboard {
 
   public void update() {
     SmartDashboard.putNumber("Shooter Angle", shooter.getTurretEncoder());
-    SmartDashboard.putBoolean("Limelight Can See Target", limelight.canSeeTarget());
+    // SmartDashboard.putBoolean("Limelight Can See Target",
+    // limelight.canSeeTarget());
     // SmartDashboard.putBoolean("Prox", shooter.getHardStop()); //We have no
     // shooter codes
   }

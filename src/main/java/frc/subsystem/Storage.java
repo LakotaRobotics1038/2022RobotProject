@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Storage implements Subsystem {
     // Ports and Constants
-    private final int SHUTTLE_MOTOR_PORT = 0;
-    private final int START_LASER_PORT = 1;
+    private final int SHUTTLE_MOTOR_PORT = 17;
+    private final int START_LASER_PORT = 0;
+    private final int MID_LASER_PORT = 1;
     private final int END_LASER_PORT = 2;
-    private final int MID_LASER_PORT = 3;
     private final int SHUTTLE_MOTOR_ENCODER_COUNTS = 47;
     private final int ENCODER_OFFSET = 500;
     private final static double shuttleMotorSpeed = 1.0;
@@ -24,14 +24,14 @@ public class Storage implements Subsystem {
     private CANSpark1038 shuttleMotor = new CANSpark1038(SHUTTLE_MOTOR_PORT, MotorType.kBrushless);
     private RelativeEncoder shuttleMotorEncoder = shuttleMotor.getEncoder();
     private DigitalInput laserStart = new DigitalInput(START_LASER_PORT);
+    private DigitalInput laserMid = new DigitalInput(MID_LASER_PORT);
     private DigitalInput laserEnd = new DigitalInput(END_LASER_PORT);
 
     // manual drive
-    private boolean manualStorageForward = false;
-    private boolean manualStorageReverse = false;
+    private ManualStorageModes selectedManualStorageMode = ManualStorageModes.None;
 
     public enum ManualStorageModes {
-        Forward, Reverse
+        Forward, Reverse, None
     }
 
     /**
@@ -53,22 +53,12 @@ public class Storage implements Subsystem {
         shuttleMotorEncoder.setPositionConversionFactor(47 / 2);
     }
 
-    public void enableManualStorage(ManualStorageModes mode) {
-        switch (mode) {
-            case Forward:
-                manualStorageForward = true;
-                break;
-            case Reverse:
-                manualStorageReverse = true;
-                break;
-            default:
-                break;
-        }
+    public void setManualStorage(ManualStorageModes mode) {
+        selectedManualStorageMode = mode;
     }
 
     public void disableManualStorage() {
-        manualStorageReverse = false;
-        manualStorageForward = false;
+        selectedManualStorageMode = ManualStorageModes.None;
     }
 
     /**
@@ -84,7 +74,7 @@ public class Storage implements Subsystem {
      * runs the ball storage
      */
     public void periodic() {
-        if (!manualStorageForward && !manualStorageReverse) {
+        if (selectedManualStorageMode == ManualStorageModes.None) {
             if (shuttleMotorEncoder.getPosition() < SHUTTLE_MOTOR_ENCODER_COUNTS && !laserEnd.get()) // sensor
             {
                 shuttleMotor.set(shuttleMotorSpeed);
@@ -93,23 +83,12 @@ public class Storage implements Subsystem {
             } else {
                 shuttleMotor.set(0);
             }
-        } else if (manualStorageForward) {
+        } else if (selectedManualStorageMode == ManualStorageModes.Forward) {
             shuttleMotor.set(shuttleMotorSpeed);
             shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
-        } else if (manualStorageReverse) {
+        } else if (selectedManualStorageMode == ManualStorageModes.Reverse) {
             shuttleMotor.set(-shuttleMotorSpeed);
             shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
-
-        }
-
-        else if (manualStorageForward) {
-            shuttleMotor.set(shuttleMotorSpeed);
-            // shuttleMotor.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
-        }
-
-        else if (manualStorageReverse) {
-            shuttleMotor.set(-shuttleMotorSpeed);
-            // shuttleMotor.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
         }
     }
 }

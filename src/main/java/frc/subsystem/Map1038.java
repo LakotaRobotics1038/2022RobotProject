@@ -9,12 +9,11 @@ import java.lang.Math;
 //TODO: NEED TO TALK WITH DREW ON ENCODER ISSUE. DISTANCE WILL BE SCREWED IF WE JUST USE ENCODER COUNTS
 
 public class Map1038 implements Subsystem {
-    private Limelight1038 limelight = Limelight1038.getInstance();
+    // private Limelight1038 limelight = Limelight1038.getInstance();
     private Gyro1038 gyro = Gyro1038.getInstance();
     private DriveTrain1038 drivetrain = DriveTrain1038.getInstance();
 
     private double gyroPos = gyro.getAngle();
-
     // public double limelightZ = limelight.getYOffset();
     final double LL_MOUNT_HEIGHT = 0;
     public double pos1X = 1;
@@ -68,11 +67,11 @@ public class Map1038 implements Subsystem {
     }
 
     public void resetCoords() {
-        double a = limelight.getXOffset();
-        double b = limelight.getYOffset();
-        a *= pos1X / Math.abs(pos1X);
-        b *= (pos1Y / Math.abs(pos1Y));
-        pos1X = a;
-        pos1Y = b;
+        // double a = limelight.getXOffset();
+        // double b = limelight.getYOffset();
+        // a *= pos1X / Math.abs(pos1X);
+        // b *= (pos1Y / Math.abs(pos1Y));
+        // pos1X = a;
+        // pos1Y = b;
     }
 }

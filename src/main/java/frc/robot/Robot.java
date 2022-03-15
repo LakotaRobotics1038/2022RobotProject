@@ -7,10 +7,8 @@
 
 package frc.robot;
 
-import java.util.Map;
-
-import javax.print.attribute.standard.MediaSize.Engineering;
-
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.*;
 import frc.subsystem.*;
@@ -26,17 +24,15 @@ import frc.libraries.Joystick1038;
 
 public class Robot extends TimedRobot {
   private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
-  private final Acquisition acquisition = Acquisition.getInstance();
-  private final Shooter shooter = Shooter.getInstance();
-  private final Endgame endgame = Endgame.getInstance();
   private final SerialComs rpiComs = SerialComs.getInstance();
-  private final Map1038 map = Map1038.getInstance();
+  private final Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
 
   private Joystick1038 driverJoystick = new Joystick1038(0);
-  private Joystick1038 operatorJoystick = new Joystick1038(1);
 
   // private Driver driverJoystick = Driver.getInstance();
   // private Operator operatorJoystick = Operator.getInstance();
+  private final int MIN_PRESSURE = 110;
+  private final int MAX_PRESSURE = 120;
 
   /*
    * This function is run when the robot is first started up and should be used
@@ -50,6 +46,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    System.out.println(compressor.getPressure());
   }
 
   public void teleopInit() {
@@ -59,25 +56,16 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     boolean prevXButtonState = false;
     driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical(), driverJoystick.getRightJoystickVertical());
-
-    if (operatorJoystick.getAButton()) {
-      acquisition.toggleAcqPos();
-    }
-
-    if (operatorJoystick.getXButton() && !prevXButtonState) {
-      endgame.liftElevator();
-      prevXButtonState = true;
-    } else {
-      endgame.lowerElevator();
-      prevXButtonState = false;
-    }
-
+    compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+    Driver.getInstance().periodic();
+    Operator.getInstance().periodic();
   }
 
   public void autonomousInit() {
   }
 
   public void autonomousPeriodic() {
+    compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
   }
 
   public void disabledInit() {

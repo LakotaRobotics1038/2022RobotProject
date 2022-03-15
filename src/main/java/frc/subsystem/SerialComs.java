@@ -31,7 +31,7 @@ public class SerialComs implements Subsystem {
     // Objects
     private static SerialPort serialPort;
     private static SerialComs rpiCom;
-    private Limelight1038 limelight = Limelight1038.getInstance();
+    // private Limelight1038 limelight = Limelight1038.getInstance();
 
     /**
      * Returns the rpi instance created when the robot starts
@@ -198,8 +198,8 @@ public class SerialComs implements Subsystem {
     }
 
     public void testSend() {
-        double distance = limelight.getYOffset();
-        String dString = Double.toString(distance);
+        // double distance = limelight.getYOffset();
+        // String dString = Double.toString(distance);
         // serialPort.setWriteBufferMode(WriteBufferMode.kFlushOnAccess);
         serialPort.writeString("this is a test");
     }

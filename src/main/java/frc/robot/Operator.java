@@ -1,9 +1,12 @@
 package frc.robot;
 
 import frc.libraries.Joystick1038;
+import frc.libraries.Joystick1038.PovPositions;
 import frc.subsystem.Acquisition;
+import frc.subsystem.Endgame;
+import frc.subsystem.Shooter;
+import frc.subsystem.Storage;
 import frc.subsystem.Storage.ManualStorageModes;
-import frc.subsystem.*;
 
 public class Operator {
     private static Operator operator;
@@ -16,29 +19,35 @@ public class Operator {
         return operator;
     }
 
-    private final int OPERATOR_JOYSTICK_PORT = 0;
+    private final int OPERATOR_JOYSTICK_PORT = 1;
 
     public Joystick1038 operatorJoystick = new Joystick1038(OPERATOR_JOYSTICK_PORT);
     private final Acquisition acquisition = Acquisition.getInstance();
     private final Endgame endgame = Endgame.getInstance();
-    private final Storage storage = Storage.getInstance();
     private final Shooter shooter = Shooter.getInstance();
+    private final Storage storage = Storage.getInstance();
+
+    private boolean prevYButtonState = false;
 
     private Operator() {
 
     }
 
     public void periodic() {
-        if (operatorJoystick.getXButton()) {
+        PovPositions povPosition = operatorJoystick.getPOVPosition();
+        if (operatorJoystick.getYButton() && !prevYButtonState) {
             acquisition.toggleAcqPos();
+            prevYButtonState = true;
+        } else if (!operatorJoystick.getYButton()) {
+            prevYButtonState = false;
         }
 
         if (operatorJoystick.getRightButton()) {
-            acquisition.runspinnyBarRev();
+            acquisition.runFwd();
         }
 
         else if (operatorJoystick.getLeftButton()) {
-            acquisition.runspinnyBarFwd();
+            acquisition.runRev();
         }
 
         if (operatorJoystick.getBButton()) {
@@ -53,12 +62,12 @@ public class Operator {
             endgame.rotateLeft();
         }
 
-        if (operatorJoystick.getRightJoystickVertical() > -1) {
-            storage.enableManualStorage(ManualStorageModes.Forward);
+        if (operatorJoystick.getRightJoystickVertical() > 0) {
+            storage.setManualStorage(ManualStorageModes.Forward);
         }
 
-        if (operatorJoystick.getRightJoystickVertical() < -1) {
-            storage.enableManualStorage(ManualStorageModes.Reverse);
+        if (operatorJoystick.getRightJoystickVertical() < 0) {
+            storage.setManualStorage(ManualStorageModes.Reverse);
         }
 
         if (operatorJoystick.getYButton()) {
@@ -75,20 +84,18 @@ public class Operator {
             shooter.executeHoodPID();
         }
 
-        if (operatorJoystick.getPOV() == 0) {
-            endgame.liftElevator();
+        else if (operatorJoystick.getLeftButton()) {
+            acquisition.runRev();
+        }
+        if (povPosition == PovPositions.Up) {
+            storage.setManualStorage(ManualStorageModes.Forward);
         }
 
-        if (operatorJoystick.getPOV() == 180) {
-            endgame.lowerElevator();
+        if (povPosition == PovPositions.Down) {
+            storage.setManualStorage(ManualStorageModes.Reverse);
         }
-
-        if (operatorJoystick.getPOV() == 90) {
-            endgame.rotateRight();
-        }
-
-        if (operatorJoystick.getPOV() == 270) {
-            endgame.rotateLeft();
+        if (povPosition == PovPositions.None) {
+            storage.disableManualStorage();
         }
 
     }

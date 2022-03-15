@@ -14,24 +14,25 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class Endgame {
 
-    private final int ELEVATOR_PORT = 0;
-    private final int ROTATOR_PORT = 0;
-    private final int RATCHET_PORT1 = 0;
-    private final int RATCHET_PORT2 = 0;
+    // Ports and Constants
+    private final int ELEVATOR_PORT = 62;
+    private final int ROTATOR_PORT = 1;
+    private final int RATCHET_ON_PORT = 4;
+    private final int RATCHET_OFF_PORT = 5;
     private boolean locked = true;
     private int endgameTop = 230; // TODO: change encoder counts to correct value
     private int endgameBottom = 0;
-    private int limitSwitchPort = 0;
+    private int LIMIT_SWITCH_PORT = 3;
     // This is from the right side of the robot looking at it with acq facing you.
     private int rotateLimitLeft = 150; // TODO: replace this with the actually encoder counts
     private int rotateLimitRight = 0;
 
     // Inputs and Outputs
-    private final DigitalInput1038 bottomLimit = new DigitalInput1038(limitSwitchPort);
+    private final DigitalInput1038 bottomLimit = new DigitalInput1038(LIMIT_SWITCH_PORT);
     private final TalonFX1038 rotator = new TalonFX1038(ROTATOR_PORT);
-    private final TalonFX1038 elevator = new TalonFX1038(ROTATOR_PORT);
-    private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, RATCHET_PORT1,
-            RATCHET_PORT2);
+    private final TalonFX1038 elevator = new TalonFX1038(ELEVATOR_PORT);
+    private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RATCHET_ON_PORT,
+            RATCHET_OFF_PORT);
     public static Endgame endgame;
 
     public static Endgame getInstance() {
@@ -44,8 +45,6 @@ public class Endgame {
 
     private Endgame() {
     }
-
-    // Ports and Constants
 
     // Encoders for the Motors
     public double getElevatorEncoderPosition() {

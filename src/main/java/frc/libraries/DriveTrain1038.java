@@ -27,12 +27,12 @@ public class DriveTrain1038 implements Subsystem {
 
     // Ports for the motors
     public final double WHEEL_DIAMETER = 4;
-    private final int HIGH_GEAR_PORT = 3;
-    private final int LOW_GEAR_PORT = 2;
-    private final static int RIGHT_FRONT_PORT = 0;
-    private final static int RIGHT_BACK_PORT = 0;
-    private final static int LEFT_FRONT_PORT = 0;
-    private final static int LEFT_BACK_PORT = 0;
+    private final int HIGH_GEAR_PORT = 1;
+    private final int LOW_GEAR_PORT = 0;
+    private final static int RIGHT_FRONT_PORT = 6;
+    private final static int RIGHT_BACK_PORT = 7;
+    private final static int LEFT_FRONT_PORT = 4;
+    private final static int LEFT_BACK_PORT = 5;
 
     // Wheel Motors
     final TalonFX1038 leftFrontTalon = new TalonFX1038(LEFT_FRONT_PORT);
@@ -42,7 +42,7 @@ public class DriveTrain1038 implements Subsystem {
 
     // TODO: Look into pneumatic types
     // Creating a new DoubleSoleniod
-    public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, LOW_GEAR_PORT,
+    public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, LOW_GEAR_PORT,
             HIGH_GEAR_PORT);
 
     // Setting isHighGear to false
