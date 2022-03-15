@@ -6,19 +6,19 @@ import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 //Enum for each drive type
 public class DriveTrain1038 implements Subsystem {
 
-    private Accelerometer accelerometer = new BuiltInAccelerometer();
     private final int ROBOT_WEIGHT = 120;
 
     public enum DriveModes {
         tankDrive, singleArcadeDrive, dualArcadeDrive
     }
 
-    // Setting the currentDriveMode to dualArcadeDrive
     public DriveModes currentDriveMode = DriveModes.dualArcadeDrive;
+    public boolean isHighGear = false;
 
     // Ports for the motors
     public final double WHEEL_DIAMETER = 4;
@@ -34,19 +34,14 @@ public class DriveTrain1038 implements Subsystem {
     final TalonFX1038 rightFrontTalon = new TalonFX1038(RIGHT_FRONT_PORT);
     final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT);
     final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT);
+    private Accelerometer accelerometer = new BuiltInAccelerometer();
 
     public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(
             PneumaticsModuleType.REVPH,
             LOW_GEAR_PORT,
             HIGH_GEAR_PORT);
 
-    // Setting isHighGear to false
-    public boolean isHighGear = false;
-
-    // Creating a new Differential Drive
     private DifferentialDrive differentialDrive;
-
-    // Creating a new DriveTrain Instance
     private static DriveTrain1038 driveTrain;
 
     public static DriveTrain1038 getInstance() {
@@ -63,38 +58,47 @@ public class DriveTrain1038 implements Subsystem {
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
     }
 
-    // Get and return distance driven by the left of the robot in inches
+    /**
+     * Get and return distance driven by the left of the robot in inches
+     */
     public double getLeftDriveEncoderDistance() {
         return leftFrontTalon.getRotations() * Math.PI * WHEEL_DIAMETER;
     }
 
-    // Get and return distance driven by the right of the robot in inches
+    /**
+     * Get and return distance driven by the right of the robot in inches
+     */
     public double getRightDriveEncoderDistance() {
         return rightFrontTalon.getRotations() * Math.PI * WHEEL_DIAMETER;
     }
 
-    // Pneumatics
+    /**
+     * Set the drive train to use high gear
+     */
     public void highGear() {
-        // Doucment that the robot is in HighGear
         isHighGear = true;
-        // Change the Gear Solenoid to Forward
-        GearChangeSolenoid.set(DoubleSolenoid.Value.kForward);
+        GearChangeSolenoid.set(Value.kForward);
     }
 
+    /**
+     * Set the drive train to use low gear
+     */
     public void lowGear() {
-        // Document that the robot is in LowGear
         isHighGear = false;
-        // Change the Gear Solenoid to Reverse
-        GearChangeSolenoid.set(DoubleSolenoid.Value.kReverse);
+        GearChangeSolenoid.set(Value.kReverse);
     }
 
+    /**
+     * Reset drive encoders to zero
+     */
     public void resetEncoders() {
-        // Reset the Motor encoders for driving
         leftFrontTalon.resetPosition();
         rightFrontTalon.resetPosition();
     }
 
-    // Switch between drive modes
+    /**
+     * Toggle drive mode between tank, single arcade, and dual arcade
+     */
     public void driveModeToggler() {
         switch (currentDriveMode) {
             case tankDrive:
@@ -112,19 +116,26 @@ public class DriveTrain1038 implements Subsystem {
         }
     }
 
-    // Drive robot with tank controls (input range -1 to 1 for each stick)
+    /**
+     * Drive the robot in tank mode
+     *
+     * @param leftStickInput  the forward speed of the left side of the robot
+     *                        (-1 to 1)
+     * @param rightStickInput the forward speed of the right side of the robot
+     *                        (-1 to 1)
+     */
     public void tankDrive(double leftStickInput, double rightStickInput) {
         differentialDrive.tankDrive(leftStickInput, rightStickInput, true);
     }
 
-    // Drive robot using a single stick (input range -1 to 1)
-    public void singleAracadeDrive(double speed, double turnValue) {
+    /**
+     * Drive the robot in single stick arcade mode
+     *
+     * @param speed     The forward speed of the robot (-1 to 1)
+     * @param turnValue The turn speed of the robot (-1 to 1)
+     */
+    public void arcadeDrive(double speed, double turnValue) {
         differentialDrive.arcadeDrive(speed, turnValue, true);
-    }
-
-    // Drive robot using 2 sticks (input ranges -1 to 1)
-    public void dualArcadeDrive(double yaxis, double xaxis) {
-        differentialDrive.arcadeDrive(yaxis, xaxis, true);
     }
 
     /**

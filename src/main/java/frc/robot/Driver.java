@@ -39,11 +39,11 @@ public class Driver {
                 } else {
                     drivePower = 0;
                 }
-                driveTrain.dualArcadeDrive(drivePower * multiplier,
+                driveTrain.arcadeDrive(drivePower * multiplier,
                         driverJoystick.getRightJoystickHorizontal() * multiplier);
                 break;
             case singleArcadeDrive:
-                driveTrain.singleAracadeDrive(driverJoystick.getLeftJoystickVertical() * multiplier,
+                driveTrain.arcadeDrive(driverJoystick.getLeftJoystickVertical() * multiplier,
                         driverJoystick.getLeftJoystickHorizontal() * multiplier);
                 break;
         }
