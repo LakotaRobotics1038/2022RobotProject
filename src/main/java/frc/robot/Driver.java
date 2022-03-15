@@ -8,7 +8,7 @@ public class Driver {
     private static Driver driver;
 
     private double drivePower = 0;
-    public double multiplier = .8;
+    public double multiplier = .5;
 
     public static Driver getInstance() {
         if (driver == null) {
@@ -58,7 +58,7 @@ public class Driver {
             multiplier = .8;
             driveTrain.highGear();
         } else {
-            multiplier = .8;
+            multiplier = .5;
             driveTrain.lowGear();
         }
     }
