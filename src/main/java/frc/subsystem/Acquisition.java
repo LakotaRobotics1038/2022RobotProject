@@ -11,23 +11,12 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class Acquisition implements Subsystem {
     private static Acquisition acquisition;
 
-    public static Acquisition getInstance() {
-        if (acquisition == null) {
-            System.out.println("Creating a new Acquisition");
-            acquisition = new Acquisition();
-        }
-        return acquisition;
-    }
-
-    private Acquisition() {
-    }
-
     // Motor ports *CHANGE THESE OR ROBOT GETS ANGRY!
     // Ports and Constants
     private final int ACQUISITION_MOTOR_PORT = 9;
     private final int PUSH_OUT_ACQUISITION_CHANNEL = 2;
     private final int PULL_IN_ACQUISITION_CHANNEL = 3;
-    private final static double ACQUISITION_MOTOR_SPEED = 0.65;
+    private final double ACQUISITION_MOTOR_SPEED = 0.65;
 
     // States
     public AcquisitionStates acquisitionState = AcquisitionStates.In;
@@ -40,6 +29,18 @@ public class Acquisition implements Subsystem {
 
     public enum AcquisitionStates {
         In, Out
+    }
+
+    public static Acquisition getInstance() {
+        if (acquisition == null) {
+            System.out.println("Creating a new Acquisition");
+            acquisition = new Acquisition();
+        }
+        return acquisition;
+    }
+
+    private Acquisition() {
+        acquisitionSolenoid.set(Value.kForward);
     }
 
     // Motor Speeds
