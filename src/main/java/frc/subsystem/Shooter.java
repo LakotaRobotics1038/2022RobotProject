@@ -12,7 +12,7 @@ import frc.libraries.CANSpark1038;
 import frc.libraries.Gyro1038;
 import frc.subsystem.Storage.ManualStorageModes;
 
-//Everything is based off distance and runs in a PID loop, no need for mapping or drivetrain. 
+//Everything is based off distance and runs in a PID loop, no need for mapping or drivetrain.
 //Best case we can implement math that will allow us to shoot and drive. PID might be able to do that with some extra math
 public class Shooter implements Subsystem {
   private static Shooter shooter;
@@ -129,7 +129,7 @@ public class Shooter implements Subsystem {
 
   /**
    * sets the position setpoint
-   * 
+   *
    * @deprecated DO NOT USE
    */
   @Deprecated
@@ -162,7 +162,12 @@ public class Shooter implements Subsystem {
     // System.out.println("PID");
     // double power = positionPID.calculate(limelight.getXOffset());
     // System.out.println("x " + limelight.getXOffset());
+    // if (turretMotor.getSelectedSensorPosition() > LEFT_STOP ||
+    // turretMotor.getSelectedSensorPosition() < RIGHT_STOP) {
     // turretMotor.set(power * 0.5);
+    // } else {
+    // turretMotor.set(-power * 0.5);
+    // }
   }
 
   /**
@@ -187,9 +192,10 @@ public class Shooter implements Subsystem {
 
   // checks if the speedPID is at the setpoint (What speed we want the shooter at)
   /**
-   * 
+   *
    * @return if the speed is at it's setpoint.
    */
+
   public boolean speedOnTarget() {
     return speedPID.atSetpoint();
   }
@@ -197,7 +203,7 @@ public class Shooter implements Subsystem {
   // sets the shooter to manual speed, disabling the PID
   /**
    * This is used to shoot manually.
-   * 
+   *
    * @deprecated
    * @param speed the shooter should be at
    */
@@ -239,7 +245,7 @@ public class Shooter implements Subsystem {
 
   /**
    * stops and resets PID values if interrupted (potentially unnecessary)
-   * 
+   *
    * @param interrupted if the robot is interrupted
    */
   public void end(boolean interrupted) {
@@ -252,7 +258,7 @@ public class Shooter implements Subsystem {
 
   /**
    * decides whether the robot is ready to shoot
-   * 
+   *
    * @return returns if robot is ready to shoot
    */
   public boolean isFinished() {
@@ -294,7 +300,7 @@ public class Shooter implements Subsystem {
   // gets the current shooter speed
   /**
    * This returns the current shooterSpeed.
-   * 
+   *
    * @return The current shooter speed.
    */
   public double getShooterSpeed() {
@@ -325,7 +331,7 @@ public class Shooter implements Subsystem {
   // returns the turret directions
   /**
    * Returns the current direction the turret is moving.
-   * 
+   *
    * @return The turret Direction.
    */
   public TurretDirections getTurretDirection() {
@@ -348,7 +354,7 @@ public class Shooter implements Subsystem {
 
   // hold the turret position
   /**
-   * 
+   *
    * This code holds the turret at the current position.
    */
   public void holdPosition() {
