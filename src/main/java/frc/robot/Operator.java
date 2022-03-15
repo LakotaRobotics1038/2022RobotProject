@@ -47,6 +47,8 @@ public class Operator {
             acquisition.runFwd();
         } else if (operatorJoystick.getLeftButton()) {
             acquisition.runRev();
+        } else {
+            acquisition.stop();
         }
 
         if (operatorJoystick.getBButton()) {
