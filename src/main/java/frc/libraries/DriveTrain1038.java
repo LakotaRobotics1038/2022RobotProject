@@ -58,6 +58,7 @@ public class DriveTrain1038 implements Subsystem {
         leftBackTalon.follow(leftFrontTalon);
         rightBackTalon.follow(rightFrontTalon);
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
+        this.lowGear();
     }
 
     /**
