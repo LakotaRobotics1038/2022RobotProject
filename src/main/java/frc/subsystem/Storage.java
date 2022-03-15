@@ -1,12 +1,11 @@
 package frc.subsystem;
 
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-
-import frc.libraries.CANSpark1038;
 
 public class Storage implements Subsystem {
     // Ports and Constants
@@ -22,7 +21,7 @@ public class Storage implements Subsystem {
     private static Storage storage;
 
     // Inputs and Outputs
-    private CANSpark1038 shuttleMotor = new CANSpark1038(SHUTTLE_MOTOR_PORT, MotorType.kBrushless);
+    private CANSparkMax shuttleMotor = new CANSparkMax(SHUTTLE_MOTOR_PORT, MotorType.kBrushless);
     private RelativeEncoder shuttleMotorEncoder = shuttleMotor.getEncoder();
     private DigitalInput laserStart = new DigitalInput(START_LASER_PORT);
     private DigitalInput laserMid = new DigitalInput(MID_LASER_PORT);

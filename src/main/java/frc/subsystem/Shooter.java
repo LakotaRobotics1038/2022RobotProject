@@ -1,6 +1,7 @@
 package frc.subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -8,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import frc.libraries.TalonSRX1038;
 import frc.libraries.TalonFX1038;
-import frc.libraries.CANSpark1038;
 import frc.libraries.Gyro1038;
 import frc.subsystem.Storage.ManualStorageModes;
 
@@ -52,8 +52,8 @@ public class Shooter implements Subsystem {
     // Inputs and Outputs
     public TalonFX1038 shooterMotor1 = new TalonFX1038(SHOOTER_MOTOR_PORT1);
     public TalonFX1038 shooterMotor2 = new TalonFX1038(SHOOTER_MOTOR_PORT2);
-    public CANSpark1038 compressionMotor = new CANSpark1038(COMPRESSION_MOTOR_PORT, MotorType.kBrushed);
-    public CANSpark1038 hoodMotor = new CANSpark1038(HOOD_MOTOR_PORT, MotorType.kBrushless);
+    public CANSparkMax compressionMotor = new CANSparkMax(COMPRESSION_MOTOR_PORT, MotorType.kBrushed);
+    public CANSparkMax hoodMotor = new CANSparkMax(HOOD_MOTOR_PORT, MotorType.kBrushless);
     public TalonSRX1038 turretMotor = new TalonSRX1038(TURRET_MOTOR_PORT);
 
     // TODO: map angles to encoder counts, turret should go 160ish degrees both

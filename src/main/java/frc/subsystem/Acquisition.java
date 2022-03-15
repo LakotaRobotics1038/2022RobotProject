@@ -1,13 +1,12 @@
 package frc.subsystem;
 
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-
-import frc.libraries.CANSpark1038;
 
 public class Acquisition implements Subsystem {
     private static Acquisition acquisition;
@@ -35,7 +34,7 @@ public class Acquisition implements Subsystem {
     public boolean XIsPressed = false;
 
     // Inputs and Outputs
-    private final CANSpark1038 acquisitionMotor = new CANSpark1038(ACQUISITION_MOTOR_PORT, MotorType.kBrushless);
+    private final CANSparkMax acquisitionMotor = new CANSparkMax(ACQUISITION_MOTOR_PORT, MotorType.kBrushless);
     private DoubleSolenoid acquisitionSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
             PUSH_OUT_ACQUISITION_CHANNEL, PULL_IN_ACQUISITION_CHANNEL);
 
