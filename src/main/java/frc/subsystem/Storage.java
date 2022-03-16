@@ -31,7 +31,7 @@ public class Storage implements Subsystem {
     private ManualStorageModes selectedManualStorageMode = ManualStorageModes.None;
 
     public enum ManualStorageModes {
-        Forward, Reverse, None
+        In, Out, None
     }
 
     /**
@@ -74,20 +74,24 @@ public class Storage implements Subsystem {
      * runs the ball storage
      */
     public void periodic() {
-        if (selectedManualStorageMode == ManualStorageModes.None) {
-            if (shuttleMotorEncoder.getPosition() < SHUTTLE_MOTOR_ENCODER_COUNTS && !laserEnd.get()) {
+        switch (selectedManualStorageMode) {
+            case None:
+                if (shuttleMotorEncoder.getPosition() < SHUTTLE_MOTOR_ENCODER_COUNTS && !laserEnd.get()) {
+                    shuttleMotor.set(shuttleMotorSpeed);
+                } else if (laserStart.get() && !laserEnd.get()) {
+                    shuttleMotorEncoder.setPosition(0);
+                } else {
+                    shuttleMotor.set(0);
+                }
+                break;
+            case In:
                 shuttleMotor.set(shuttleMotorSpeed);
-            } else if (laserStart.get() && !laserEnd.get()) {
-                shuttleMotorEncoder.setPosition(0);
-            } else {
-                shuttleMotor.set(0);
-            }
-        } else if (selectedManualStorageMode == ManualStorageModes.Forward) {
-            shuttleMotor.set(shuttleMotorSpeed);
-            shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
-        } else if (selectedManualStorageMode == ManualStorageModes.Reverse) {
-            shuttleMotor.set(-shuttleMotorSpeed);
-            shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
+                shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
+                break;
+            case Out:
+                shuttleMotor.set(-shuttleMotorSpeed);
+                shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
+                break;
         }
     }
 }
