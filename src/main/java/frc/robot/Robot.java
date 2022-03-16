@@ -21,7 +21,7 @@ import frc.subsystem.SerialComs;
  */
 public class Robot extends TimedRobot {
     private final int PH_PORT = 1;
-    private final int MIN_PRESSURE = 110;
+    private final int MIN_PRESSURE = 115;
     private final int MAX_PRESSURE = 120;
 
     private final SerialComs rpiComs = SerialComs.getInstance();
