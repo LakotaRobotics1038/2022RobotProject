@@ -15,7 +15,7 @@ public class Storage implements Subsystem {
     private final int END_LASER_PORT = 2;
     private final int SHUTTLE_MOTOR_ENCODER_COUNTS = 47;
     private final int ENCODER_OFFSET = 500;
-    private final static double shuttleMotorSpeed = 1.0;
+    private final double shuttleMotorSpeed = 1.0;
 
     // declares storage
     private static Storage storage;
