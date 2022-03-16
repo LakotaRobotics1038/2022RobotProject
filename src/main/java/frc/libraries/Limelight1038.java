@@ -27,12 +27,11 @@ public class Limelight1038 {
     private double valid_target;
     private double x;
     private double y;
-    private double actualHeight = 0; // TODO: Change both of these.
-    private double limelightAngle = 0;
+    private double actualHeight = 35.75; // Inches
+    private double limelightAngle = 30; // Degrees
 
     // Offset default value
     private int defaultOffset = 0;
-    private final double MOUNTED_ANGLE = 0;
 
     public enum LEDStates {
         On(0), Off(1);

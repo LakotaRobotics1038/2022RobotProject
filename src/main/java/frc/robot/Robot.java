@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     }
 
     public void teleopPeriodic() {
-        compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        // compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
         Operator.getInstance().periodic();
         Storage.getInstance().periodic();
