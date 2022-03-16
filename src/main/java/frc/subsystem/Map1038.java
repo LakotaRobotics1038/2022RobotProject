@@ -1,20 +1,21 @@
 package frc.subsystem;
 
+import java.lang.Math;
+
 import edu.wpi.first.wpilibj2.command.Subsystem;
+
 import frc.libraries.Limelight1038;
 import frc.libraries.DriveTrain1038;
 import frc.libraries.Gyro1038;
-import java.lang.Math;
 
 //TODO: NEED TO TALK WITH DREW ON ENCODER ISSUE. DISTANCE WILL BE SCREWED IF WE JUST USE ENCODER COUNTS
 
 public class Map1038 implements Subsystem {
-    private Limelight1038 limelight = Limelight1038.getInstance();
+    // private Limelight1038 limelight = Limelight1038.getInstance();
     private Gyro1038 gyro = Gyro1038.getInstance();
     private DriveTrain1038 drivetrain = DriveTrain1038.getInstance();
 
     private double gyroPos = gyro.getAngle();
-
     // public double limelightZ = limelight.getYOffset();
     final double LL_MOUNT_HEIGHT = 0;
     public double pos1X = 1;
@@ -64,15 +65,15 @@ public class Map1038 implements Subsystem {
     public double turretAngle(double currentTurretPos) {
         gyroPos = gyro.getAngle();
         double targetAngle = Math.atan(pos1X / pos1Y) - gyroPos;
-        return currentTurretPos - targetAngle; // turngle
+        return currentTurretPos - targetAngle; // turn angle
     }
 
     public void resetCoords() {
-        double a = limelight.getXOffset();
-        double b = limelight.getYOffset();
-        a *= pos1X / Math.abs(pos1X);
-        b *= (pos1Y / Math.abs(pos1Y));
-        pos1X = a;
-        pos1Y = b;
+        // double a = limelight.getXOffset();
+        // double b = limelight.getYOffset();
+        // a *= pos1X / Math.abs(pos1X);
+        // b *= (pos1Y / Math.abs(pos1Y));
+        // pos1X = a;
+        // pos1Y = b;
     }
 }

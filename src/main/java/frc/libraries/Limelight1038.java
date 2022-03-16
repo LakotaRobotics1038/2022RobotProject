@@ -45,13 +45,13 @@ public class Limelight1038 {
     };
 
     /** Changes the LED state to off. */
-    private void Limelight() {
+    private Limelight1038() {
         changeLEDStatus(LEDStates.Off);
     }
 
     /**
      * returns limelight instance when robot is turned on
-     * 
+     *
      * @return the limelight instance
      */
     public static Limelight1038 getInstance() {
@@ -79,7 +79,7 @@ public class Limelight1038 {
 
     /**
      * tells if robot has acquired the target
-     * 
+     *
      * @return whether or not the robot has a target
      */
     public boolean canSeeTarget() {
@@ -97,7 +97,7 @@ public class Limelight1038 {
 
     /**
      * returns how far from center vertically the robot is
-     * 
+     *
      * @return distance from center vertically
      */
     public double getYOffset() {

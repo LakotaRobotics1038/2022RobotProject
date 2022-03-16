@@ -7,15 +7,12 @@
 
 package frc.robot;
 
-import java.util.Map;
-
-import javax.print.attribute.standard.MediaSize.Engineering;
-
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.libraries.*;
-import frc.subsystem.*;
+import frc.subsystem.SerialComs;
+import frc.subsystem.Storage;
 
-import frc.libraries.Joystick1038;
 /*
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -23,86 +20,63 @@ import frc.libraries.Joystick1038;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-
 public class Robot extends TimedRobot {
-  private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
-  private final Acquisition acquisition = Acquisition.getInstance();
-  private final Shooter shooter = Shooter.getInstance();
-  private final Endgame endgame = Endgame.getInstance();
-  private final SerialComs rpiComs = SerialComs.getInstance();
-  private final Map1038 map = Map1038.getInstance();
+    private final int PH_PORT = 1;
+    private final int MIN_PRESSURE = 115;
+    private final int MAX_PRESSURE = 120;
 
-  private Joystick1038 driverJoystick = new Joystick1038(0);
-  private Joystick1038 operatorJoystick = new Joystick1038(1);
+    private final SerialComs rpiComs = SerialComs.getInstance();
+    private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
 
-  // private Driver driverJoystick = Driver.getInstance();
-  // private Operator operatorJoystick = Operator.getInstance();
+    /*
+     * This function is run when the robot is first started up and should be used
+     * for any initialization code.
+     */
 
-  /*
-   * This function is run when the robot is first started up and should be used
-   * for any initialization code.
-   */
-
-  @Override
-  public void robotInit() {
-    // rpiComs.stopSerialPort();
-  }
-
-  @Override
-  public void robotPeriodic() {
-  }
-
-  public void teleopInit() {
-    rpiComs.initialize();
-  }
-
-  public void teleopPeriodic() {
-    boolean prevXButtonState = false;
-    driveTrain.tankDrive(driverJoystick.getLeftJoystickVertical(), driverJoystick.getRightJoystickVertical());
-
-    if (operatorJoystick.getAButton()) {
-      acquisition.toggleAcqPos();
+    @Override
+    public void robotInit() {
+        // rpiComs.stopSerialPort();
     }
 
-    if (operatorJoystick.getXButton() && !prevXButtonState) {
-      endgame.liftElevator();
-      prevXButtonState = true;
-    } else {
-      endgame.lowerElevator();
-      prevXButtonState = false;
+    @Override
+    public void robotPeriodic() {
+        System.out.println(compressor.getPressure());
     }
 
-  }
+    public void teleopInit() {
 
-  public void autonomousInit() {
-  }
+    }
 
-  public void autonomousPeriodic() {
-  }
+    public void teleopPeriodic() {
+        compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        Driver.getInstance().periodic();
+        Operator.getInstance().periodic();
+        Storage.getInstance().periodic();
+    }
 
-  public void disabledInit() {
-  }
+    public void autonomousInit() {
+    }
 
-  public void disabledPeriodic() {
-  }
+    public void autonomousPeriodic() {
+        compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+    }
 
-  /**
-   * This function is called periodically during test mode.
-   */
-  @Override
-  public void testInit() {
+    public void disabledInit() {
+    }
 
-  }
+    public void disabledPeriodic() {
+    }
 
-  @Override
-  public void testPeriodic() {
-    // if (operatorJoystick.getAButton()) {
-    // testCylinder.set(Value.kForward);
-    // } else if (operatorJoystick.getBButton()) {
-    // testCylinder.set(Value.kReverse);
-    // }
-    // driveTrain.tankDrive(driverJoystick.getRightTrigger(),
-    // driverJoystick.getRightTrigger());
+    /**
+     * This function is called periodically during test mode.
+     */
+    @Override
+    public void testInit() {
 
-  }
+    }
+
+    @Override
+    public void testPeriodic() {
+
+    }
 }

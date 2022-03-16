@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import edu.wpi.first.hal.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.libraries.Limelight1038;
 
 public class SerialComs implements Subsystem {
     // Variables
@@ -31,11 +30,11 @@ public class SerialComs implements Subsystem {
     // Objects
     private static SerialPort serialPort;
     private static SerialComs rpiCom;
-    private Limelight1038 limelight = Limelight1038.getInstance();
+    // private Limelight1038 limelight = Limelight1038.getInstance();
 
     /**
      * Returns the rpi instance created when the robot starts
-     * 
+     *
      * @return rpi instance
      */
     public static SerialComs getInstance() {
@@ -49,7 +48,7 @@ public class SerialComs implements Subsystem {
      * Initializes the rpi reader (empty currently)
      */
     private SerialComs() {
-
+        this.initialize();
     }
 
     /**
@@ -106,7 +105,7 @@ public class SerialComs implements Subsystem {
 
     /**
      * The front laser looking towards the ground
-     * 
+     *
      * @return Distance to ground from front bottom laser in cm
      */
     public int getStorageLaser1Val() {
@@ -115,7 +114,7 @@ public class SerialComs implements Subsystem {
 
     /**
      * The rear laser looking towards the ground
-     * 
+     *
      * @return Distance to ground from rear bottom laser in cm
      */
     public int getStorageLaser2Val() {
@@ -127,7 +126,7 @@ public class SerialComs implements Subsystem {
 
     /**
      * The front left laser looking forwards
-     * 
+     *
      * @return Distance to object from front left in cm
      */
     public int getStorageLaser3Val() {
@@ -136,7 +135,7 @@ public class SerialComs implements Subsystem {
 
     /**
      * The front right laser looking forwards
-     * 
+     *
      * @return Distance to object from front right in cm
      */
     public int getLimitSwitch1Val() {
@@ -145,7 +144,7 @@ public class SerialComs implements Subsystem {
 
     /**
      * Position of middle of white tape
-     * 
+     *
      * @return Middle of white tape as an average
      */
     public double getLimitSwitch2Val() {
@@ -154,7 +153,7 @@ public class SerialComs implements Subsystem {
 
     /**
      * Accelerometer on the four bar
-     * 
+     *
      * @return Angle of scoring arm by calculating from vertical and horizontal
      *         forces
      */
@@ -168,7 +167,7 @@ public class SerialComs implements Subsystem {
 
     /**
      * Accelerometer on the wrist piece
-     * 
+     *
      * @return Angle of wrist by calculating from vertical and horizontal forces
      */
     public int getAcqAccelerometerVal() {
@@ -198,8 +197,8 @@ public class SerialComs implements Subsystem {
     }
 
     public void testSend() {
-        double distance = limelight.getYOffset();
-        String dString = Double.toString(distance);
+        // double distance = limelight.getYOffset();
+        // String dString = Double.toString(distance);
         // serialPort.setWriteBufferMode(WriteBufferMode.kFlushOnAccess);
         serialPort.writeString("this is a test");
     }
