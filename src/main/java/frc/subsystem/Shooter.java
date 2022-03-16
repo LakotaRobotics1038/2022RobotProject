@@ -106,7 +106,7 @@ public class Shooter implements Subsystem {
      */
     public void feedBall() {
         if (isFinished()) {
-            storage.setManualStorage(ManualStorageModes.Forward);
+            storage.setManualStorage(ManualStorageModes.In);
         }
     }
 
