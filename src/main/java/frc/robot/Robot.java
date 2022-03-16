@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.subsystem.SerialComs;
+import frc.subsystem.Storage;
 
 /*
  * The VM is configured to automatically run this class, and to call the
@@ -50,6 +51,7 @@ public class Robot extends TimedRobot {
         compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
         Operator.getInstance().periodic();
+        Storage.getInstance().periodic();
     }
 
     public void autonomousInit() {
