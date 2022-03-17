@@ -7,6 +7,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.libraries.Dashboard;
 
 public class AutonSelector {
     // Path Options
@@ -16,8 +17,6 @@ public class AutonSelector {
     private final String trajectoryJSON = "frc/auton/Pathweaver/Testpath.wpilib.json";
 
     // Fields
-    private String autonChooser;
-    private String position;
     private static AutonSelector autonSelector;
 
     public static AutonSelector getInstance() {
@@ -32,6 +31,8 @@ public class AutonSelector {
     }
 
     public void chooseAuton() {
+        String position = Dashboard.getInstance().getSelectedAuton();
+        String autonChooser = Dashboard.getInstance().getPosition();
         Trajectory trajectory = new Trajectory();
 
         System.out.println("pos: " + position);
