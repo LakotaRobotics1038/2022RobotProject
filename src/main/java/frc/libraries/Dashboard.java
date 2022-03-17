@@ -1,6 +1,10 @@
 package frc.libraries;
 
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.auton.Pathweaver.output.*;
 
 import frc.subsystem.Shooter;
 
@@ -10,6 +14,8 @@ public class Dashboard {
     // private Limelight1038 limelight = Limelight1038.getInstance();
 
     private final int CAMERA_EXPOSURE = 50;
+    String trajectoryJSON = "frc/auton/Pathweaver/Testpath.wpilib.json";
+    Trajectory trajectory = new Trajectory();
 
     private String position;
     private String autonChooser;
@@ -27,6 +33,7 @@ public class Dashboard {
         SmartDashboard.putNumber("Shooter Angle", 0);
         SmartDashboard.putBoolean("Prox", false);
         SmartDashboard.putNumber("Shooter speed", .55);
+        SendableChooser<Trajectory> TestPath = new SendableChooser<>();
     }
 
     public void update() {
