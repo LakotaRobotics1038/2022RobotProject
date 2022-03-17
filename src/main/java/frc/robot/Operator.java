@@ -61,21 +61,31 @@ public class Operator {
             endgame.rotateLeft();
         }
 
-        if (operatorJoystick.getRightJoystickVertical() > 0) {
+        if (operatorJoystick.getLeftButton()) {
+            shooter.executeSpeedPID();
+        } else {
+            shooter.disableSpeedPID();
+            shooter.shootManually(0);
+        }
+
+        if (shooter.isFinished() && operatorJoystick.getLeftButton()) {
+            operatorJoystick.setLeftRumble(1);
+            operatorJoystick.setRightRumble(1);
+        } else {
+            operatorJoystick.setRightRumble(0);
+            operatorJoystick.setLeftRumble(0);
+        }
+
+        if (operatorJoystick.getLeftTrigger() > .5) {
+            shooter.feedBall();
+        }
+
+        if (operatorJoystick.getLeftJoystickVertical() > .5) {
             storage.setManualStorage(ManualStorageModes.In);
-        } else if (operatorJoystick.getRightJoystickVertical() < 0) {
+        } else if (operatorJoystick.getLeftJoystickVertical() < -.5) {
             storage.setManualStorage(ManualStorageModes.Out);
         } else {
             storage.disableManualStorage();
-        }
-
-        if (operatorJoystick.getLeftTrigger() > -1) {
-            shooter.executeAimPID();
-        }
-
-        if (operatorJoystick.getRightTrigger() > -1) {
-            shooter.executeSpeedPID(); // TODO: may need adjusting
-            shooter.executeHoodPID();
         }
     }
 }
