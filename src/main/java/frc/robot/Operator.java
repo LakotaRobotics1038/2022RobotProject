@@ -34,8 +34,6 @@ public class Operator {
     }
 
     public void periodic() {
-        PovPositions povPosition = operatorJoystick.getPOVPosition();
-
         if (operatorJoystick.getYButton() && !prevYButtonState) {
             acquisition.toggleAcqPos();
             prevYButtonState = true;
@@ -64,9 +62,9 @@ public class Operator {
         }
 
         if (operatorJoystick.getRightJoystickVertical() > 0) {
-            storage.setManualStorage(ManualStorageModes.Forward);
+            storage.setManualStorage(ManualStorageModes.In);
         } else if (operatorJoystick.getRightJoystickVertical() < 0) {
-            storage.setManualStorage(ManualStorageModes.Reverse);
+            storage.setManualStorage(ManualStorageModes.Out);
         } else {
             storage.disableManualStorage();
         }
@@ -78,14 +76,6 @@ public class Operator {
         if (operatorJoystick.getRightTrigger() > -1) {
             shooter.executeSpeedPID(); // TODO: may need adjusting
             shooter.executeHoodPID();
-        }
-
-        if (povPosition == PovPositions.Up) {
-            storage.setManualStorage(ManualStorageModes.Forward);
-        } else if (povPosition == PovPositions.Down) {
-            storage.setManualStorage(ManualStorageModes.Reverse);
-        } else if (povPosition == PovPositions.None) {
-            storage.disableManualStorage();
         }
     }
 }

@@ -10,8 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
-
 import frc.subsystem.SerialComs;
+import frc.subsystem.Storage;
 
 /*
  * The VM is configured to automatically run this class, and to call the
@@ -22,7 +22,7 @@ import frc.subsystem.SerialComs;
  */
 public class Robot extends TimedRobot {
     private final int PH_PORT = 1;
-    private final int MIN_PRESSURE = 110;
+    private final int MIN_PRESSURE = 115;
     private final int MAX_PRESSURE = 120;
 
     private final SerialComs rpiComs = SerialComs.getInstance();
@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
         compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
         Operator.getInstance().periodic();
+        Storage.getInstance().periodic();
     }
 
     public void autonomousInit() {

@@ -102,7 +102,5 @@ public class Gyro1038 implements Gyro {
     }
 
     @Override
-    public void close() throws Exception {
-        // TODO Auto-generated method stub
-    }
+    public void close() throws Exception {}
 }

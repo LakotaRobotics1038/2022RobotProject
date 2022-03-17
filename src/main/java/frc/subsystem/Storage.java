@@ -15,7 +15,7 @@ public class Storage implements Subsystem {
     private final int END_LASER_PORT = 2;
     private final int SHUTTLE_MOTOR_ENCODER_COUNTS = 47;
     private final int ENCODER_OFFSET = 500;
-    private final static double shuttleMotorSpeed = 1.0;
+    private final double shuttleMotorSpeed = 1.0;
 
     // declares storage
     private static Storage storage;
@@ -31,7 +31,7 @@ public class Storage implements Subsystem {
     private ManualStorageModes selectedManualStorageMode = ManualStorageModes.None;
 
     public enum ManualStorageModes {
-        Forward, Reverse, None
+        In, Out, None
     }
 
     /**
@@ -48,7 +48,7 @@ public class Storage implements Subsystem {
     }
 
     private Storage() {
-        shuttleMotor.setInverted(true);
+        shuttleMotor.setInverted(false);
         shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
         shuttleMotorEncoder.setPositionConversionFactor(47 / 2);
     }
@@ -74,6 +74,7 @@ public class Storage implements Subsystem {
      * runs the ball storage
      */
     public void periodic() {
+
         if (selectedManualStorageMode == ManualStorageModes.None) {
             // If the ball is at the first laser and not the middle laser. Move the ball.
             if (laserStart.get() && !laserMid.get()) {
@@ -98,6 +99,26 @@ public class Storage implements Subsystem {
         } else if (selectedManualStorageMode == ManualStorageModes.Reverse) {
             shuttleMotor.set(-shuttleMotorSpeed);
             shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
+          
+    /*    switch (selectedManualStorageMode) {
+            case None:
+                if (shuttleMotorEncoder.getPosition() < SHUTTLE_MOTOR_ENCODER_COUNTS && !laserEnd.get()) {
+                    shuttleMotor.set(shuttleMotorSpeed);
+                } else if (laserStart.get() && !laserEnd.get()) {
+                    shuttleMotorEncoder.setPosition(0);
+                } else {
+                    shuttleMotor.set(0);
+                }
+                break;
+            case In:
+                shuttleMotor.set(shuttleMotorSpeed);
+                shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
+                break;
+            case Out:
+                shuttleMotor.set(-shuttleMotorSpeed);
+                shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
+                break;*/
+
         }
     }
 }
