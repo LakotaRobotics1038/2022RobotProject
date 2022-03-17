@@ -1,7 +1,5 @@
 package frc.auton;
 
-import frc.libraries.*;
-
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -9,14 +7,17 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class AutonSelector {
+    // Path Options
     public static final String TestPath = "TestPath";
-    // fields
+
+    // Path Locations
+    private final String trajectoryJSON = "frc/auton/Pathweaver/Testpath.wpilib.json";
+
+    // Fields
     private String autonChooser;
     private String position;
-    private String gameData;
     private static AutonSelector autonSelector;
 
     public static AutonSelector getInstance() {
@@ -31,12 +32,10 @@ public class AutonSelector {
     }
 
     public void chooseAuton() {
-        String trajectoryJSON = "frc/auton/Pathweaver/Testpath.wpilib.json";
         Trajectory trajectory = new Trajectory();
 
-        System.out.println("pos:" + position);
-        System.out.println("auto:" + autonChooser);
-        System.out.println("game data:" + gameData);
+        System.out.println("pos: " + position);
+        System.out.println("auto: " + autonChooser);
 
         switch (autonChooser) {
             case TestPath:
@@ -45,7 +44,6 @@ public class AutonSelector {
                     trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
                 } catch (IOException ex) {
                     DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-
                 }
                 break;
         }
