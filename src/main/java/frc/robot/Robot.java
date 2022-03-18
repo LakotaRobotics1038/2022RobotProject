@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.libraries.Dashboard;
 import frc.subsystem.SerialComs;
 import frc.subsystem.Storage;
 import frc.subsystem.*;
@@ -42,9 +43,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
+
+        Dashboard.getInstance().update();
         // System.out.println(compressor.getPressure());
         System.out.println(shooter.turretMotor.getSelectedSensorPosition());
-
     }
 
     public void teleopInit() {
@@ -52,7 +54,7 @@ public class Robot extends TimedRobot {
     }
 
     public void teleopPeriodic() {
-        compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        // compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
         Operator.getInstance().periodic();
         Storage.getInstance().periodic();
