@@ -86,13 +86,13 @@ public class Operator {
             storage.setManualStorage(ManualStorageModes.Out);
         } else {
             storage.setManualStorage(ManualStorageModes.Stop);
-            storage.disableManualStorage();
+            // storage.disableManualStorage();
         }
 
         if (operatorJoystick.getAButton()) {
             shooter.findTarget();
         } else {
-            shooter.goToCrashPosition();
+            shooter.returnToZero();
         }
     }
 }

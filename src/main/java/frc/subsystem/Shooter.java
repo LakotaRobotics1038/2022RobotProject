@@ -346,8 +346,8 @@ public class Shooter implements Subsystem {
 
     // code red mountain dew TODO: change this name to code red
     /** This was goToCrashPosition. This has been renamed to codeRed */
-    public void goToCrashPosition() {
-        if (Math.abs(turretMotor.getSelectedSensorPosition()) < 1000) {
+    public void returnToZero() {
+        if (Math.abs(turretMotor.getSelectedSensorPosition()) < 4000) {
             stopTurret();
         } else if (turretMotor.getSelectedSensorPosition() > 0) {
             currentTurretDirection = TurretDirections.Right;
@@ -376,7 +376,6 @@ public class Shooter implements Subsystem {
     public void findTarget() {
         limelight.changeLEDStatus(LEDStates.On);
         System.out.println("Can see target? " + limelight.canSeeTarget());
-        System.out.println(turretMotor.getSelectedSensorPosition());
         if (turretMotor.getSelectedSensorPosition() <= RIGHT_STOP) {
             currentTurretDirection = TurretDirections.Left;
             moveTurret();
@@ -384,7 +383,8 @@ public class Shooter implements Subsystem {
             currentTurretDirection = TurretDirections.Right;
             moveTurret();
         } else if (limelight.canSeeTarget()) {
-            executeAimPID();
+            // executeAimPID();
+            moveTurret();
         } else {
             moveTurret();
         }
