@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.Dashboard;
 import frc.subsystem.SerialComs;
 import frc.subsystem.Storage;
+import frc.subsystem.*;
 
 /*
  * The VM is configured to automatically run this class, and to call the
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
 
     private final SerialComs rpiComs = SerialComs.getInstance();
     private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
+    private final Shooter shooter = Shooter.getInstance();
 
     /*
      * This function is run when the robot is first started up and should be used
@@ -41,8 +43,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        System.out.println(compressor.getPressure());
+
         Dashboard.getInstance().update();
+        // System.out.println(compressor.getPressure());
+        System.out.println(shooter.turretMotor.getSelectedSensorPosition());
     }
 
     public void teleopInit() {
