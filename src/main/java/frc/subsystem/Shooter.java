@@ -55,12 +55,14 @@ public class Shooter implements Subsystem {
     public TalonFX1038 shooterMotor1 = new TalonFX1038(SHOOTER_MOTOR_PORT1);
     public TalonFX1038 shooterMotor2 = new TalonFX1038(SHOOTER_MOTOR_PORT2);
     public CANSparkMax compressionMotor = new CANSparkMax(COMPRESSION_MOTOR_PORT, MotorType.kBrushed);
-    public CANSparkMax hoodMotor = new CANSparkMax(HOOD_MOTOR_PORT, MotorType.kBrushless);
+    private CANSparkMax hoodMotor = new CANSparkMax(HOOD_MOTOR_PORT, MotorType.kBrushless);
     public TalonSRX1038 turretMotor = new TalonSRX1038(TURRET_MOTOR_PORT);
 
     // TODO: map angles to encoder counts, turret should go 160ish degrees both
     // ways.
-
+    private final double hoodMaxDistance = 5.5; // inches
+    private final double hoodMaxEncoder = 88;
+    private final double encoderCountsPerInch = hoodMaxEncoder / hoodMaxDistance;
     private final double hootSetpoint = 0.0;
     private final double hoodTolerance = 1;
     private final static double hoodP = 0.08;
@@ -102,7 +104,10 @@ public class Shooter implements Subsystem {
         hoodPID.setSetpoint(hootSetpoint);
         hoodPID.setTolerance(hoodTolerance);
         hoodPID.disableContinuousInput();
-        hoodMotor.getEncoder();
+        hoodMotor.setInverted(true);
+        hoodMotor.getEncoder().setPositionConversionFactor(1 / encoderCountsPerInch);
+        hoodMotor.getEncoder().setPosition(0);
+
     }
 
     /**
@@ -375,7 +380,7 @@ public class Shooter implements Subsystem {
 
     public void findTarget() {
         limelight.changeLEDStatus(LEDStates.On);
-        System.out.println("Can see target? " + limelight.canSeeTarget());
+        // System.out.println("Can see target? " + limelight.canSeeTarget());
         if (turretMotor.getSelectedSensorPosition() <= RIGHT_STOP) {
             currentTurretDirection = TurretDirections.Left;
             moveTurret();
@@ -388,5 +393,13 @@ public class Shooter implements Subsystem {
         } else {
             moveTurret();
         }
+    }
+
+    /**
+     *
+     * @return Hood encoder count in inches.
+     */
+    public double getHoodEncoder() {
+        return hoodMotor.getEncoder().getPosition();
     }
 }
