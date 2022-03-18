@@ -31,7 +31,7 @@ public class Storage implements Subsystem {
     private ManualStorageModes selectedManualStorageMode = ManualStorageModes.None;
 
     public enum ManualStorageModes {
-        In, Out, None
+        In, Out, None, Stop
     }
 
     /**
@@ -83,9 +83,9 @@ public class Storage implements Subsystem {
                 } else if (!laserStart.get() && laserMid.get()) {
                     shuttleMotor.set(0);
                 }
-                // If there is a ball at the first laser and the middle laser and not the final
+                // If there is a ball at the first laser and the middle laser and not the
                 // laser.
-                // Move the ball at the middle to the end and the one at the start to the end.
+                // Move the ball at the middle to the end and the one at the start to the
                 if (laserStart.get() && laserMid.get() && !laserEnd.get()) {
                     shuttleMotor.set(shuttleMotorSpeed);
                     // if the balls moved to their correct position then stop the belt.
@@ -101,6 +101,8 @@ public class Storage implements Subsystem {
                 shuttleMotor.set(-shuttleMotorSpeed);
                 shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
                 break;
+            case Stop:
+                shuttleMotor.set(0);
         }
     }
 }

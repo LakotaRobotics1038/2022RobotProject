@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         // rpiComs.stopSerialPort();
+        shooter.resetTurretEncoder();
     }
 
     @Override
@@ -46,7 +47,7 @@ public class Robot extends TimedRobot {
 
         Dashboard.getInstance().update();
         // System.out.println(compressor.getPressure());
-        System.out.println(shooter.turretMotor.getSelectedSensorPosition());
+
     }
 
     public void teleopInit() {

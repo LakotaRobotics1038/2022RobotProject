@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import frc.libraries.TalonSRX1038;
+import frc.libraries.Limelight1038.LEDStates;
 import frc.libraries.TalonFX1038;
 import frc.libraries.Gyro1038;
 import frc.libraries.Limelight1038;
@@ -26,8 +27,7 @@ public class Shooter implements Subsystem {
     private boolean isEnabled = false;
     private static double swivelSpeed = 0.2;
     private final static int LEFT_STOP = 684200; // TODO: Need to change both of these to represent where we have to
-                                                 // stop the
-    // turret.
+    // stop the turret.
     private final static int RIGHT_STOP = -684200;
     // Turret
     private TurretDirections currentTurretDirection = TurretDirections.Left;
@@ -374,6 +374,9 @@ public class Shooter implements Subsystem {
      */
 
     public void findTarget() {
+        limelight.changeLEDStatus(LEDStates.On);
+        System.out.println("Can see target? " + limelight.canSeeTarget());
+        System.out.println(turretMotor.getSelectedSensorPosition());
         if (turretMotor.getSelectedSensorPosition() <= RIGHT_STOP) {
             currentTurretDirection = TurretDirections.Left;
             moveTurret();

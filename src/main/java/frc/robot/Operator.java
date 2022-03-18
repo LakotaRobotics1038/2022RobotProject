@@ -85,6 +85,7 @@ public class Operator {
         } else if (operatorJoystick.getLeftJoystickVertical() < -.5) {
             storage.setManualStorage(ManualStorageModes.Out);
         } else {
+            storage.setManualStorage(ManualStorageModes.Stop);
             storage.disableManualStorage();
         }
 
