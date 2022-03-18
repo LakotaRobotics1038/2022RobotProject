@@ -85,13 +85,14 @@ public class Operator {
         } else if (operatorJoystick.getLeftJoystickVertical() < -.5) {
             storage.setManualStorage(ManualStorageModes.Out);
         } else {
-            storage.disableManualStorage();
+            storage.setManualStorage(ManualStorageModes.Stop);
+            // storage.disableManualStorage();
         }
 
         if (operatorJoystick.getAButton()) {
             shooter.findTarget();
         } else {
-            shooter.goToCrashPosition();
+            shooter.returnToZero();
         }
     }
 }

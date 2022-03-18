@@ -29,7 +29,7 @@ public class Storage implements Subsystem {
     private ManualStorageModes selectedManualStorageMode = ManualStorageModes.None;
 
     public enum ManualStorageModes {
-        In, Out, None
+        In, Out, None, Stop
     }
 
     /**
@@ -90,6 +90,8 @@ public class Storage implements Subsystem {
                 shuttleMotor.set(-shuttleMotorSpeed);
                 shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
                 break;
+            case Stop:
+                shuttleMotor.set(0);
         }
     }
 }
