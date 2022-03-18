@@ -76,11 +76,20 @@ public class Storage implements Subsystem {
     public void periodic() {
         switch (selectedManualStorageMode) {
             case None:
-                if (shuttleMotorEncoder.getPosition() < SHUTTLE_MOTOR_ENCODER_COUNTS && !laserEnd.get()) {
+                // If the ball is at the first laser and not the middle laser. Move the ball.
+                if (laserStart.get() && !laserMid.get()) {
                     shuttleMotor.set(shuttleMotorSpeed);
-                } else if (laserStart.get() && !laserEnd.get()) {
-                    shuttleMotorEncoder.setPosition(0);
-                } else {
+                    // If a ball is not at the first laser and its at the middle laser. Stop it.
+                } else if (!laserStart.get() && laserMid.get()) {
+                    shuttleMotor.set(0);
+                }
+                // If there is a ball at the first laser and the middle laser and not the final
+                // laser.
+                // Move the ball at the middle to the end and the one at the start to the end.
+                if (laserStart.get() && laserMid.get() && !laserEnd.get()) {
+                    shuttleMotor.set(shuttleMotorSpeed);
+                    // if the balls moved to their correct position then stop the belt.
+                } else if (!laserStart.get() && laserMid.get() && laserEnd.get()) {
                     shuttleMotor.set(0);
                 }
                 break;

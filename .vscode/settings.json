@@ -40,5 +40,7 @@
         "roborio",
         "setpoint",
         "teleop"
-    ]
+    ],
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active"
 }
