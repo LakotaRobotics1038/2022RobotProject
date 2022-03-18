@@ -87,5 +87,11 @@ public class Operator {
         } else {
             storage.disableManualStorage();
         }
+
+        if (operatorJoystick.getAButton()) {
+            shooter.findTarget();
+        } else {
+            shooter.goToCrashPosition();
+        }
     }
 }

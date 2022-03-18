@@ -25,9 +25,10 @@ public class Shooter implements Subsystem {
     private Gyro1038 gryo = Gyro1038.getInstance();
     private boolean isEnabled = false;
     private static double swivelSpeed = 0.2;
-    private final static int LEFT_STOP = 0; // TODO: Need to change both of these to represent where we have to stop the
-                                            // turret.
-    private final static int RIGHT_STOP = 0;
+    private final static int LEFT_STOP = 684200; // TODO: Need to change both of these to represent where we have to
+                                                 // stop the
+    // turret.
+    private final static int RIGHT_STOP = -684200;
     // Turret
     private TurretDirections currentTurretDirection = TurretDirections.Left;
 
@@ -87,6 +88,8 @@ public class Shooter implements Subsystem {
     private final static double feedSpeed = 1;
 
     private Shooter() {
+        shooterMotor1.setInverted(true);
+        shooterMotor2.setInverted(false);
         positionPID.setSetpoint(positionSetpoint);
         positionPID.setTolerance(positionTolerance);
         positionPID.disableContinuousInput();
@@ -182,7 +185,7 @@ public class Shooter implements Subsystem {
         System.out.println("speed" + shooterMotor1.getSelectedSensorVelocity());
         System.out.println("setpoint: " + speedPID.getSetpoint());
         System.out.println("power" + power);
-        shooterMotor1.set(-power);
+        shooterMotor1.set(power);
         shooterMotor2.set(power);
     }
 
@@ -278,7 +281,7 @@ public class Shooter implements Subsystem {
     }
 
     // switch case for what direction the turret spins
-    public void swivelEy() {
+    private void moveTurret() {
         switch (currentTurretDirection) {
             case Left:
                 turretMotor.set(swivelSpeed);
@@ -294,7 +297,7 @@ public class Shooter implements Subsystem {
      * @return The current direction in degrees of the turret.
      */
     public double getTurretEncoder() {
-        return turretMotor.getSelectedSensorPosition() * 180.00 / 82000.00; // converts radians to degrees
+        return turretMotor.getSelectedSensorPosition();// * 180.00 / 82000.00; // converts radians to degrees
     }
 
     // gets the current shooter speed
@@ -343,15 +346,15 @@ public class Shooter implements Subsystem {
 
     // code red mountain dew TODO: change this name to code red
     /** This was goToCrashPosition. This has been renamed to codeRed */
-    public void codeRed() {
+    public void goToCrashPosition() {
         if (Math.abs(turretMotor.getSelectedSensorPosition()) < 1000) {
             stopTurret();
         } else if (turretMotor.getSelectedSensorPosition() > 0) {
             currentTurretDirection = TurretDirections.Right;
-            swivelEy();
+            moveTurret();
         } else if (turretMotor.getSelectedSensorPosition() < 0) {
             currentTurretDirection = TurretDirections.Left;
-            swivelEy();
+            moveTurret();
         }
     }
 
@@ -370,19 +373,17 @@ public class Shooter implements Subsystem {
      * turnTurret now.
      */
 
-    public void move() {
-        turretMotor.setSelectedSensorPosition(0);
-
+    public void findTarget() {
         if (turretMotor.getSelectedSensorPosition() <= RIGHT_STOP) {
             currentTurretDirection = TurretDirections.Left;
-            swivelEy();
+            moveTurret();
         } else if (turretMotor.getSelectedSensorPosition() >= LEFT_STOP) {
             currentTurretDirection = TurretDirections.Right;
-            swivelEy();
+            moveTurret();
         } else if (limelight.canSeeTarget()) {
             executeAimPID();
         } else {
-            swivelEy();
+            moveTurret();
         }
     }
 }
