@@ -63,10 +63,10 @@ public class Shooter implements Subsystem {
     private final double hoodMaxDistance = 5.5; // inches
     private final double hoodMaxEncoder = 88;
     private final double encoderCountsPerInch = hoodMaxEncoder / hoodMaxDistance;
-    private final double hootSetpoint = 0.0;
-    private final double hoodTolerance = 1;
-    private final static double hoodP = 0.08;
-    private final static double hoodI = 0.0;
+    private final double hoodSetpoint = 0;
+    private final double hoodTolerance = .25;
+    private final static double hoodP = 0.65;
+    private final static double hoodI = 0.03;
     private final static double hoodD = 0.0;
     private PIDController hoodPID = new PIDController(hoodP, hoodI, hoodD);
 
@@ -101,7 +101,7 @@ public class Shooter implements Subsystem {
         speedPID.setTolerance(speedTolerance);
         speedPID.disableContinuousInput();
 
-        hoodPID.setSetpoint(hootSetpoint);
+        hoodPID.setSetpoint(limelight.getTargetDistance()); // TODO: Figure out what to divide by.
         hoodPID.setTolerance(hoodTolerance);
         hoodPID.disableContinuousInput();
         hoodMotor.setInverted(true);
@@ -139,15 +139,20 @@ public class Shooter implements Subsystem {
     /**
      * sets the position setpoint
      *
-     * @deprecated DO NOT USE
+     * @deprecated use shooter function instead.
      */
-    @Deprecated
     public void initialize() {
         positionPID.setSetpoint(positionSetpoint);
+        hoodPID.setSetpoint(hoodSetpoint);
 
     }
 
-    /** Zero's the hood */
+    /**
+     * Zero's the hood
+     *
+     * @warning Does not reset encoder values; this only works if encoder has been
+     *          set correctly.
+     */
     public void zeroHood() {
         // TODO: move encoder to a variable up top
         if (hoodMotor.getEncoder().getPosition() > 0) {
@@ -159,7 +164,7 @@ public class Shooter implements Subsystem {
 
     /** Aims the hood */
     public void executeHoodPID() {
-        double power = hoodPID.calculate(limelight.getTargetDistance()); // TODO:
+        double power = hoodPID.calculate(hoodMotor.getEncoder().getPosition()); // TODO:
         // fine tune this PID
         hoodMotor.set(power);
     }
