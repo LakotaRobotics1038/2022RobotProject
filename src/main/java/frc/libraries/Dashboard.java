@@ -1,6 +1,7 @@
 package frc.libraries;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -10,20 +11,26 @@ import frc.subsystem.Shooter;
 
 public class Dashboard {
     private static Dashboard dashboard;
+
     private Shooter shooter = Shooter.getInstance();
-    // private Limelight1038 limelight = Limelight1038.getInstance();
+    private Gyro1038 gyro = Gyro1038.getInstance();
+    private Limelight1038 limelight = Limelight1038.getInstance();
+
     public SendableChooser<String> autoChooser = new SendableChooser<>();
     public SendableChooser<String> startPosition = new SendableChooser<>();
 
-    private final int CAMERA_EXPOSURE = 50;
-
     private String position;
     private String autonChooser;
+
     private ShuffleboardTab driversTab;
     private ShuffleboardTab controlsTab;
 
     private NetworkTableEntry resetGyro;
     private NetworkTableEntry recalGyro;
+    private NetworkTableEntry gyroAngle;
+    private NetworkTableEntry shooterAngle;
+    private NetworkTableEntry matchTime;
+    private NetworkTableEntry limelightTarget;
 
     public static Dashboard getInstance() {
         if (dashboard == null) {
@@ -37,36 +44,50 @@ public class Dashboard {
         driversTab = Shuffleboard.getTab("Drivers");
         controlsTab = Shuffleboard.getTab("Controls");
 
-        driversTab.add("Match Time", -1);
-        driversTab.add("Shooter Angle", 0);
-        driversTab.add("Shooter speed", .55);
+        // Drivers
         autoChooser.setDefaultOption("Test Auton", AutonSelector.TestPath);
         driversTab.add("Auton Choices", autoChooser);
         driversTab.add("Start Position", startPosition);
 
+        driversTab.add("Match Time", -1);
+        shooterAngle = driversTab.add("Shooter Angle", 0)
+                .getEntry();
+
+        gyroAngle = driversTab.add("Gyro", 0)
+                .withWidget(BuiltInWidgets.kGyro)
+                .getEntry();
+
+        limelightTarget = controlsTab.add("Limelight Target", false)
+                .withWidget(BuiltInWidgets.kBooleanBox)
+                .getEntry();
+
+        // Controls
         resetGyro = controlsTab.add("Reset Gyro", false)
                 .withWidget(BuiltInWidgets.kBooleanBox)
                 .getEntry();
+
         recalGyro = controlsTab.add("Recal Gyro", false)
                 .withWidget(BuiltInWidgets.kBooleanBox)
                 .getEntry();
     }
 
     public void update() {
-        driversTab.add("Shooter Angle", shooter.getTurretEncoder());
-        driversTab.add("Gyro", Gyro1038.getInstance().getAngle());
-        // SmartDashboard.putBoolean("Limelight Can See Target",
-        // limelight.canSeeTarget());
-        position = startPosition.getSelected();
+        // Drivers
         autonChooser = autoChooser.getSelected();
+        position = startPosition.getSelected();
+        matchTime.setNumber(Timer.getMatchTime());
+        shooterAngle.setNumber(shooter.getTurretEncoder());
+        gyroAngle.setNumber(gyro.getAngle());
+        limelightTarget.setBoolean(limelight.canSeeTarget());
 
+        // Controls
         if (resetGyro.getBoolean(false)) {
-            Gyro1038.getInstance().reset();
+            gyro.reset();
             resetGyro.setBoolean(false);
         }
 
         if (recalGyro.getBoolean(false)) {
-            Gyro1038.getInstance().calibrate();
+            gyro.calibrate();
             recalGyro.setBoolean(false);
         }
     }
