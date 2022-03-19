@@ -164,6 +164,10 @@ public class Shooter implements Subsystem {
         hoodMotor.set(power);
     }
 
+    public void moveHoodManually(double speed) {
+        hoodMotor.set(speed);
+    }
+
     /**
      * aims turret towards target
      */
