@@ -20,7 +20,7 @@ public class Endgame {
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
     private boolean locked = true;
-    private int endgameTop = 230; // TODO: change encoder counts to correct value
+    private int endgameTop = 18000; // TODO: change encoder counts to correct value
     private int endgameBottom = 0;
     private int LIMIT_SWITCH_PORT = 3;
     // This is from the right side of the robot looking at it with acq facing you.
@@ -28,9 +28,10 @@ public class Endgame {
     private int rotateLimitRight = 0;
 
     // Inputs and Outputs
-    private final DigitalInput1038 bottomLimit = new DigitalInput1038(LIMIT_SWITCH_PORT);
+    // private final DigitalInput1038 bottomLimit = new
+    // DigitalInput1038(LIMIT_SWITCH_PORT);
     private final TalonFX1038 rotatorMotor = new TalonFX1038(ROTATOR_PORT);
-    private final TalonFX1038 elevatorMotor = new TalonFX1038(ELEVATOR_PORT);
+    public final TalonFX1038 elevatorMotor = new TalonFX1038(ELEVATOR_PORT);
     private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(
             PneumaticsModuleType.REVPH,
             RATCHET_ON_PORT,
@@ -47,8 +48,10 @@ public class Endgame {
 
     private Endgame() {
         this.engageRatchet();
-        elevatorMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-                LimitSwitchNormal.NormallyClosed);
+        elevatorMotor.setInverted(true);
+        elevatorMotor.setPosition(0);
+        elevatorMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                LimitSwitchNormal.NormallyClosed, 0);
     }
 
     // Encoders for the Motors
@@ -79,10 +82,9 @@ public class Endgame {
     }
 
     public void lowerElevator() {
-        if (!bottomLimit.get()) {
-            elevatorMotor.set(ControlMode.Position, endgameBottom);
-        } else {
-            System.out.println("You are at the bottom limit already.");
+        elevatorMotor.set(ControlMode.Position, endgameBottom);
+        if (elevatorMotor.isRevLimitSwitchClosed() == 0) {
+            elevatorMotor.setPosition(0);
         }
     }
 

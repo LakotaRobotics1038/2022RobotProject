@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
     private final SerialComs rpiComs = SerialComs.getInstance();
     private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
     private final Shooter shooter = Shooter.getInstance();
+    private final Endgame endgame = Endgame.getInstance();
 
     /*
      * This function is run when the robot is first started up and should be used
@@ -47,8 +48,10 @@ public class Robot extends TimedRobot {
 
         Dashboard.getInstance().update();
         // System.out.println(compressor.getPressure());
-        System.out.println(shooter.getHoodEncoder());
-
+        System.out.println("Endgame encoder counts" + endgame.getElevatorEncoderPosition());
+        // System.out.println("Forward limit switch" +
+        // endgame.elevatorMotor.isFwdLimitSwitchClosed());
+        System.out.println("Reverse limit switch" + endgame.elevatorMotor.isRevLimitSwitchClosed());
     }
 
     public void teleopInit() {
@@ -66,7 +69,7 @@ public class Robot extends TimedRobot {
     }
 
     public void autonomousPeriodic() {
-        compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        // compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
     }
 
     public void disabledInit() {

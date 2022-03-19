@@ -52,6 +52,9 @@ public class Operator {
         if (operatorJoystick.getBButton()) {
             endgame.liftElevator();
         }
+        if (operatorJoystick.getXButton()) {
+            endgame.lowerElevator();
+        }
 
         if (operatorJoystick.getRightJoystickHorizontal() > -1) {
             endgame.rotateRight();
