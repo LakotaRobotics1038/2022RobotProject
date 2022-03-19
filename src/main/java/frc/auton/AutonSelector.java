@@ -52,15 +52,17 @@ public class AutonSelector {
                 try {
                     trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
                 } catch (IOException ex) {
-                    DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+                    DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON,
+                            ex.getStackTrace());
                 }
-                break;
-            case DriveStraight:
-                return new DriveAuton();
+
             case DriveAndShoot:
                 return new SequentialCommandGroup(new DriveAuton(), new ShootingAuton());
             case DriveShootandAcquire:
                 return new SequentialCommandGroup(new DriveAuton(), new AcquireCommand(3), new ShootingAuton());
+            default:
+                return new DriveAuton();
         }
+
     }
 }
