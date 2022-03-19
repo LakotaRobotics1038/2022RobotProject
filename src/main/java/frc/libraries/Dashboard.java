@@ -1,7 +1,10 @@
 package frc.libraries;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.auton.AutonSelector;
 import frc.subsystem.Shooter;
 
@@ -16,6 +19,11 @@ public class Dashboard {
 
     private String position;
     private String autonChooser;
+    private ShuffleboardTab driversTab;
+    private ShuffleboardTab controlsTab;
+
+    private NetworkTableEntry resetGyro;
+    private NetworkTableEntry recalGyro;
 
     public static Dashboard getInstance() {
         if (dashboard == null) {
@@ -26,31 +34,40 @@ public class Dashboard {
     }
 
     private Dashboard() {
-        SmartDashboard.putNumber("Drivers/Match Time", -1);
-        SmartDashboard.putNumber("Drivers/Shooter Angle", 0);
-        SmartDashboard.putNumber("Drivers/Shooter speed", .55);
+        driversTab = Shuffleboard.getTab("Drivers");
+        controlsTab = Shuffleboard.getTab("Controls");
 
+        driversTab.add("Match Time", -1);
+        driversTab.add("Shooter Angle", 0);
+        driversTab.add("Shooter speed", .55);
         autoChooser.setDefaultOption("Test Auton", AutonSelector.TestPath);
-        SmartDashboard.putData("Drivers/Start Position", startPosition);
-        SmartDashboard.putData("Drivers/Auton choices", autoChooser);
+        driversTab.add("Auton Choices", autoChooser);
+        driversTab.add("Start Position", startPosition);
+
+        resetGyro = controlsTab.add("Reset Gyro", false)
+                .withWidget(BuiltInWidgets.kBooleanBox)
+                .getEntry();
+        recalGyro = controlsTab.add("Recal Gyro", false)
+                .withWidget(BuiltInWidgets.kBooleanBox)
+                .getEntry();
     }
 
     public void update() {
-        SmartDashboard.putNumber("Drivers/Shooter Angle", shooter.getTurretEncoder());
-        SmartDashboard.putNumber("Drivers/Gyro", Gyro1038.getInstance().getAngle());
+        driversTab.add("Shooter Angle", shooter.getTurretEncoder());
+        driversTab.add("Gyro", Gyro1038.getInstance().getAngle());
         // SmartDashboard.putBoolean("Limelight Can See Target",
         // limelight.canSeeTarget());
         position = startPosition.getSelected();
         autonChooser = autoChooser.getSelected();
 
-        if (SmartDashboard.getBoolean("Controls/Reset Gyro", false)) {
+        if (resetGyro.getBoolean(false)) {
             Gyro1038.getInstance().reset();
-            SmartDashboard.putBoolean("Controls/Reset Gyro", false);
+            resetGyro.setBoolean(false);
         }
 
-        if (SmartDashboard.getBoolean("Controls/Recal Gyro", false)) {
+        if (recalGyro.getBoolean(false)) {
             Gyro1038.getInstance().calibrate();
-            SmartDashboard.putBoolean("Controls/Recal Gyro", false);
+            recalGyro.setBoolean(false);
         }
     }
 
