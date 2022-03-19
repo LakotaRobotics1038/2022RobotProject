@@ -1,6 +1,8 @@
 package frc.subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -27,8 +29,8 @@ public class Endgame {
 
     // Inputs and Outputs
     private final DigitalInput1038 bottomLimit = new DigitalInput1038(LIMIT_SWITCH_PORT);
-    private final TalonFX1038 rotator = new TalonFX1038(ROTATOR_PORT);
-    private final TalonFX1038 elevator = new TalonFX1038(ELEVATOR_PORT);
+    private final TalonFX1038 rotatorMotor = new TalonFX1038(ROTATOR_PORT);
+    private final TalonFX1038 elevatorMotor = new TalonFX1038(ELEVATOR_PORT);
     private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(
             PneumaticsModuleType.REVPH,
             RATCHET_ON_PORT,
@@ -45,15 +47,17 @@ public class Endgame {
 
     private Endgame() {
         this.engageRatchet();
+        elevatorMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                LimitSwitchNormal.NormallyClosed);
     }
 
     // Encoders for the Motors
     public double getElevatorEncoderPosition() {
-        return elevator.getPosition();
+        return elevatorMotor.getPosition();
     }
 
     public double getRotatorEncodePosition() {
-        return rotator.getPosition(); // might need some extra weird math
+        return rotatorMotor.getPosition(); // might need some extra weird math
     }
 
     public void releaseRatchet() {
@@ -69,27 +73,27 @@ public class Endgame {
     public void liftElevator() {
         releaseRatchet();
         if (!locked) {
-            elevator.set(ControlMode.Position, endgameTop);
+            elevatorMotor.set(ControlMode.Position, endgameTop);
             engageRatchet();
         }
     }
 
     public void lowerElevator() {
         if (!bottomLimit.get()) {
-            elevator.set(ControlMode.Position, endgameBottom);
+            elevatorMotor.set(ControlMode.Position, endgameBottom);
         } else {
             System.out.println("You are at the bottom limit already.");
         }
     }
 
     public void rotateRight() {
-        rotator.setNeutralMode(NeutralMode.Brake);
-        rotator.set(ControlMode.Position, rotateLimitRight);
+        rotatorMotor.setNeutralMode(NeutralMode.Brake);
+        rotatorMotor.set(ControlMode.Position, rotateLimitRight);
     }
 
     public void rotateLeft() {
-        rotator.setNeutralMode(NeutralMode.Brake);
-        rotator.set(ControlMode.Position, rotateLimitLeft);
+        rotatorMotor.setNeutralMode(NeutralMode.Brake);
+        rotatorMotor.set(ControlMode.Position, rotateLimitLeft);
     }
 
 }
