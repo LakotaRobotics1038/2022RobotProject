@@ -72,10 +72,10 @@ public class Shooter implements Subsystem {
 
     private final double positionSetpoint = 0.0;
     private final double positionTolerance = 1;
-    private final static double positionP = 0.08; // .15
-    private final static double positionI = 0.0;
-    private final static double positionD = 0.0;
-    private PIDController positionPID = new PIDController(positionP, positionI, positionD);
+    private final static double TurrentP = 0.08; // .15
+    private final static double TurrentI = 0.0;
+    private final static double TurrentD = 0.0;
+    private PIDController TurrentPID = new PIDController(TurrentP, TurrentI, TurrentD);
 
     // Speed PID for shooter
     // private final double speedSetpoint = limelight.getShooterSetpoint();
@@ -92,9 +92,9 @@ public class Shooter implements Subsystem {
     private Shooter() {
         shooterMotor1.setInverted(true);
         shooterMotor2.setInverted(false);
-        positionPID.setSetpoint(positionSetpoint);
-        positionPID.setTolerance(positionTolerance);
-        positionPID.disableContinuousInput();
+        TurrentPID.setSetpoint(positionSetpoint);
+        TurrentPID.setTolerance(positionTolerance);
+        TurrentPID.disableContinuousInput();
         turretMotor.setSelectedSensorPosition(0);
 
         // speedPID.setSetpoint(speedSetpoint);
@@ -169,12 +169,16 @@ public class Shooter implements Subsystem {
         hoodMotor.set(power);
     }
 
+    public void moveHoodManually(double speed) {
+        hoodMotor.set(speed);
+    }
+
     /**
      * aims turret towards target
      */
     public void executeAimPID() {
         System.out.println("PID");
-        double power = positionPID.calculate(limelight.getXOffset());
+        double power = TurrentPID.calculate(limelight.getXOffset());
         System.out.println("x " + limelight.getXOffset());
         if (turretMotor.getSelectedSensorPosition() > LEFT_STOP ||
                 turretMotor.getSelectedSensorPosition() < RIGHT_STOP) {
@@ -228,11 +232,7 @@ public class Shooter implements Subsystem {
 
     // pass thru the turret direction you want, then this will set the turret to
     // that
-    /**
-     * @deprecated This shouldn't be used. Use turnTurret
-     * @param value turret direction you want to move to.
-     */
-    @Deprecated
+
     public void setTurretDirection(TurretDirections value) {
         currentTurretDirection = value;
     }
@@ -265,7 +265,7 @@ public class Shooter implements Subsystem {
         if (interrupted) {
             System.out.println("position interrupted");
         }
-        positionPID.reset();
+        TurrentPID.reset();
         speedPID.reset();
     }
 
@@ -275,13 +275,13 @@ public class Shooter implements Subsystem {
      * @return returns if robot is ready to shoot
      */
     public boolean isFinished() {
-        return positionPID.atSetpoint() && speedPID.atSetpoint() && isRunning;
+        return TurrentPID.atSetpoint() && speedPID.atSetpoint() && isRunning;
     }
 
     // Returns to see if the turret is aimed that the target
     public boolean turretOnTarget() {
         // return false;
-        return positionPID.atSetpoint() && limelight.canSeeTarget();
+        return TurrentPID.atSetpoint() && limelight.canSeeTarget();
     }
 
     // moves the turret
@@ -319,14 +319,6 @@ public class Shooter implements Subsystem {
     public double getShooterSpeed() {
         return shooterMotor1.getSelectedSensorVelocity() / 4100.00; // converts to speed
     }
-
-    // returns the hard stop of the robot before it breaks
-    /**
-     * @deprecated This method needs deleted
-     *             public boolean getHardStop() {
-     *             return hardStop.get();
-     *             }
-     */
 
     // this sets the turret encoder position to 0
     /**

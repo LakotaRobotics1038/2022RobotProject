@@ -97,5 +97,13 @@ public class Operator {
         } else {
             shooter.returnToZero();
         }
+
+        if (operatorJoystick.getPOVPosition() == PovPositions.Up) {
+            shooter.moveHoodManually(0.5);
+        } else if (operatorJoystick.getPOVPosition() == PovPositions.Down) {
+            shooter.moveHoodManually(-0.5);
+        } else {
+            shooter.moveHoodManually(0);
+        }
     }
 }
