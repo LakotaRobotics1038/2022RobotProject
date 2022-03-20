@@ -20,7 +20,7 @@ public class Endgame {
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
     private boolean locked = true;
-    private int endgameTop = 18000; // TODO: change encoder counts to correct value
+    private int endgameTop = 155000; // TODO: change encoder counts to correct value
     private int endgameBottom = 0;
     private int LIMIT_SWITCH_PORT = 3;
     // This is from the right side of the robot looking at it with acq facing you.
@@ -64,28 +64,41 @@ public class Endgame {
     }
 
     public void releaseRatchet() {
-        ratchetSolenoid.set(Value.kForward);
+        ratchetSolenoid.set(Value.kReverse);
         locked = false;
     }
 
     public void engageRatchet() {
-        ratchetSolenoid.set(Value.kReverse);
+        ratchetSolenoid.set(Value.kForward);
         locked = true;
     }
 
     public void liftElevator() {
         releaseRatchet();
-        if (!locked) {
-            elevatorMotor.set(ControlMode.Position, endgameTop);
+        if (!locked && elevatorMotor.getPosition() < endgameTop) {
+            elevatorMotor.set(.25);
+        } else {
+            elevatorMotor.set(0);
             engageRatchet();
         }
     }
 
     public void lowerElevator() {
-        elevatorMotor.set(ControlMode.Position, endgameBottom);
-        if (elevatorMotor.isRevLimitSwitchClosed() == 0) {
+        // elevatorMotor.set(-.25);
+        if (elevatorMotor.isRevLimitSwitchClosed() == 1) {
+            elevatorMotor.set(-.25);
+        } else if (elevatorMotor.isRevLimitSwitchClosed() == 0) {
+            elevatorMotor.set(0);
             elevatorMotor.setPosition(0);
         }
+
+        // if (elevatorMotor.isRevLimitSwitchClosed() == 1) {
+        // elevatorMotor.setPosition(0);
+        // }
+    }
+
+    public void stopElevator() {
+        elevatorMotor.set(0);
     }
 
     public void rotateRight() {

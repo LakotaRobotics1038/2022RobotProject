@@ -56,11 +56,11 @@ public class Operator {
             endgame.lowerElevator();
         }
 
-        if (operatorJoystick.getRightJoystickHorizontal() > -1) {
+        if (operatorJoystick.getRightJoystickHorizontal() <= -.25) {
             endgame.rotateRight();
         }
 
-        if (operatorJoystick.getRightJoystickHorizontal() < -1) {
+        if (operatorJoystick.getRightJoystickHorizontal() >= .25) {
             endgame.rotateLeft();
         }
 
@@ -79,7 +79,7 @@ public class Operator {
             operatorJoystick.setLeftRumble(0);
         }
 
-        if (operatorJoystick.getLeftTrigger() > .5) {
+        if (operatorJoystick.getLeftTrigger() > .25) {
             shooter.feedBall();
         }
 
