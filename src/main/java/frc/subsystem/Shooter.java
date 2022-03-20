@@ -227,11 +227,7 @@ public class Shooter implements Subsystem {
 
     // pass thru the turret direction you want, then this will set the turret to
     // that
-    /**
-     * @deprecated This shouldn't be used. Use turnTurret
-     * @param value turret direction you want to move to.
-     */
-    @Deprecated
+
     public void setTurretDirection(TurretDirections value) {
         currentTurretDirection = value;
     }
