@@ -319,14 +319,6 @@ public class Shooter implements Subsystem {
         return shooterMotor1.getSelectedSensorVelocity() / 4100.00; // converts to speed
     }
 
-    // returns the hard stop of the robot before it breaks
-    /**
-     * @deprecated This method needs deleted
-     *             public boolean getHardStop() {
-     *             return hardStop.get();
-     *             }
-     */
-
     // this sets the turret encoder position to 0
     /**
      * This resets the encoder value back to 0 for the turret encoder.
