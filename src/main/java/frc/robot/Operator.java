@@ -41,9 +41,9 @@ public class Operator {
             prevYButtonState = false;
         }
 
-        if (operatorJoystick.getRightButton()) {
+        if (operatorJoystick.getLeftButton()) {
             acquisition.runFwd();
-        } else if (operatorJoystick.getLeftButton()) {
+        } else if (operatorJoystick.getLeftTriggerDigital()) {
             acquisition.runRev();
         } else {
             acquisition.stop();
@@ -51,27 +51,36 @@ public class Operator {
 
         if (operatorJoystick.getBButton()) {
             endgame.liftElevator();
+        } else {
+            endgame.stopElevator();
         }
         if (operatorJoystick.getXButton()) {
             endgame.lowerElevator();
+        } else {
+            endgame.stopElevator();
         }
 
-        if (operatorJoystick.getRightJoystickHorizontal() <= -.25) {
+        if (operatorJoystick.getRightJoystickHorizontal() <= -.5) {
             endgame.rotateRight();
         }
 
-        if (operatorJoystick.getRightJoystickHorizontal() >= .25) {
+        if (operatorJoystick.getRightJoystickHorizontal() >= .5) {
             endgame.rotateLeft();
         }
 
-        if (operatorJoystick.getLeftButton()) {
+        if (operatorJoystick.getRightJoystickHorizontal() == 0) {
+            endgame.stopRotator();
+        }
+
+        if (operatorJoystick.getRightButton()) {
             shooter.executeSpeedPID();
+            shooter.executeHoodPID();
         } else {
             shooter.disableSpeedPID();
             shooter.shootManually(0);
         }
 
-        if (shooter.isFinished() && operatorJoystick.getLeftButton()) {
+        if (shooter.isFinished() && operatorJoystick.getRightButton()) {
             operatorJoystick.setLeftRumble(1);
             operatorJoystick.setRightRumble(1);
         } else {
@@ -79,7 +88,7 @@ public class Operator {
             operatorJoystick.setLeftRumble(0);
         }
 
-        if (operatorJoystick.getLeftTrigger() > .25) {
+        if (operatorJoystick.getRightTriggerDigital()) {
             shooter.feedBall();
         }
 
