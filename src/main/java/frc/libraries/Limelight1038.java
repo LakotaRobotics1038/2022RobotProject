@@ -27,11 +27,11 @@ public class Limelight1038 {
     private double valid_target;
     private double x;
     private double y;
-    private double actualHeight = 35.75; // Inches
+    private double actualHeight = 68; // Inches
     private double limelightAngle = 30; // Degrees
 
     // Offset default value
-    private int defaultOffset = 0;
+    private double defaultOffset = 0.0;
 
     public enum LEDStates {
         On(0), Off(1);
@@ -128,20 +128,25 @@ public class Limelight1038 {
      */
     public double getShooterSetpoint() {
         double setpoint = ty.getDouble(defaultOffset);
+        // double setpoint = getYOffset();
         return (setpoint * -250 + 31000) / (4100.00);
     }
 
     /** @return the motor power that limelight says it should be at. */
     public double getMotorPower() {
         double power = ty.getDouble(defaultOffset);
-        return power * -.00417 + .55;
+        // double power = getYOffset();
+        return power * 1; // -.00417 + .55
     }
 
     /** @return the distance from the limelight to the target. */
     public double getTargetDistance() {
         // get distance via trig, limelight angle, hub height - limelight height then
         // trig it out
-        double distance = actualHeight / Math.tan(limelightAngle);
+        double distance = actualHeight
+                / Math.abs(Math.tan(((limelightAngle + getYOffset()) * (Math.PI / 180.0))));
+        // System.out.println(Math.tan((limelightAngle + ty.getDouble(defaultOffset) *
+        // (Math.PI / 180.0))));
         return distance;
     }
 }

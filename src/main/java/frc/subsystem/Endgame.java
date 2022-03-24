@@ -1,6 +1,7 @@
 package frc.subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -19,13 +20,13 @@ public class Endgame {
     private final int ROTATOR_PORT = 1;
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
-    private boolean locked = true;
+    public boolean locked = true;
     private int endgameTop = 155000; // TODO: change encoder counts to correct value
     private int endgameBottom = 0;
     private int LIMIT_SWITCH_PORT = 3;
     // This is from the right side of the robot looking at it with acq facing you.
-    private int rotateLimitLeft = 150; // TODO: replace this with the actually encoder counts
-    private int rotateLimitRight = 0;
+    private int rotateLimitLeft = 40000; // TODO: replace this with the actually encoder counts
+    private int rotateLimitRight = -1000;
 
     // Inputs and Outputs
     // private final DigitalInput1038 bottomLimit = new
@@ -47,9 +48,12 @@ public class Endgame {
     }
 
     private Endgame() {
-        this.engageRatchet();
+        // this.engageRatchet();
         elevatorMotor.setInverted(true);
         elevatorMotor.setPosition(0);
+        rotatorMotor.setPosition(0);
+        rotatorMotor.setInverted(true);
+        rotatorMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         elevatorMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
                 LimitSwitchNormal.NormallyClosed, 0);
     }
@@ -59,7 +63,11 @@ public class Endgame {
         return elevatorMotor.getPosition();
     }
 
-    public double getRotatorEncodePosition() {
+    public double getRotatorMotorPosition() {
+        return rotatorMotor.getPosition();
+    }
+
+    public double getRotatorEncoderPosition() {
         return rotatorMotor.getPosition(); // might need some extra weird math
     }
 
@@ -101,14 +109,27 @@ public class Endgame {
         elevatorMotor.set(0);
     }
 
-    public void rotateRight() {
-        rotatorMotor.setNeutralMode(NeutralMode.Brake);
-        rotatorMotor.set(ControlMode.Position, rotateLimitRight);
-    }
-
     public void rotateLeft() {
         rotatorMotor.setNeutralMode(NeutralMode.Brake);
-        rotatorMotor.set(ControlMode.Position, rotateLimitLeft);
+        if (rotatorMotor.getPosition() < rotateLimitLeft) {
+            rotatorMotor.set(.1);
+        } else if (rotatorMotor.getPosition() >= rotateLimitLeft) {
+            rotatorMotor.set(0);
+        }
+
+    }
+
+    public void rotateRight() {
+        rotatorMotor.setNeutralMode(NeutralMode.Brake);
+        if (rotatorMotor.getPosition() > rotateLimitRight) {
+            rotatorMotor.set(-.1);
+        } else if (rotatorMotor.getPosition() <= rotateLimitRight) {
+            rotatorMotor.set(0);
+        }
+    }
+
+    public void stopRotator() {
+        rotatorMotor.set(0);
     }
 
 }

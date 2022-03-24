@@ -40,7 +40,7 @@ public class Acquisition implements Subsystem {
     }
 
     private Acquisition() {
-        acquisitionSolenoid.set(Value.kForward);
+        acquisitionSolenoid.set(Value.kReverse);
     }
 
     // Motor Speeds
