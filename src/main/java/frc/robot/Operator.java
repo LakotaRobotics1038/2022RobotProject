@@ -51,10 +51,7 @@ public class Operator {
 
         if (operatorJoystick.getBButton()) {
             endgame.liftElevator();
-        } else {
-            endgame.stopElevator();
-        }
-        if (operatorJoystick.getXButton()) {
+        } else if (operatorJoystick.getXButton()) {
             endgame.lowerElevator();
         } else {
             endgame.stopElevator();
