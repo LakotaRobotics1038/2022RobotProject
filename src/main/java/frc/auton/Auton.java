@@ -8,7 +8,7 @@ public class Auton extends SequentialCommandGroup {
 
     /**
      * Creates a new auton with data
-     * 
+     *
      * @param positionIn The position of the robot on the field
      * @param gameDataIn Game data from FMS
      */
