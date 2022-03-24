@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.Dashboard;
 import frc.libraries.Limelight1038;
+import frc.libraries.Limelight1038.LEDStates;
 import frc.subsystem.SerialComs;
 import frc.subsystem.Storage;
 import frc.subsystem.*;
@@ -25,10 +26,10 @@ import frc.subsystem.*;
  */
 public class Robot extends TimedRobot {
     private final int PH_PORT = 1;
-    private final int MIN_PRESSURE = 115;
+    private final int MIN_PRESSURE = 110;
     private final int MAX_PRESSURE = 120;
 
-    private final SerialComs rpiComs = SerialComs.getInstance();
+    // private final SerialComs rpiComs = SerialComs.getInstance();
     private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
     private final Shooter shooter = Shooter.getInstance();
     private final Endgame endgame = Endgame.getInstance();
@@ -44,6 +45,7 @@ public class Robot extends TimedRobot {
         // rpiComs.stopSerialPort();
         shooter.resetTurretEncoder();
         shooter.enable();
+        limelight.changeLEDStatus(LEDStates.Off);
     }
 
     @Override
@@ -61,7 +63,8 @@ public class Robot extends TimedRobot {
         // System.out.println("Is limit switch closed" +
         // endgame.elevatorMotor.isRevLimitSwitchClosed());
         // System.out.println("Hood position " + shooter.getHoodEncoder());
-        System.out.println("Target Distance " + limelight.getTargetDistance());
+        // System.out.println("Target Distance " + limelight.getTargetDistance());
+        System.out.println("Shooter setpoint" + limelight.getShooterSetpoint());
         System.out.println("Speed PID at setpoint " + shooter.speedOnTarget());
         System.out.println("Speed of shooter " + shooter.getShooterSpeed());
     }
@@ -75,6 +78,7 @@ public class Robot extends TimedRobot {
         Driver.getInstance().periodic();
         Operator.getInstance().periodic();
         Storage.getInstance().periodic();
+        Shooter.getInstance().periodic();
     }
 
     public void autonomousInit() {

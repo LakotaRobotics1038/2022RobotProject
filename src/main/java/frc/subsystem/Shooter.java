@@ -1,6 +1,7 @@
 package frc.subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -91,7 +92,8 @@ public class Shooter implements Subsystem {
 
     private Shooter() {
         shooterMotor1.setInverted(false);
-        shooterMotor2.setInverted(true);
+        shooterMotor2.follow(shooterMotor1);
+        shooterMotor2.setInverted(InvertType.OpposeMaster);
         compressionMotor.setInverted(false);
         turretPID.setSetpoint(positionSetpoint);
         turretPID.setTolerance(positionTolerance);
@@ -100,7 +102,7 @@ public class Shooter implements Subsystem {
 
         // speedPID.setSetpoint(speedSetpoint);
         speedPID.setTolerance(speedTolerance);
-        speedPID.disableContinuousInput();
+        speedPID.enableContinuousInput(-1, 1);
 
         hoodPID.setSetpoint(limelight.getTargetDistance()); // TODO: Figure out what to divide by.
         hoodPID.setTolerance(hoodTolerance);
@@ -130,23 +132,13 @@ public class Shooter implements Subsystem {
     /**
      * disables speed motors and pid
      */
-    public void disablePID() {
+    public void disable() {
         // TODO: Fix this
+        isEnabled = false;
         speedPID.calculate(0.0);
         shooterMotor1.set(0);
-        shooterMotor2.set(0);
         compressionMotor.set(0);
-    }
-
-    /**
-     * sets the position setpoint
-     *
-     * @deprecated use shooter function instead.
-     */
-    public void initialize() {
-        turretPID.setSetpoint(positionSetpoint);
-        hoodPID.setSetpoint(hoodSetpoint);
-
+        limelight.changeLEDStatus(LEDStates.Off);
     }
 
     /**
@@ -165,7 +157,7 @@ public class Shooter implements Subsystem {
     }
 
     /** Aims the hood */
-    public void executeHoodPID() {
+    private void executeHoodPID() {
         double power = hoodPID.calculate(hoodMotor.getEncoder().getPosition()); // TODO:
         // fine tune this PID
         hoodMotor.set(power);
@@ -178,11 +170,9 @@ public class Shooter implements Subsystem {
     /**
      * aims turret towards target
      */
-    public void executeAimPID() {
+    private void executeAimPID() {
         // hoodSetpoint = limelight.getTargetDistance() / 60;
-        System.out.println("PID");
         double power = turretPID.calculate(limelight.getXOffset());
-        System.out.println("x " + limelight.getXOffset());
         if (turretMotor.getSelectedSensorPosition() > LEFT_STOP ||
                 turretMotor.getSelectedSensorPosition() < RIGHT_STOP) {
             turretMotor.set(-power * 0.5);
@@ -194,21 +184,16 @@ public class Shooter implements Subsystem {
     /**
      * sets the speed of the shooter
      */
-    public void executeSpeedPID() {
+    private void executeSpeedPID() {
         isRunning = true;
-        speedPID.setSetpoint(limelight.getShooterSetpoint());
-        double power = speedPID.calculate(shooterMotor1.getSelectedSensorVelocity()) + limelight.getMotorPower();
-        System.out.println("speed" + shooterMotor1.getSelectedSensorVelocity());
-        System.out.println("setpoint: " + speedPID.getSetpoint());
-        System.out.println("power" + power);
+        speedPID.setSetpoint(limelight.getShooterSetpoint()); // limelight.getShooterSetpoint()
+        double power = speedPID
+                .calculate((shooterMotor1.getSelectedSensorVelocity() / 4100.00) + limelight.getMotorPower());
+        // System.out.println("speed" + getShooterSpeed());
+        // System.out.println("setpoint: " + speedPID.getSetpoint());
+        // System.out.println("power" + power);
         compressionMotor.set(power);
         shooterMotor1.set(power);
-        shooterMotor2.set(power);
-    }
-
-    // Stops the speedPID
-    public void disableSpeedPID() {
-        isRunning = false;
     }
 
     // checks if the speedPID is at the setpoint (What speed we want the shooter at)
@@ -230,15 +215,7 @@ public class Shooter implements Subsystem {
      */
     public void shootManually(double speed) {
         shooterMotor1.set(speed);
-        shooterMotor2.set(speed);
         compressionMotor.set(speed);
-    }
-
-    // pass thru the turret direction you want, then this will set the turret to
-    // that
-
-    public void setTurretDirection(TurretDirections value) {
-        currentTurretDirection = value;
     }
 
     // enables the PIDs and what not
@@ -246,31 +223,12 @@ public class Shooter implements Subsystem {
         isEnabled = true;
     }
 
-    // Disabled the PIDs and what not, screw this
-    public void disable() {
-        isEnabled = false;
-    }
-
     // Executes the PID
     public void periodic() {
         if (isEnabled) {
-            executeAimPID();
-            executeHoodPID();
+            // executeHoodPID();
             executeSpeedPID();
         }
-    }
-
-    /**
-     * stops and resets PID values if interrupted (potentially unnecessary)
-     *
-     * @param interrupted if the robot is interrupted
-     */
-    public void end(boolean interrupted) {
-        if (interrupted) {
-            System.out.println("position interrupted");
-        }
-        turretPID.reset();
-        speedPID.reset();
     }
 
     /**
@@ -286,12 +244,6 @@ public class Shooter implements Subsystem {
     public boolean turretOnTarget() {
         // return false;
         return turretPID.atSetpoint() && limelight.canSeeTarget();
-    }
-
-    // moves the turret
-    public void turnTurret(double turnAngle) {
-        // TODO: Do Math here for converting angle to encoder counts
-        turretMotor.set(ControlMode.Position, turnAngle);
     }
 
     // switch case for what direction the turret spins
@@ -363,15 +315,6 @@ public class Shooter implements Subsystem {
             currentTurretDirection = TurretDirections.Left;
             moveTurret();
         }
-    }
-
-    // hold the turret position
-    /**
-     *
-     * This code holds the turret at the current position.
-     */
-    public void holdPosition() {
-        turretMotor.set(ControlMode.Velocity, 0);
     }
 
     // moves the turret

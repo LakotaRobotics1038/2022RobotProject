@@ -74,7 +74,7 @@ public class Storage implements Subsystem {
      * runs the ball storage
      */
     public void periodic() {
-        serial.testRead();
+        // serial.testRead();
         switch (selectedManualStorageMode) {
             case None:
                 // If the ball is at the first laser and not the middle laser. Move the ball.

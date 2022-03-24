@@ -70,11 +70,10 @@ public class Operator {
         }
 
         if (operatorJoystick.getRightButton()) {
-            shooter.executeSpeedPID();
-            shooter.executeHoodPID();
+            shooter.enable();
+            // shooter.executeHoodPID();
         } else {
-            shooter.disableSpeedPID();
-            shooter.shootManually(0);
+            // shooter.disable();
         }
 
         if (shooter.isFinished() && operatorJoystick.getRightButton()) {

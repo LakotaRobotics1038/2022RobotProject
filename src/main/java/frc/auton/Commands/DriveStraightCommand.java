@@ -2,7 +2,7 @@ package frc.auton.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.libraries.DriveTrain1038;
 import frc.libraries.Gyro1038;
@@ -39,12 +39,12 @@ public class DriveStraightCommand extends CommandBase {
         System.out.println("setpoint" + drivePID.getSetpoint());
         drivePID.setTolerance(TOLERANCE);
         drivePID.disableContinuousInput();
-        SmartDashboard.putData("Controls/Drive Straight", drivePID);
+        // SmartDashboard.putData("Controls/Drive Straight", drivePID);
 
         // Angle
         turnPID.setTolerance(TOLERANCE);
         turnPID.enableContinuousInput(0, 360);
-        SmartDashboard.putData("Controls/Drive Straight Angle", turnPID);
+        // SmartDashboard.putData("Controls/Drive Straight Angle", turnPID);
         addRequirements(drive);
     }
 }
