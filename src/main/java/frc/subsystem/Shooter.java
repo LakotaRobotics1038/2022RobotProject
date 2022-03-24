@@ -63,24 +63,24 @@ public class Shooter implements Subsystem {
     private final double hoodMaxDistance = 5.5; // inches
     private final double hoodMaxEncoder = 88;
     private final double encoderCountsPerInch = hoodMaxEncoder / hoodMaxDistance;
-    private final double hootSetpoint = 0.0;
-    private final double hoodTolerance = 1;
-    private final static double hoodP = 0.08;
-    private final static double hoodI = 0.0;
+    private double hoodSetpoint = 0;
+    private final double hoodTolerance = .25;
+    private final static double hoodP = 0.65;
+    private final static double hoodI = 0.03;
     private final static double hoodD = 0.0;
     private PIDController hoodPID = new PIDController(hoodP, hoodI, hoodD);
 
     private final double positionSetpoint = 0.0;
     private final double positionTolerance = 1;
-    private final static double TurrentP = 0.08; // .15
-    private final static double TurrentI = 0.0;
-    private final static double TurrentD = 0.0;
-    private PIDController TurrentPID = new PIDController(TurrentP, TurrentI, TurrentD);
+    private final static double turretP = 0.08; // .15
+    private final static double turretI = 0.0;
+    private final static double turretD = 0.0;
+    private PIDController turretPID = new PIDController(turretP, turretI, turretD);
 
     // Speed PID for shooter
     // private final double speedSetpoint = limelight.getShooterSetpoint();
-    private final double speedTolerance = 1000;
-    private final static double speedP = 0.000007;
+    private final double speedTolerance = 1;
+    private final static double speedP = 0.00007;
     private final static double speedI = 0.0;
     private final static double speedD = 0.0;
     private PIDController speedPID = new PIDController(speedP, speedI, speedD);
@@ -90,18 +90,19 @@ public class Shooter implements Subsystem {
     private final static double feedSpeed = 1;
 
     private Shooter() {
-        shooterMotor1.setInverted(true);
-        shooterMotor2.setInverted(false);
-        TurrentPID.setSetpoint(positionSetpoint);
-        TurrentPID.setTolerance(positionTolerance);
-        TurrentPID.disableContinuousInput();
+        shooterMotor1.setInverted(false);
+        shooterMotor2.setInverted(true);
+        compressionMotor.setInverted(false);
+        turretPID.setSetpoint(positionSetpoint);
+        turretPID.setTolerance(positionTolerance);
+        turretPID.disableContinuousInput();
         turretMotor.setSelectedSensorPosition(0);
 
         // speedPID.setSetpoint(speedSetpoint);
         speedPID.setTolerance(speedTolerance);
         speedPID.disableContinuousInput();
 
-        hoodPID.setSetpoint(hootSetpoint);
+        hoodPID.setSetpoint(limelight.getTargetDistance()); // TODO: Figure out what to divide by.
         hoodPID.setTolerance(hoodTolerance);
         hoodPID.disableContinuousInput();
         hoodMotor.setInverted(true);
@@ -134,20 +135,26 @@ public class Shooter implements Subsystem {
         speedPID.calculate(0.0);
         shooterMotor1.set(0);
         shooterMotor2.set(0);
+        compressionMotor.set(0);
     }
 
     /**
      * sets the position setpoint
      *
-     * @deprecated DO NOT USE
+     * @deprecated use shooter function instead.
      */
-    @Deprecated
     public void initialize() {
-        TurrentPID.setSetpoint(positionSetpoint);
+        turretPID.setSetpoint(positionSetpoint);
+        hoodPID.setSetpoint(hoodSetpoint);
 
     }
 
-    /** Zero's the hood */
+    /**
+     * Zero's the hood
+     *
+     * @warning Does not reset encoder values; this only works if encoder has been
+     *          set correctly.
+     */
     public void zeroHood() {
         // TODO: move encoder to a variable up top
         if (hoodMotor.getEncoder().getPosition() > 0) {
@@ -159,23 +166,28 @@ public class Shooter implements Subsystem {
 
     /** Aims the hood */
     public void executeHoodPID() {
-        double power = hoodPID.calculate(limelight.getTargetDistance()); // TODO:
+        double power = hoodPID.calculate(hoodMotor.getEncoder().getPosition()); // TODO:
         // fine tune this PID
         hoodMotor.set(power);
+    }
+
+    public void moveHoodManually(double speed) {
+        hoodMotor.set(speed);
     }
 
     /**
      * aims turret towards target
      */
     public void executeAimPID() {
+        // hoodSetpoint = limelight.getTargetDistance() / 60;
         System.out.println("PID");
-        double power = TurrentPID.calculate(limelight.getXOffset());
+        double power = turretPID.calculate(limelight.getXOffset());
         System.out.println("x " + limelight.getXOffset());
         if (turretMotor.getSelectedSensorPosition() > LEFT_STOP ||
                 turretMotor.getSelectedSensorPosition() < RIGHT_STOP) {
-            turretMotor.set(power * 0.5);
-        } else {
             turretMotor.set(-power * 0.5);
+        } else {
+            turretMotor.set(power * 0.5);
         }
     }
 
@@ -185,11 +197,11 @@ public class Shooter implements Subsystem {
     public void executeSpeedPID() {
         isRunning = true;
         speedPID.setSetpoint(limelight.getShooterSetpoint());
-        double power = speedPID.calculate(shooterMotor1.getSelectedSensorVelocity())
-                + limelight.getMotorPower();
+        double power = speedPID.calculate(shooterMotor1.getSelectedSensorVelocity()) + limelight.getMotorPower();
         System.out.println("speed" + shooterMotor1.getSelectedSensorVelocity());
         System.out.println("setpoint: " + speedPID.getSetpoint());
         System.out.println("power" + power);
+        compressionMotor.set(power);
         shooterMotor1.set(power);
         shooterMotor2.set(power);
     }
@@ -218,16 +230,13 @@ public class Shooter implements Subsystem {
      */
     public void shootManually(double speed) {
         shooterMotor1.set(speed);
-        shooterMotor2.set(-speed);
+        shooterMotor2.set(speed);
+        compressionMotor.set(speed);
     }
 
     // pass thru the turret direction you want, then this will set the turret to
     // that
-    /**
-     * @deprecated This shouldn't be used. Use turnTurret
-     * @param value turret direction you want to move to.
-     */
-    @Deprecated
+
     public void setTurretDirection(TurretDirections value) {
         currentTurretDirection = value;
     }
@@ -245,7 +254,7 @@ public class Shooter implements Subsystem {
     // Executes the PID
     public void periodic() {
         if (isEnabled) {
-            // executeAimPID();
+            executeAimPID();
             executeHoodPID();
             executeSpeedPID();
         }
@@ -260,7 +269,7 @@ public class Shooter implements Subsystem {
         if (interrupted) {
             System.out.println("position interrupted");
         }
-        TurrentPID.reset();
+        turretPID.reset();
         speedPID.reset();
     }
 
@@ -270,13 +279,13 @@ public class Shooter implements Subsystem {
      * @return returns if robot is ready to shoot
      */
     public boolean isFinished() {
-        return TurrentPID.atSetpoint() && speedPID.atSetpoint() && isRunning;
+        return turretPID.atSetpoint() && speedPID.atSetpoint() && isRunning;
     }
 
     // Returns to see if the turret is aimed that the target
     public boolean turretOnTarget() {
         // return false;
-        return TurrentPID.atSetpoint() && limelight.canSeeTarget();
+        return turretPID.atSetpoint() && limelight.canSeeTarget();
     }
 
     // moves the turret
@@ -315,14 +324,6 @@ public class Shooter implements Subsystem {
         return shooterMotor1.getSelectedSensorVelocity() / 4100.00; // converts to speed
     }
 
-    // returns the hard stop of the robot before it breaks
-    /**
-     * @deprecated This method needs deleted
-     *             public boolean getHardStop() {
-     *             return hardStop.get();
-     *             }
-     */
-
     // this sets the turret encoder position to 0
     /**
      * This resets the encoder value back to 0 for the turret encoder.
@@ -352,7 +353,8 @@ public class Shooter implements Subsystem {
     // code red mountain dew TODO: change this name to code red
     /** This was goToCrashPosition. This has been renamed to codeRed */
     public void returnToZero() {
-        if (Math.abs(turretMotor.getSelectedSensorPosition()) < 4000) {
+        zeroHood();
+        if (Math.abs(turretMotor.getSelectedSensorPosition()) < 8000) {
             stopTurret();
         } else if (turretMotor.getSelectedSensorPosition() > 0) {
             currentTurretDirection = TurretDirections.Right;
@@ -388,8 +390,8 @@ public class Shooter implements Subsystem {
             currentTurretDirection = TurretDirections.Right;
             moveTurret();
         } else if (limelight.canSeeTarget()) {
-            // executeAimPID();
-            moveTurret();
+            executeAimPID();
+            // moveTurret();
         } else {
             moveTurret();
         }

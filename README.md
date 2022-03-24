@@ -3,4 +3,5 @@
 
 Code for FRC Rapid React 2022
 
-PLEASE LOOK AT ISSUES/PROJECTS THAT IS WHERE ALL THE INFORMATION ABOUT THIS CODE IS
+Talon Docs, go to page 146 for encoder counts docs. 
+https://readthedocs.org/projects/phoenix-documentation/downloads/pdf/latest/

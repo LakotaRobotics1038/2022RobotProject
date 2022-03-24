@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.libraries.Dashboard;
+import frc.libraries.Limelight1038;
 import frc.subsystem.SerialComs;
 import frc.subsystem.Storage;
 import frc.subsystem.*;
@@ -30,6 +31,8 @@ public class Robot extends TimedRobot {
     private final SerialComs rpiComs = SerialComs.getInstance();
     private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
     private final Shooter shooter = Shooter.getInstance();
+    private final Endgame endgame = Endgame.getInstance();
+    private final Limelight1038 limelight = Limelight1038.getInstance();
 
     /*
      * This function is run when the robot is first started up and should be used
@@ -40,15 +43,27 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // rpiComs.stopSerialPort();
         shooter.resetTurretEncoder();
+        shooter.enable();
     }
 
     @Override
     public void robotPeriodic() {
-
         Dashboard.getInstance().update();
+        // limelight.getTargetDistance();
         // System.out.println(compressor.getPressure());
-        System.out.println(shooter.getHoodEncoder());
-
+        // System.out.println("Endgame rotator arm position " +
+        // endgame.getRotatorEncoderPosition());
+        // System.out.println("Endgame elevator arm position " +
+        // endgame.getElevatorEncoderPosition());
+        // System.out.println("Ratchet engaged " + endgame.locked);
+        // System.out.println("Can see target " + limelight.canSeeTarget());
+        // System.out.println("Target distance " + limelight.getTargetDistance());
+        // System.out.println("Is limit switch closed" +
+        // endgame.elevatorMotor.isRevLimitSwitchClosed());
+        // System.out.println("Hood position " + shooter.getHoodEncoder());
+        System.out.println("Target Distance " + limelight.getTargetDistance());
+        System.out.println("Speed PID at setpoint " + shooter.speedOnTarget());
+        System.out.println("Speed of shooter " + shooter.getShooterSpeed());
     }
 
     public void teleopInit() {
@@ -56,7 +71,7 @@ public class Robot extends TimedRobot {
     }
 
     public void teleopPeriodic() {
-        // compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
         Operator.getInstance().periodic();
         Storage.getInstance().periodic();
@@ -66,7 +81,7 @@ public class Robot extends TimedRobot {
     }
 
     public void autonomousPeriodic() {
-        compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        // compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
     }
 
     public void disabledInit() {

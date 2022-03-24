@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Storage implements Subsystem {
+    private SerialComs serial = SerialComs.getInstance();
     // Ports and Constants
     private final int SHUTTLE_MOTOR_PORT = 17;
     private final int START_LASER_PORT = 0;
@@ -22,8 +23,9 @@ public class Storage implements Subsystem {
     // Inputs and Outputs
     private CANSparkMax shuttleMotor = new CANSparkMax(SHUTTLE_MOTOR_PORT, MotorType.kBrushless);
     private RelativeEncoder shuttleMotorEncoder = shuttleMotor.getEncoder();
-    private DigitalInput laserStart = new DigitalInput(START_LASER_PORT);
-    private DigitalInput laserEnd = new DigitalInput(END_LASER_PORT);
+    private int laserStart = serial.storageLaser1;// new DigitalInput(START_LASER_PORT);
+    private int laserEnd = serial.storageLaser2;
+    private int laserDistance = 12;
 
     // manual drive
     private ManualStorageModes selectedManualStorageMode = ManualStorageModes.None;
@@ -72,13 +74,14 @@ public class Storage implements Subsystem {
      * runs the ball storage
      */
     public void periodic() {
+        serial.testRead();
         switch (selectedManualStorageMode) {
             case None:
                 // If the ball is at the first laser and not the middle laser. Move the ball.
-                if (laserStart.get() && !laserEnd.get()) {
+                if (laserStart < laserDistance && laserEnd > laserDistance) {
                     shuttleMotor.set(shuttleMotorSpeed);
                     // If a ball is not at the first laser and its at the middle laser. Stop it.
-                } else if (!laserStart.get() && laserEnd.get()) {
+                } else if (laserStart > laserDistance && laserEnd < laserDistance) {
                     shuttleMotor.set(0);
                 }
                 break;

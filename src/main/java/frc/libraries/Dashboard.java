@@ -76,6 +76,7 @@ public class Dashboard {
         autonChooser = autoChooser.getSelected();
         position = startPosition.getSelected();
         matchTime.setNumber(Timer.getMatchTime());
+
         shooterAngle.setNumber(shooter.getTurretEncoder());
         gyroAngle.setNumber(gyro.getAngle());
         limelightTarget.setBoolean(limelight.canSeeTarget());

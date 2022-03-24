@@ -1,6 +1,7 @@
 package frc.subsystem;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.io.BufferedReader;
 
 import edu.wpi.first.hal.util.UncleanStatusException;
@@ -177,29 +178,37 @@ public class SerialComs implements Subsystem {
     private byte[] testOut;
 
     public void testRead() {
+        ArrayList<Integer> parsedInt = new ArrayList<Integer>();
 
         // if (serialPort.getBytesReceived() != 0) {
         // testOut = serialPort.read(1);
         rpiOutput = serialPort.readString();
         // rpiOutput = rpiOutput.format(rpiOutput, StandardCharsets.UTF_8);
         String outputString = String.format(rpiOutput, StandardCharsets.UTF_8);
-        try {
-            int parsedInt = Integer.parseInt(outputString);
+        char[] outputArray = outputString.toCharArray();
+        for (var i = 0; i < outputArray.length; i++) { // var i = 0; i < outputArray.length; i++;
+            try {
+                parsedInt.add((outputArray[i] - 0));
+                // Integer.parseInt();
+                // storageLaser1 = parsedInt;
 
-            System.out.println("\n \n Will this work " + parsedInt + "\n \n");
-        } catch (NumberFormatException ex) {
-            // ex.printStackTrace();
-            // System.out.println(ex);
+                System.out.println("\n \n Will this work " + parsedInt + "\n \n");
+            } catch (NumberFormatException ex) {
+                // ex.printStackTrace();
+                // System.out.println(ex);
+            }
         }
+        storageLaser1 = parsedInt.get(0);
+        storageLaser2 = parsedInt.get(1);
 
         // }
 
     }
 
-    public void testSend() {
-        // double distance = limelight.getYOffset();
-        // String dString = Double.toString(distance);
-        // serialPort.setWriteBufferMode(WriteBufferMode.kFlushOnAccess);
-        serialPort.writeString("this is a test");
-    }
+    // public void testSend() {
+    // // double distance = limelight.getYOffset();
+    // // String dString = Double.toString(distance);
+    // // serialPort.setWriteBufferMode(WriteBufferMode.kFlushOnAccess);
+    // serialPort.writeString("this is a test");
+    // }
 }
