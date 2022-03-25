@@ -22,8 +22,8 @@ public class DriveTrain1038 implements Subsystem {
     public boolean isHighGear = false;
 
     // Ports for the motors
-    private final double WHEEL_DIAMETER = 4;
-    private final int ENCODER_COUNTS_PER_REVOLUTION = 4096;
+    private final double WHEEL_DIAMETER = 6;
+    private final int ENCODER_COUNTS_PER_REVOLUTION = 23700;
     private final int HIGH_GEAR_PORT = 1;
     private final int LOW_GEAR_PORT = 0;
     private final static int RIGHT_FRONT_PORT = 6;
@@ -68,6 +68,7 @@ public class DriveTrain1038 implements Subsystem {
      * Get and return distance driven by the left of the robot in inches
      */
     public double getLeftDriveEncoderDistance() {
+        System.out.println("ENCODER " + leftFrontTalon.getPosition());
         return leftFrontTalon.getPosition() / ENCODER_COUNTS_PER_REVOLUTION * Math.PI * WHEEL_DIAMETER;
     }
 
