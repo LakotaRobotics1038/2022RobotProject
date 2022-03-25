@@ -65,7 +65,6 @@ public class AutonSelector {
                 return new SequentialCommandGroup(new ForwardAuton(), new AcquireCommand(3), new ShootingAuton());
 
             case None:
-                return "you don't have any auton";
 
             default:
                 return new ForwardAuton();
