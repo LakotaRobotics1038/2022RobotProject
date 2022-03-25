@@ -167,7 +167,8 @@ public class Shooter implements Subsystem {
     /** Aims the hood */
     private void executeHoodPID() {
         // TODO: Clamp setpoint to 0, max encoder
-        hoodPID.setSetpoint(limelight.getTargetDistance() / 60);
+        hoodPID.setSetpoint(MathUtil.clamp((limelight.getTargetDistance() / 60), 0, hoodMaxEncoder));
+
         double power = hoodPID.calculate(hoodMotor.getEncoder().getPosition());
         hoodMotor.set(power);
     }
