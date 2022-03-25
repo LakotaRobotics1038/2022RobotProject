@@ -26,9 +26,9 @@ public class Shooter implements Subsystem {
     // private Map1038 map = Map1038.getInstance(); Looks like we won't need drive
     // or map.
     // private DriveTrain1038 drive = DriveTrain1038.getInstance();
-    private Limelight1038 limelight = Limelight1038.getInstance();<<<<<<<HEAD
-    private Gyro1038 gryo = Gyro1038.getInstance();
-    private boolean overrideHoodPID = false;=======>>>>>>>origin/master
+    private Limelight1038 limelight = Limelight1038.getInstance();
+    // private Gyro1038 gryo = Gyro1038.getInstance();
+    private boolean overrideHoodPID = false;
     private boolean isEnabled = false;
     private static double swivelSpeed = 0.35;
     private final double TURRET_POWER_MULTIPLIER = 0.5;
