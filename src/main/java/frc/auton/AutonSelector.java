@@ -62,11 +62,11 @@ public class AutonSelector {
                 }
 
             case DriveAndShoot:
-                return new SequentialCommandGroup(new DriveAuton(), new ShootingAuton());
+                return new SequentialCommandGroup(new ForwardAuton(), new ShootingAuton());
             case DriveShootandAcquire:
-                return new SequentialCommandGroup(new DriveAuton(), new AcquireCommand(3), new ShootingAuton());
+                return new SequentialCommandGroup(new ForwardAuton(), new AcquireCommand(3), new ShootingAuton());
             default:
-                return new DriveAuton();
+                return new ForwardAuton();
         }
 
     }

@@ -26,6 +26,11 @@ public class DriveStraightCommand extends CommandBase {
     private PIDController drivePID;
     private PIDController turnPID;
 
+    /**
+     * Drive the robot straight
+     * 
+     * @param setpoint number of feet to drive straight
+     */
     public DriveStraightCommand(double setpoint) {
         gyroSensor.reset();
         drivePID = new PIDController(dP, dI, dD);
@@ -33,9 +38,8 @@ public class DriveStraightCommand extends CommandBase {
 
         drivePID.setPID(dP, dI, dD);
 
-        // *12 Converts inches to feet
-        dSetpoint = setpoint;
-        drivePID.setSetpoint(setpoint);
+        // Converts inches to feet
+        drivePID.setSetpoint(setpoint / 12);
         System.out.println("setpoint" + drivePID.getSetpoint());
         drivePID.setTolerance(TOLERANCE);
         drivePID.disableContinuousInput();
