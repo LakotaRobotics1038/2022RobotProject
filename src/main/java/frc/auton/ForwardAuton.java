@@ -2,11 +2,11 @@ package frc.auton;
 
 import frc.auton.commands.DriveStraightCommand;
 
-public class DriveAuton extends Auton {
+public class ForwardAuton extends Auton {
     // FIXME: this name isn't right, what should it be?
 
-    public DriveAuton() {
+    public ForwardAuton() {
         super();
-        addCommands(new DriveStraightCommand(12));
+        addCommands(new DriveStraightCommand(2));
     }
 }
