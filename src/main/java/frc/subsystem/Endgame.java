@@ -88,7 +88,7 @@ public class Endgame {
         if (!locked && elevatorMotor.getPosition() < endgameTop) {
             elevatorMotor.set(.25);
         } else {
-            elevatorMotor.set(0);
+            elevatorMotor.stopMotor();
             engageRatchet();
         }
     }

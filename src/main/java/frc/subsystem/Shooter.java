@@ -152,7 +152,7 @@ public class Shooter implements Subsystem {
         if (hoodMotorEncoder.getPosition() > 0) {
             hoodMotor.set(-.5);
         } else {
-            hoodMotor.set(0);
+            hoodMotor.stopMotor();
         }
     }
 
@@ -303,7 +303,7 @@ public class Shooter implements Subsystem {
      * Stops the turret from moving.
      */
     private void stopTurret() {
-        turretMotor.set(0);
+        turretMotor.stopMotor();
     }
 
     // returns the turret directions
