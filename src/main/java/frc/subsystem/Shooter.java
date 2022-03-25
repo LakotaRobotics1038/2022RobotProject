@@ -189,7 +189,7 @@ public class Shooter implements Subsystem {
         }
     }
 
-    private int getSpeedSetpoint(){
+    private double getSpeedSetpoint() {
         if (limelight.getTargetDistance() <= 60) {
             return 500;
         } else if (limelight.getTargetDistance() <= 120) {
