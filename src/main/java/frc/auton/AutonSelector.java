@@ -40,6 +40,5 @@ public class AutonSelector {
             case None:
                 return null;
         }
-
     }
 }

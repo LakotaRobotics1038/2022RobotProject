@@ -3,6 +3,9 @@ package frc.libraries;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -59,6 +62,7 @@ public class DriveTrain1038 implements Subsystem {
         rightBackTalon.follow(rightFrontTalon);
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
         this.lowGear();
+        this.setCoastMode();
     }
 
     /**
@@ -148,5 +152,31 @@ public class DriveTrain1038 implements Subsystem {
      */
     public double robotSpeed() {
         return accelerometer.getX();
+    }
+
+    /**
+     * Set the drive train to brake mode. You should do this in auton init
+     */
+    public void setBrakeMode() {
+        this.setNeutralMode(NeutralMode.Brake);
+    }
+
+    /**
+     * Set the drive train to coast. Typically used in teleop init
+     */
+    public void setCoastMode() {
+        this.setNeutralMode(NeutralMode.Coast);
+    }
+
+    /**
+     * Helper function to set all of the drive controllers to the same neutral mode
+     *
+     * @param mode the neutral mode you want the drive train to use
+     */
+    private void setNeutralMode(NeutralMode mode) {
+        this.leftFrontTalon.setNeutralMode(mode);
+        this.leftBackTalon.setNeutralMode(mode);
+        this.rightFrontTalon.setNeutralMode(mode);
+        this.rightBackTalon.setNeutralMode(mode);
     }
 }
