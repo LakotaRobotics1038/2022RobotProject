@@ -23,7 +23,7 @@ public class Endgame {
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
     public boolean locked = true;
-    private int endgameTop = 75000; // TODO: change encoder counts to correct value
+    private int endgameTop = 160000; // TODO: change encoder counts to correct value
     private int endgameBottom = 0;
     private int LIMIT_SWITCH_PORT = 3;
     // This is from the right side of the robot looking at it with acq facing you.
@@ -86,7 +86,7 @@ public class Endgame {
     public void liftElevator() {
         releaseRatchet();
         if (!locked && elevatorMotor.getPosition() < endgameTop) {
-            elevatorMotor.set(.25);
+            elevatorMotor.set(.4);
         } else {
             elevatorMotor.set(0);
             engageRatchet();
@@ -96,7 +96,7 @@ public class Endgame {
     public void lowerElevator() {
         // elevatorMotor.set(-.25);
         if (elevatorMotor.isRevLimitSwitchClosed() == 1) {
-            elevatorMotor.set(-.75);
+            elevatorMotor.set(-.25);
         } else if (elevatorMotor.isRevLimitSwitchClosed() == 0) {
             elevatorMotor.set(0);
             elevatorMotor.setPosition(0);

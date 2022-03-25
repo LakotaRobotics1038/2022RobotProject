@@ -32,10 +32,11 @@ public class Shooter implements Subsystem {
     private Gyro1038 gryo = Gyro1038.getInstance();
     private boolean overrideHoodPID = false;
     private boolean isEnabled = false;
-    private static double swivelSpeed = 0.2;
-    private final static int LEFT_STOP = 684200; // TODO: Need to change both of these to represent where we have to
+    private static double swivelSpeed = 0.35;
+    private final double TURRET_POWER_MULTIPLIER = 0.5;
+    private final static int LEFT_STOP = 684000; // TODO: Need to change both of these to represent where we have to
     // stop the turret.
-    private final static int RIGHT_STOP = -684200;
+    private final static int RIGHT_STOP = -LEFT_STOP;
     // Turret
     private TurretDirections currentTurretDirection = TurretDirections.Left;
 
@@ -169,8 +170,8 @@ public class Shooter implements Subsystem {
 
     /** Aims the hood */
     private void executeHoodPID() {
-        double setPoint = MathUtil.clamp((limelight.getTargetDistance() / 100), 0, hoodMaxDistance);
-        hoodPID.setSetpoint(hoodMaxDistance - setPoint);
+        double setPoint = MathUtil.clamp((limelight.getTargetDistance() / 40), 0, hoodMaxDistance);
+        hoodPID.setSetpoint(setPoint);
 
         double power = hoodPID.calculate(hoodMotor.getEncoder().getPosition());
         hoodMotor.set(power);
@@ -185,23 +186,24 @@ public class Shooter implements Subsystem {
      */
     private void executeAimPID() {
         double power = turretPID.calculate(limelight.getXOffset());
-        if (turretMotor.getSelectedSensorPosition() > LEFT_STOP ||
-                turretMotor.getSelectedSensorPosition() < RIGHT_STOP) {
-            turretMotor.set(-power * 0.5);
+        if (turretMotor.getSelectedSensorPosition() >= LEFT_STOP) {
+            turretMotor.set(-Math.abs(power * TURRET_POWER_MULTIPLIER));
+        } else if (turretMotor.getSelectedSensorPosition() <= RIGHT_STOP) {
+            turretMotor.set(Math.abs(power * TURRET_POWER_MULTIPLIER));
         } else {
-            turretMotor.set(power * 0.5);
+            turretMotor.set(power * TURRET_POWER_MULTIPLIER);
         }
     }
 
     private double getSpeedSetpoint() {
         if (limelight.getTargetDistance() <= 60) {
-            return 500;
+            return 300;
         } else if (limelight.getTargetDistance() <= 120) {
-            return 700;
+            return 600;
         } else if (limelight.getTargetDistance() <= 180) {
-            return 900;
+            return 750;
         } else if (limelight.getTargetDistance() <= 240) {
-            return 1000;
+            return 900;
         } else {
             return limelight.getShooterSetpoint();
         }
@@ -333,7 +335,7 @@ public class Shooter implements Subsystem {
     /** This was goToCrashPosition. This has been renamed to codeRed */
     public void returnToZero() {
         zeroHood();
-        if (Math.abs(turretMotor.getSelectedSensorPosition()) < 8000) {
+        if (Math.abs(turretMotor.getSelectedSensorPosition()) < 12000) {
             stopTurret();
         } else if (turretMotor.getSelectedSensorPosition() > 0) {
             currentTurretDirection = TurretDirections.Right;
