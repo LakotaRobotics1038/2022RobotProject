@@ -31,6 +31,8 @@ public class Dashboard {
     private NetworkTableEntry shooterAngle;
     private NetworkTableEntry matchTime;
     private NetworkTableEntry limelightTarget;
+    private NetworkTableEntry limelightSetpoint;
+    private NetworkTableEntry shooterSpeed;
 
     public static Dashboard getInstance() {
         if (dashboard == null) {
@@ -69,6 +71,12 @@ public class Dashboard {
         recalGyro = controlsTab.add("Recal Gyro", false)
                 .withWidget(BuiltInWidgets.kBooleanBox)
                 .getEntry();
+
+        shooterSpeed = controlsTab.add("Shooter Speed", -1)
+                .getEntry();
+
+        limelightSetpoint = controlsTab.add("Limelight Setpoint", -1)
+                .getEntry();
     }
 
     public void update() {
@@ -80,6 +88,8 @@ public class Dashboard {
         shooterAngle.setNumber(shooter.getTurretEncoder());
         gyroAngle.setNumber(gyro.getAngle());
         limelightTarget.setBoolean(limelight.canSeeTarget());
+        shooterSpeed.setNumber(shooter.getShooterSpeed());
+        limelightTarget.setNumber(limelight.getShooterSetpoint());
 
         // Controls
         if (resetGyro.getBoolean(false)) {

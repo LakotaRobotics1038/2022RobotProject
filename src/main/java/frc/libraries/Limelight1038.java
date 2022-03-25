@@ -127,16 +127,19 @@ public class Limelight1038 {
      * @returns the setpoint of the shooter. This is the target value for shooter.
      */
     public double getShooterSetpoint() {
-        double setpoint = ty.getDouble(defaultOffset);
+        // double setpoint = ty.getDouble(defaultOffset);
+        // System.out.println(x);
+        double setpoint = getTargetDistance();
         // double setpoint = getYOffset();
-        return (setpoint * -250 + 31000) / (4100.00);
+
+        return (setpoint);
     }
 
     /** @return the motor power that limelight says it should be at. */
     public double getMotorPower() {
         double power = ty.getDouble(defaultOffset);
         // double power = getYOffset();
-        return power * 1; // -.00417 + .55
+        return power * -.00417 + .55;
     }
 
     /** @return the distance from the limelight to the target. */

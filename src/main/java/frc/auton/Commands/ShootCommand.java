@@ -18,7 +18,7 @@ public class ShootCommand extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.executeSpeedPID();
+        shooter.enable();
         storage.setManualStorage(ManualStorageModes.In);
         storage.periodic();
     }
@@ -27,6 +27,7 @@ public class ShootCommand extends CommandBase {
     public void end(boolean interuppted) {
         shooter.shootManually(0);
         shooter.noFeedBall();
+        shooter.disable();
     }
 
     @Override

@@ -186,20 +186,21 @@ public class SerialComs implements Subsystem {
         // rpiOutput = rpiOutput.format(rpiOutput, StandardCharsets.UTF_8);
         String outputString = String.format(rpiOutput, StandardCharsets.UTF_8);
         char[] outputArray = outputString.toCharArray();
-        for (var i = 0; i < outputArray.length; i++) { // var i = 0; i < outputArray.length; i++;
-            try {
-                parsedInt.add((outputArray[i] - 0));
-                // Integer.parseInt();
-                // storageLaser1 = parsedInt;
+        // for (var i = 0; i < outputArray.length; i++) { // var i = 0; i <
+        // outputArray.length; i++;
+        // try {
+        // parsedInt.add((outputArray[i] - 0));
+        // // Integer.parseInt();
+        // // storageLaser1 = parsedInt;
 
-                System.out.println("\n \n Will this work " + parsedInt + "\n \n");
-            } catch (NumberFormatException ex) {
-                // ex.printStackTrace();
-                // System.out.println(ex);
-            }
-        }
-        storageLaser1 = parsedInt.get(0);
-        storageLaser2 = parsedInt.get(1);
+        // System.out.println("\n \n Will this work " + parsedInt + "\n \n");
+        // } catch (NumberFormatException ex) {
+        // // ex.printStackTrace();
+        // // System.out.println(ex);
+        // }
+        // }
+        storageLaser1 = 0;// parsedInt.get(0);
+        storageLaser2 = 0;// parsedInt.get(1);
 
         // }
 

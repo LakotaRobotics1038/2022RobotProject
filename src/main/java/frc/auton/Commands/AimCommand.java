@@ -25,19 +25,20 @@ public class AimCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        shooter.setTurretDirection(TurretDirections.Left);
+        shooter.enable();
         limelight.changeLEDStatus(LEDStates.On);
     }
 
     @Override
     public void execute() {
-        shooter.executeSpeedPID();
+        shooter.enable();
         shooter.findTarget();
     }
 
     @Override
     public void end(boolean interuppted) {
         limelight.changeLEDStatus(LEDStates.Off);
+        shooter.disable();
     }
 
     @Override

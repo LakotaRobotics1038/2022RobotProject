@@ -16,12 +16,14 @@ import frc.libraries.TalonFX1038;
 public class Endgame {
 
     // Ports and Constants
+    // Just nakey shafts? --Julian
+    // That's just how I prefer it. --Kristyna
     private final int ELEVATOR_PORT = 62;
     private final int ROTATOR_PORT = 1;
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
     public boolean locked = true;
-    private int endgameTop = 155000; // TODO: change encoder counts to correct value
+    private int endgameTop = 100000; // TODO: change encoder counts to correct value
     private int endgameBottom = 0;
     private int LIMIT_SWITCH_PORT = 3;
     // This is from the right side of the robot looking at it with acq facing you.
@@ -72,12 +74,12 @@ public class Endgame {
     }
 
     public void releaseRatchet() {
-        ratchetSolenoid.set(Value.kReverse);
+        ratchetSolenoid.set(Value.kForward);
         locked = false;
     }
 
     public void engageRatchet() {
-        ratchetSolenoid.set(Value.kForward);
+        ratchetSolenoid.set(Value.kReverse);
         locked = true;
     }
 
