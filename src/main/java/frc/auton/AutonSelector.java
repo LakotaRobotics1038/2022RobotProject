@@ -20,6 +20,7 @@ public class AutonSelector {
     public static final String DriveStraight = "DriveStraight";
     public static final String DriveAndShoot = "DriveAndShoot";
     public static final String DriveShootandAcquire = "DriveShootandAcquire";
+    public static final String None = "None";
     public static Boolean TheTryWorked = false;
 
     // Path Locations
@@ -62,6 +63,10 @@ public class AutonSelector {
                 return new SequentialCommandGroup(new ForwardAuton(), new ShootingAuton());
             case DriveShootandAcquire:
                 return new SequentialCommandGroup(new ForwardAuton(), new AcquireCommand(3), new ShootingAuton());
+
+            case None:
+                return "you don't have any auton";
+
             default:
                 return new ForwardAuton();
         }
