@@ -103,6 +103,12 @@ public class Operator {
             shooter.returnToZero();
         }
 
+        if (operatorJoystick.getPOVPosition() == PovPositions.Left) {
+            shooter.disableHoodPID();
+        } else if (operatorJoystick.getPOVPosition() == PovPositions.Right) {
+            shooter.enableHoodPID();
+        }
+
         if (operatorJoystick.getPOVPosition() == PovPositions.Up) {
             shooter.moveHoodManually(0.5);
         } else if (operatorJoystick.getPOVPosition() == PovPositions.Down) {

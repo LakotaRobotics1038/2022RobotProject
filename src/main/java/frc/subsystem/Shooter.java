@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import frc.libraries.TalonSRX1038;
 import frc.libraries.Limelight1038.LEDStates;
+import frc.robot.Operator;
 import frc.libraries.TalonFX1038;
 import frc.libraries.Gyro1038;
 import frc.libraries.Limelight1038;
@@ -29,6 +30,7 @@ public class Shooter implements Subsystem {
     // private DriveTrain1038 drive = DriveTrain1038.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
     private Gyro1038 gryo = Gyro1038.getInstance();
+    private boolean overrideHoodPID = false;
     private boolean isEnabled = false;
     private static double swivelSpeed = 0.2;
     private final static int LEFT_STOP = 684200; // TODO: Need to change both of these to represent where we have to
@@ -147,6 +149,7 @@ public class Shooter implements Subsystem {
         shooterMotor1.set(0);
         compressionMotor.set(0);
         limelight.changeLEDStatus(LEDStates.Off);
+        shooter.zeroHood();
     }
 
     /**
@@ -166,7 +169,7 @@ public class Shooter implements Subsystem {
 
     /** Aims the hood */
     private void executeHoodPID() {
-        double setPoint = MathUtil.clamp((limelight.getTargetDistance() / 60), 0, hoodMaxDistance);
+        double setPoint = MathUtil.clamp((limelight.getTargetDistance() / 100), 0, hoodMaxDistance);
         hoodPID.setSetpoint(hoodMaxDistance - setPoint);
 
         double power = hoodPID.calculate(hoodMotor.getEncoder().getPosition());
@@ -248,7 +251,9 @@ public class Shooter implements Subsystem {
     // Executes the PID
     public void periodic() {
         if (isEnabled) {
-            executeHoodPID();
+            if (!overrideHoodPID) {
+                executeHoodPID();
+            }
             executeSpeedPID();
         }
     }
@@ -368,5 +373,20 @@ public class Shooter implements Subsystem {
      */
     public double getHoodEncoder() {
         return hoodMotor.getEncoder().getPosition();
+    }
+
+    /**
+     * Stops the hoodPID while the shooter is enabled.
+     */
+    public void disableHoodPID() {
+        overrideHoodPID = true;
+        hoodMotor.stopMotor();
+    }
+
+    /**
+     * Allows the hood to work while the shooter is enabled.
+     */
+    public void enableHoodPID() {
+        overrideHoodPID = false;
     }
 }
