@@ -47,7 +47,7 @@ public class Dashboard {
         controlsTab = Shuffleboard.getTab("Controls");
 
         // Drivers
-        autoChooser.setDefaultOption("Test Auton", AutonSelector.TestPath);
+        autoChooser.setDefaultOption("Forward Auton", AutonSelector.ForwardAuto);
         driversTab.add("Auton Choices", autoChooser);
         driversTab.add("Start Position", startPosition);
 
