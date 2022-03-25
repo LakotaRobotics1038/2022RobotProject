@@ -73,7 +73,7 @@ public class Operator {
             shooter.enable();
             // shooter.executeHoodPID();
         } else {
-            // shooter.disable();
+            shooter.disable();
         }
 
         if (shooter.isFinished() && operatorJoystick.getRightButton()) {

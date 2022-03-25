@@ -132,14 +132,14 @@ public class Limelight1038 {
         double setpoint = getTargetDistance();
         // double setpoint = getYOffset();
 
-        return (setpoint * 1000) / (4100.00);
+        return (setpoint);
     }
 
     /** @return the motor power that limelight says it should be at. */
     public double getMotorPower() {
         double power = ty.getDouble(defaultOffset);
         // double power = getYOffset();
-        return power * 5; // -.00417 + .55
+        return power * -.00417 + .55;
     }
 
     /** @return the distance from the limelight to the target. */

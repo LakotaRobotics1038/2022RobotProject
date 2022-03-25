@@ -1,10 +1,14 @@
 package frc.subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -81,7 +85,7 @@ public class Shooter implements Subsystem {
     // Speed PID for shooter
     // private final double speedSetpoint = limelight.getShooterSetpoint();
     private final double speedTolerance = 1;
-    private final static double speedP = 0.00007;
+    private final static double speedP = 0.005;
     private final static double speedI = 0.0;
     private final static double speedD = 0.0;
     private PIDController speedPID = new PIDController(speedP, speedI, speedD);
@@ -91,6 +95,10 @@ public class Shooter implements Subsystem {
     private final static double feedSpeed = 1;
 
     private Shooter() {
+
+        shooterMotor1.setNeutralMode(NeutralMode.Coast);
+        shooterMotor2.setNeutralMode(NeutralMode.Coast);
+        compressionMotor.setIdleMode(IdleMode.kCoast);
         shooterMotor1.setInverted(false);
         shooterMotor2.follow(shooterMotor1);
         shooterMotor2.setInverted(InvertType.OpposeMaster);
@@ -102,9 +110,9 @@ public class Shooter implements Subsystem {
 
         // speedPID.setSetpoint(speedSetpoint);
         speedPID.setTolerance(speedTolerance);
-        speedPID.enableContinuousInput(-1, 1);
-
-        hoodPID.setSetpoint(limelight.getTargetDistance()); // TODO: Figure out what to divide by.
+        // speedPID.enableContinuousInput(0, 1);
+        speedPID.disableContinuousInput();
+        // TODO: Figure out what to divide by.
         hoodPID.setTolerance(hoodTolerance);
         hoodPID.disableContinuousInput();
         hoodMotor.setInverted(true);
@@ -158,8 +166,8 @@ public class Shooter implements Subsystem {
 
     /** Aims the hood */
     private void executeHoodPID() {
-        double power = hoodPID.calculate(hoodMotor.getEncoder().getPosition()); // TODO:
-        // fine tune this PID
+        hoodPID.setSetpoint(limelight.getTargetDistance() / 60);
+        double power = hoodPID.calculate(hoodMotor.getEncoder().getPosition());
         hoodMotor.set(power);
     }
 
@@ -186,14 +194,30 @@ public class Shooter implements Subsystem {
      */
     private void executeSpeedPID() {
         isRunning = true;
-        speedPID.setSetpoint(limelight.getShooterSetpoint()); // limelight.getShooterSetpoint()
-        double power = speedPID
-                .calculate((shooterMotor1.getSelectedSensorVelocity() / 4100.00) + limelight.getMotorPower());
+        // speedPID.setSetpoint(limelight.getShooterSetpoint()); //
+        // limelight.getShooterSetpoint()
+        // double power = .25;
+        double power = speedPID.calculate(((shooterMotor1.getSelectedSensorVelocity() / 2048) * 100)); // limelight.getMotorPower()
+        if (limelight.getTargetDistance() <= 60) {
+            speedPID.setSetpoint(500);
+        } else if (limelight.getTargetDistance() <= 120) {
+            speedPID.setSetpoint(700);
+        } else if (limelight.getTargetDistance() <= 180) {
+            speedPID.setSetpoint(900);
+        } else if (limelight.getTargetDistance() <= 240) {
+            speedPID.setSetpoint(1000);
+        } else {
+            speedPID.setSetpoint(limelight.getShooterSetpoint());
+        }
+        // double power = 1;
+
+        power = MathUtil.clamp(power, 0, 1);
         // System.out.println("speed" + getShooterSpeed());
         // System.out.println("setpoint: " + speedPID.getSetpoint());
-        // System.out.println("power" + power);
-        compressionMotor.set(power);
+        System.out.println(" \n \n power" + power);
+        compressionMotor.set(power * .5);
         shooterMotor1.set(power);
+
     }
 
     // checks if the speedPID is at the setpoint (What speed we want the shooter at)
@@ -226,7 +250,7 @@ public class Shooter implements Subsystem {
     // Executes the PID
     public void periodic() {
         if (isEnabled) {
-            // executeHoodPID();
+            executeHoodPID();
             executeSpeedPID();
         }
     }

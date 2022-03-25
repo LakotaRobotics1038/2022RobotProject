@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // rpiComs.stopSerialPort();
         shooter.resetTurretEncoder();
-        shooter.enable();
+        // shooter.enable();
         limelight.changeLEDStatus(LEDStates.Off);
     }
 
@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
     }
 
     public void teleopPeriodic() {
-        compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        // compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
         Operator.getInstance().periodic();
         Storage.getInstance().periodic();
