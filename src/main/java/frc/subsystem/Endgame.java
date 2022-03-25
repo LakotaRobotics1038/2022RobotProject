@@ -50,7 +50,7 @@ public class Endgame {
     }
 
     private Endgame() {
-        // this.engageRatchet();
+        this.engageRatchet();
         elevatorMotor.setInverted(true);
         elevatorMotor.resetPosition();
         rotatorMotor.resetPosition();
@@ -88,12 +88,13 @@ public class Endgame {
         if (!locked && elevatorMotor.getPosition() < endgameTop) {
             elevatorMotor.set(.4);
         } else {
-            elevatorMotor.stopMotor();
             engageRatchet();
+            elevatorMotor.stopMotor();
         }
     }
 
     public void lowerElevator() {
+        engageRatchet();
         if (elevatorMotor.isRevLimitSwitchClosed() == 1) {
             elevatorMotor.set(-.25);
         } else if (elevatorMotor.isRevLimitSwitchClosed() == 0) {

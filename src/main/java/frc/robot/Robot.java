@@ -41,6 +41,7 @@ public class Robot extends TimedRobot {
     private final CommandScheduler scheduler = CommandScheduler.getInstance();
     private final AutonSelector autonSelector = AutonSelector.getInstance();
     private final Limelight1038 limelight = Limelight1038.getInstance();
+    private final Endgame endgame = Endgame.getInstance();
     private SequentialCommandGroup autonPath;
 
     /*
@@ -83,6 +84,7 @@ public class Robot extends TimedRobot {
     }
 
     public void disabledInit() {
+        endgame.engageRatchet();
     }
 
     public void disabledPeriodic() {
