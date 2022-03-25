@@ -166,6 +166,7 @@ public class Shooter implements Subsystem {
 
     /** Aims the hood */
     private void executeHoodPID() {
+        // TODO: Clamp setpoint to 0, max encoder
         hoodPID.setSetpoint(limelight.getTargetDistance() / 60);
         double power = hoodPID.calculate(hoodMotor.getEncoder().getPosition());
         hoodMotor.set(power);
@@ -179,7 +180,6 @@ public class Shooter implements Subsystem {
      * aims turret towards target
      */
     private void executeAimPID() {
-        // hoodSetpoint = limelight.getTargetDistance() / 60;
         double power = turretPID.calculate(limelight.getXOffset());
         if (turretMotor.getSelectedSensorPosition() > LEFT_STOP ||
                 turretMotor.getSelectedSensorPosition() < RIGHT_STOP) {
@@ -189,35 +189,32 @@ public class Shooter implements Subsystem {
         }
     }
 
+    private int getSpeedSetpoint(){
+        if (limelight.getTargetDistance() <= 60) {
+            return 500;
+        } else if (limelight.getTargetDistance() <= 120) {
+            return 700;
+        } else if (limelight.getTargetDistance() <= 180) {
+            return 900;
+        } else if (limelight.getTargetDistance() <= 240) {
+            return 1000;
+        } else {
+            return limelight.getShooterSetpoint();
+        }
+    }
+
     /**
      * sets the speed of the shooter
      */
     private void executeSpeedPID() {
         isRunning = true;
-        // speedPID.setSetpoint(limelight.getShooterSetpoint()); //
-        // limelight.getShooterSetpoint()
-        // double power = .25;
-        double power = speedPID.calculate(((shooterMotor1.getSelectedSensorVelocity() / 2048) * 100)); // limelight.getMotorPower()
-        if (limelight.getTargetDistance() <= 60) {
-            speedPID.setSetpoint(500);
-        } else if (limelight.getTargetDistance() <= 120) {
-            speedPID.setSetpoint(700);
-        } else if (limelight.getTargetDistance() <= 180) {
-            speedPID.setSetpoint(900);
-        } else if (limelight.getTargetDistance() <= 240) {
-            speedPID.setSetpoint(1000);
-        } else {
-            speedPID.setSetpoint(limelight.getShooterSetpoint());
-        }
-        // double power = 1;
+        speedPID.setSetpoint(getSpeedSetpoint());
+
+        double power = speedPID.calculate(getShooterSpeed() * 100);
 
         power = MathUtil.clamp(power, 0, 1);
-        // System.out.println("speed" + getShooterSpeed());
-        // System.out.println("setpoint: " + speedPID.getSetpoint());
-        System.out.println(" \n \n power" + power);
         compressionMotor.set(power * .5);
         shooterMotor1.set(power);
-
     }
 
     // checks if the speedPID is at the setpoint (What speed we want the shooter at)
@@ -297,7 +294,7 @@ public class Shooter implements Subsystem {
      * @return The current shooter speed.
      */
     public double getShooterSpeed() {
-        return shooterMotor1.getSelectedSensorVelocity() / 4100.00; // converts to speed
+        return shooterMotor1.getSelectedSensorVelocity() / 2048; // converts to speed
     }
 
     // this sets the turret encoder position to 0
