@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 //Enum for each drive type
 public class DriveTrain1038 implements Subsystem {
 
-    private final int ROBOT_WEIGHT = 120;
-
     public enum DriveModes {
         tankDrive, singleArcadeDrive, dualArcadeDrive
     }
@@ -24,7 +22,8 @@ public class DriveTrain1038 implements Subsystem {
     public boolean isHighGear = false;
 
     // Ports for the motors
-    public final double WHEEL_DIAMETER = 4;
+    private final double WHEEL_DIAMETER = 4;
+    private final int ENCODER_COUNTS_PER_REVOLUTION = 4096;
     private final int HIGH_GEAR_PORT = 1;
     private final int LOW_GEAR_PORT = 0;
     private final static int RIGHT_FRONT_PORT = 6;
@@ -69,14 +68,14 @@ public class DriveTrain1038 implements Subsystem {
      * Get and return distance driven by the left of the robot in inches
      */
     public double getLeftDriveEncoderDistance() {
-        return leftFrontTalon.getRotations() * Math.PI * WHEEL_DIAMETER;
+        return leftFrontTalon.getPosition() / ENCODER_COUNTS_PER_REVOLUTION * Math.PI * WHEEL_DIAMETER;
     }
 
     /**
      * Get and return distance driven by the right of the robot in inches
      */
     public double getRightDriveEncoderDistance() {
-        return rightFrontTalon.getRotations() * Math.PI * WHEEL_DIAMETER;
+        return rightFrontTalon.getPosition() / ENCODER_COUNTS_PER_REVOLUTION * Math.PI * WHEEL_DIAMETER;
     }
 
     /**

@@ -52,8 +52,8 @@ public class Endgame {
     private Endgame() {
         // this.engageRatchet();
         elevatorMotor.setInverted(true);
-        elevatorMotor.setPosition(0);
-        rotatorMotor.setPosition(0);
+        elevatorMotor.resetPosition();
+        rotatorMotor.resetPosition();
         rotatorMotor.setInverted(true);
         rotatorMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         elevatorMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
@@ -94,21 +94,16 @@ public class Endgame {
     }
 
     public void lowerElevator() {
-        // elevatorMotor.set(-.25);
         if (elevatorMotor.isRevLimitSwitchClosed() == 1) {
             elevatorMotor.set(-.25);
         } else if (elevatorMotor.isRevLimitSwitchClosed() == 0) {
-            elevatorMotor.set(0);
-            elevatorMotor.setPosition(0);
+            elevatorMotor.stopMotor();
+            elevatorMotor.resetPosition();
         }
-
-        // if (elevatorMotor.isRevLimitSwitchClosed() == 1) {
-        // elevatorMotor.setPosition(0);
-        // }
     }
 
     public void stopElevator() {
-        elevatorMotor.set(0);
+        elevatorMotor.stopMotor();
     }
 
     public void rotateLeft() {
@@ -116,7 +111,7 @@ public class Endgame {
         if (rotatorMotor.getPosition() < rotateLimitLeft) {
             rotatorMotor.set(.1);
         } else if (rotatorMotor.getPosition() >= rotateLimitLeft) {
-            rotatorMotor.set(0);
+            rotatorMotor.stopMotor();
         }
 
     }
@@ -126,12 +121,12 @@ public class Endgame {
         if (rotatorMotor.getPosition() > rotateLimitRight) {
             rotatorMotor.set(-.1);
         } else if (rotatorMotor.getPosition() <= rotateLimitRight) {
-            rotatorMotor.set(0);
+            rotatorMotor.stopMotor();
         }
     }
 
     public void stopRotator() {
-        rotatorMotor.set(0);
+        rotatorMotor.stopMotor();
     }
 
 }

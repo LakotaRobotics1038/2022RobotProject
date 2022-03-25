@@ -42,4 +42,16 @@ public class TalonSRX1038 extends TalonSRX implements MotorController {
     public void stopMotor() {
         super.set(super.getControlMode(), 0);
     }
+
+    public double getPosition() {
+        return super.getSelectedSensorPosition();
+    }
+
+    public void setPosition(int i) {
+        super.setSelectedSensorPosition(i);
+    }
+
+    public void resetPosition() {
+        setPosition(0);
+    }
 }
