@@ -10,10 +10,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.auton.AutonSelector;
 import frc.libraries.Dashboard;
+import frc.libraries.DriveTrain1038;
+import frc.libraries.Gyro1038;
 import frc.libraries.Limelight1038;
 import frc.libraries.Limelight1038.LEDStates;
-import frc.subsystem.SerialComs;
 import frc.subsystem.Storage;
 import frc.subsystem.*;
 
@@ -29,63 +33,53 @@ public class Robot extends TimedRobot {
     private final int MIN_PRESSURE = 110;
     private final int MAX_PRESSURE = 120;
 
-    // private final SerialComs rpiComs = SerialComs.getInstance();
     private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
+    private final Storage storage = Storage.getInstance();
     private final Shooter shooter = Shooter.getInstance();
-    private final Endgame endgame = Endgame.getInstance();
+    private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
+    private final Gyro1038 gyroSensor = Gyro1038.getInstance();
+    private final CommandScheduler scheduler = CommandScheduler.getInstance();
+    private final AutonSelector autonSelector = AutonSelector.getInstance();
     private final Limelight1038 limelight = Limelight1038.getInstance();
+    private SequentialCommandGroup autonPath;
 
     /*
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
      */
-
     @Override
     public void robotInit() {
-        // rpiComs.stopSerialPort();
         shooter.resetTurretEncoder();
-        // shooter.enable();
         limelight.changeLEDStatus(LEDStates.Off);
     }
 
     @Override
     public void robotPeriodic() {
         Dashboard.getInstance().update();
-        // limelight.getTargetDistance();
-        // System.out.println(compressor.getPressure());
-        // System.out.println("Endgame rotator arm position " +
-        // endgame.getRotatorEncoderPosition());
-        // System.out.println("Endgame elevator arm position " +
-        // endgame.getElevatorEncoderPosition());
-        // System.out.println("Ratchet engaged " + endgame.locked);
-        // System.out.println("Can see target " + limelight.canSeeTarget());
-        // System.out.println("Target distance " + limelight.getTargetDistance());
-        // System.out.println("Is limit switch closed" +
-        // endgame.elevatorMotor.isRevLimitSwitchClosed());
-        // System.out.println("Hood position " + shooter.getHoodEncoder());
-        // System.out.println("Target Distance " + limelight.getTargetDistance());
-        System.out.println("Shooter setpoint" + limelight.getShooterSetpoint());
-        System.out.println("Speed PID at setpoint " + shooter.speedOnTarget());
-        System.out.println("Speed of shooter " + shooter.getShooterSpeed());
     }
 
     public void teleopInit() {
-
+        driveTrain.setCoastMode();
     }
 
     public void teleopPeriodic() {
         compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
         Operator.getInstance().periodic();
-        Storage.getInstance().periodic();
-        Shooter.getInstance().periodic();
+        storage.periodic();
+        shooter.periodic();
     }
 
     public void autonomousInit() {
+        driveTrain.setBrakeMode();
+        autonPath = autonSelector.chooseAuton();
+        gyroSensor.reset();
+        scheduler.schedule(autonPath);
     }
 
     public void autonomousPeriodic() {
-        // compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
+        scheduler.run();
     }
 
     public void disabledInit() {

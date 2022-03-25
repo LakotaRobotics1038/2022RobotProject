@@ -82,7 +82,7 @@ public class Storage implements Subsystem {
                     shuttleMotor.set(shuttleMotorSpeed);
                     // If a ball is not at the first laser and its at the middle laser. Stop it.
                 } else if (laserStart > laserDistance && laserEnd < laserDistance) {
-                    shuttleMotor.set(0);
+                    shuttleMotor.stopMotor();
                 }
                 break;
             case In:
@@ -94,7 +94,7 @@ public class Storage implements Subsystem {
                 shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
                 break;
             case Stop:
-                shuttleMotor.set(0);
+                shuttleMotor.stopMotor();
         }
     }
 }

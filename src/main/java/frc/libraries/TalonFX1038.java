@@ -54,8 +54,4 @@ public class TalonFX1038 extends TalonFX implements MotorController {
     public void resetPosition() {
         setPosition(0);
     }
-
-    public double getRotations() {
-        return getPosition() / 360;
-    }
 }

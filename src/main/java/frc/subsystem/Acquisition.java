@@ -69,6 +69,6 @@ public class Acquisition implements Subsystem {
     }
 
     public void stop() {
-        acquisitionMotor.set(0);
+        acquisitionMotor.stopMotor();
     }
 }

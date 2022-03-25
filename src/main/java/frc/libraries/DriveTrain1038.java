@@ -3,6 +3,9 @@ package frc.libraries;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -10,8 +13,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 //Enum for each drive type
 public class DriveTrain1038 implements Subsystem {
-
-    private final int ROBOT_WEIGHT = 120;
 
     public enum DriveModes {
         tankDrive, singleArcadeDrive, dualArcadeDrive
@@ -21,7 +22,8 @@ public class DriveTrain1038 implements Subsystem {
     public boolean isHighGear = false;
 
     // Ports for the motors
-    public final double WHEEL_DIAMETER = 4;
+    private final double WHEEL_DIAMETER = 4;
+    private final int ENCODER_COUNTS_PER_REVOLUTION = 4096;
     private final int HIGH_GEAR_PORT = 1;
     private final int LOW_GEAR_PORT = 0;
     private final static int RIGHT_FRONT_PORT = 6;
@@ -59,20 +61,21 @@ public class DriveTrain1038 implements Subsystem {
         rightBackTalon.follow(rightFrontTalon);
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
         this.lowGear();
+        this.setCoastMode();
     }
 
     /**
      * Get and return distance driven by the left of the robot in inches
      */
     public double getLeftDriveEncoderDistance() {
-        return leftFrontTalon.getRotations() * Math.PI * WHEEL_DIAMETER;
+        return leftFrontTalon.getPosition() / ENCODER_COUNTS_PER_REVOLUTION * Math.PI * WHEEL_DIAMETER;
     }
 
     /**
      * Get and return distance driven by the right of the robot in inches
      */
     public double getRightDriveEncoderDistance() {
-        return rightFrontTalon.getRotations() * Math.PI * WHEEL_DIAMETER;
+        return rightFrontTalon.getPosition() / ENCODER_COUNTS_PER_REVOLUTION * Math.PI * WHEEL_DIAMETER;
     }
 
     /**
@@ -148,5 +151,31 @@ public class DriveTrain1038 implements Subsystem {
      */
     public double robotSpeed() {
         return accelerometer.getX();
+    }
+
+    /**
+     * Set the drive train to brake mode. You should do this in auton init
+     */
+    public void setBrakeMode() {
+        this.setNeutralMode(NeutralMode.Brake);
+    }
+
+    /**
+     * Set the drive train to coast. Typically used in teleop init
+     */
+    public void setCoastMode() {
+        this.setNeutralMode(NeutralMode.Coast);
+    }
+
+    /**
+     * Helper function to set all of the drive controllers to the same neutral mode
+     *
+     * @param mode the neutral mode you want the drive train to use
+     */
+    private void setNeutralMode(NeutralMode mode) {
+        this.leftFrontTalon.setNeutralMode(mode);
+        this.leftBackTalon.setNeutralMode(mode);
+        this.rightFrontTalon.setNeutralMode(mode);
+        this.rightBackTalon.setNeutralMode(mode);
     }
 }
