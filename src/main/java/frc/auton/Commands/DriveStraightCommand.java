@@ -16,10 +16,10 @@ public class DriveStraightCommand extends CommandBase {
     private final double TOLERANCE = 1.9;
 
     private final static double dP = 0.001; // .04 proto
-    private final static double dI = 0.001;
+    private final static double dI = 0.000; // was .001
     private final static double dD = 0.000;
     private final static double tP = 0.200; // .23 proto
-    private final static double tI = 0.001;
+    private final static double tI = 0.000; // was .001
     private final static double tD = 0.000;
 
     private PIDController drivePID;
