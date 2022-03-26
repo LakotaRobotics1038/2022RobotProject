@@ -49,6 +49,7 @@ public class Dashboard {
         // Drivers
         autoChooser.setDefaultOption("No Auton", AutonSelector.None);
         autoChooser.addOption("Drive Straight", AutonSelector.DriveStraight);
+        autoChooser.addOption("Turn 90", AutonSelector.Turn90);
 
         startPosition.setDefaultOption("Center", AutonSelector.CenterPosition);
         startPosition.addOption("Left", AutonSelector.LeftPosition);

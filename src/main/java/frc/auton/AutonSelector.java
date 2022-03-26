@@ -6,6 +6,7 @@ import frc.libraries.Dashboard;
 public class AutonSelector {
     // Path Options
     public static final String DriveStraight = "DriveStraight";
+    public static final String Turn90 = "Turn90";
     public static final String None = "None";
 
     public static final String LeftPosition = "L";
@@ -36,6 +37,8 @@ public class AutonSelector {
         switch (autonChooser) {
             case DriveStraight:
                 return new ForwardAuton();
+            case Turn90:
+                return new TurnAuton();
             default:
             case None:
                 return null;
