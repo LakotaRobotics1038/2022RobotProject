@@ -97,7 +97,7 @@ public class Dashboard {
         gyroAngle.setNumber(gyro.getAngle());
         limelightTarget.setBoolean(limelight.canSeeTarget());
         shooterSpeed.setNumber(shooter.getShooterSpeed());
-        limelightTarget.setNumber(limelight.getShooterSetpoint());
+        limelightSetpoint.setNumber(limelight.getShooterSetpoint());
 
         // Controls
         if (resetGyro.getBoolean(false)) {
