@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
@@ -56,7 +57,7 @@ public class DriveTrain1038 implements Subsystem {
 
     public DriveTrain1038() {
         leftFrontTalon.setInverted(true);
-        leftBackTalon.setInverted(true);
+        leftBackTalon.setInverted(InvertType.FollowMaster);
         leftBackTalon.follow(leftFrontTalon);
         rightBackTalon.follow(rightFrontTalon);
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
