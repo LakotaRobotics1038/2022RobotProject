@@ -2,8 +2,6 @@ package frc.auton.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.libraries.DriveTrain1038;
 import frc.libraries.Gyro1038;
@@ -38,14 +36,10 @@ public class DriveStraightCommand extends PIDCommand {
         drivePID = getController();
         drivePID.setTolerance(TOLERANCE);
         drivePID.disableContinuousInput();
-        Shuffleboard.getTab("Controls").add("Drive Straight PID", drivePID)
-                .withWidget(BuiltInWidgets.kPIDCommand);
 
         // Angle
         turnPID.setTolerance(TOLERANCE);
         turnPID.enableContinuousInput(0, 360);
-        Shuffleboard.getTab("Controls").add("Drive Straight Angle PID", turnPID)
-                .withWidget(BuiltInWidgets.kPIDController);
     }
 
     @Override
