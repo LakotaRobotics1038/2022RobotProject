@@ -28,13 +28,18 @@ public class AutonSelector {
     }
 
     public SequentialCommandGroup chooseAuton() {
-        String autonChooser = Dashboard.getInstance().getSelectedAuton();
+        String chosenAuto = Dashboard.getInstance().getSelectedAuton();
         String position = Dashboard.getInstance().getPosition();
 
         System.out.println("pos: " + position);
-        System.out.println("auto: " + autonChooser);
+        System.out.println("auto: " + chosenAuto);
 
-        switch (autonChooser) {
+        if (chosenAuto == null) {
+            System.out.println("Unable to select auton");
+            return null;
+        }
+
+        switch (chosenAuto) {
             case DriveStraight:
                 return new ForwardAuton();
             case Turn90:
