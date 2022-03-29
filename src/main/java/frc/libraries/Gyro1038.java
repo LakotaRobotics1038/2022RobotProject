@@ -30,7 +30,7 @@ public class Gyro1038 implements Gyro {
      */
     private Gyro1038() {
         super();
-        I2CBus = new I2C(I2C.Port.kOnboard, DEVICE_ADDRESS);
+        I2CBus = new I2C(I2C.Port.kMXP, DEVICE_ADDRESS);
         calibrate();
     }
 
@@ -102,5 +102,6 @@ public class Gyro1038 implements Gyro {
     }
 
     @Override
-    public void close() throws Exception {}
+    public void close() throws Exception {
+    }
 }
