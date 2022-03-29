@@ -28,8 +28,8 @@ public class AutonSelector {
     }
 
     public SequentialCommandGroup chooseAuton() {
-        String position = Dashboard.getInstance().getSelectedAuton();
-        String autonChooser = Dashboard.getInstance().getPosition();
+        String autonChooser = Dashboard.getInstance().getSelectedAuton();
+        String position = Dashboard.getInstance().getPosition();
 
         System.out.println("pos: " + position);
         System.out.println("auto: " + autonChooser);
