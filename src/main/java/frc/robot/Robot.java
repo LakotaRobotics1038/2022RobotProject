@@ -43,7 +43,6 @@ public class Robot extends TimedRobot {
     private final AutonSelector autonSelector = AutonSelector.getInstance();
     private final Limelight1038 limelight = Limelight1038.getInstance();
     private final Endgame endgame = Endgame.getInstance();
-    private SequentialCommandGroup autonPath;
 
     /*
      * This function is run when the robot is first started up and should be used
@@ -74,7 +73,7 @@ public class Robot extends TimedRobot {
 
     public void autonomousInit() {
         driveTrain.setBrakeMode();
-        autonPath = autonSelector.chooseAuton();
+        SequentialCommandGroup autonPath = autonSelector.chooseAuton();
         gyroSensor.reset();
         if (autonPath != null) {
             scheduler.schedule(autonPath);
