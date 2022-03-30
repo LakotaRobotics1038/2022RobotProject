@@ -41,9 +41,9 @@ public class Operator {
             prevYButtonState = false;
         }
 
-        if (operatorJoystick.getLeftButton()) {
+        if (operatorJoystick.getRightButton()) {
             acquisition.runFwd();
-        } else if (operatorJoystick.getLeftTriggerDigital()) {
+        } else if (operatorJoystick.getRightTriggerDigital()) {
             acquisition.runRev();
         } else {
             acquisition.stop();
@@ -69,11 +69,15 @@ public class Operator {
             endgame.stopRotator();
         }
 
-        if (operatorJoystick.getRightButton()) {
+        if (operatorJoystick.getLeftButton()) {
             shooter.enable();
             // shooter.executeHoodPID();
         } else {
             shooter.disable();
+        }
+
+        if (operatorJoystick.getLeftTriggerDigital()) {
+            shooter.feedBall();
         }
 
         if (shooter.isFinished() && operatorJoystick.getRightButton()) {
@@ -82,10 +86,6 @@ public class Operator {
         } else {
             operatorJoystick.setRightRumble(0);
             operatorJoystick.setLeftRumble(0);
-        }
-
-        if (operatorJoystick.getRightTriggerDigital()) {
-            shooter.feedBall();
         }
 
         if (operatorJoystick.getLeftJoystickVertical() > .5) {
