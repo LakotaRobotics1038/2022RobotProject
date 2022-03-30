@@ -1,4 +1,4 @@
-package frc.auton.commands;
+package frc.auton.Commands2;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -28,7 +28,7 @@ public class DriveStraightCommand extends CommandBase {
 
     /**
      * Drive the robot straight
-     * 
+     *
      * @param setpoint number of feet to drive straight
      */
     public DriveStraightCommand(double setpoint) {
