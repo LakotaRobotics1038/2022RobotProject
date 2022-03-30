@@ -15,8 +15,6 @@ public class AimCommand extends CommandBase {
     private boolean turned = false;
     private final double TURRET_SPEED = 0.2;
 
-    private final int TURRET_90_DEGREES = 39500;
-
     private final double END_TIME;
 
     public AimCommand(double endTime) {

@@ -1,6 +1,5 @@
 package frc.subsystem;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -10,7 +9,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-import frc.libraries.DigitalInput1038;
 import frc.libraries.TalonFX1038;
 
 public class Endgame {
@@ -23,16 +21,12 @@ public class Endgame {
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
     public boolean locked = true;
-    private int endgameTop = 160000; // TODO: change encoder counts to correct value
-    private int endgameBottom = 0;
-    private int LIMIT_SWITCH_PORT = 3;
+    private final int ENDGAME_TOP = 160000;
     // This is from the right side of the robot looking at it with acq facing you.
     private int rotateLimitLeft = 40000; // TODO: replace this with the actually encoder counts
     private int rotateLimitRight = -1000;
 
     // Inputs and Outputs
-    // private final DigitalInput1038 bottomLimit = new
-    // DigitalInput1038(LIMIT_SWITCH_PORT);
     private final TalonFX1038 rotatorMotor = new TalonFX1038(ROTATOR_PORT);
     public final TalonFX1038 elevatorMotor = new TalonFX1038(ELEVATOR_PORT);
     private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(
@@ -85,7 +79,7 @@ public class Endgame {
 
     public void liftElevator() {
         releaseRatchet();
-        if (!locked && elevatorMotor.getPosition() < endgameTop) {
+        if (!locked && elevatorMotor.getPosition() < ENDGAME_TOP) {
             elevatorMotor.set(.4);
         } else {
             engageRatchet();

@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import frc.libraries.TalonSRX1038;
 import frc.libraries.Limelight1038.LEDStates;
-import frc.robot.Operator;
 import frc.libraries.TalonFX1038;
 import frc.libraries.Limelight1038;
 import frc.subsystem.Storage.ManualStorageModes;

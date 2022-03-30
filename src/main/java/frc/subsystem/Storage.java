@@ -4,15 +4,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Storage implements Subsystem {
     private SerialComs serial = SerialComs.getInstance();
     // Ports and Constants
     private final int SHUTTLE_MOTOR_PORT = 17;
-    private final int START_LASER_PORT = 0;
-    private final int END_LASER_PORT = 2;
     private final int SHUTTLE_MOTOR_ENCODER_COUNTS = 47;
     private final int ENCODER_OFFSET = 500;
     private final double shuttleMotorSpeed = 1.0;
