@@ -49,13 +49,18 @@ public class Dashboard {
         // Drivers
         autoChooser.setDefaultOption("No Auton", AutonSelector.None);
         autoChooser.addOption("Drive Straight", AutonSelector.DriveStraight);
+        autoChooser.addOption("Turn 90", AutonSelector.Turn90);
 
         startPosition.setDefaultOption("Center", AutonSelector.CenterPosition);
         startPosition.addOption("Left", AutonSelector.LeftPosition);
         startPosition.addOption("Right", AutonSelector.RightPosition);
 
-        driversTab.add("Auton Choices", autoChooser);
-        driversTab.add("Start Position", startPosition);
+        driversTab.add("Auton Choices", autoChooser)
+                .withPosition(0, 0)
+                .withSize(2, 1);
+        driversTab.add("Start Position", startPosition)
+                .withPosition(0, 1)
+                .withSize(2, 1);
 
         matchTime = driversTab.add("Match Time", -1)
                 .getEntry();
@@ -64,6 +69,7 @@ public class Dashboard {
                 .getEntry();
 
         gyroAngle = driversTab.add("Gyro", 0)
+                .withPosition(2, 0)
                 .withWidget(BuiltInWidgets.kGyro)
                 .getEntry();
 
@@ -73,17 +79,21 @@ public class Dashboard {
 
         // Controls
         resetGyro = controlsTab.add("Reset Gyro", false)
+                .withPosition(0, 0)
                 .withWidget(BuiltInWidgets.kBooleanBox)
                 .getEntry();
 
         recalGyro = controlsTab.add("Recal Gyro", false)
+                .withPosition(0, 1)
                 .withWidget(BuiltInWidgets.kBooleanBox)
                 .getEntry();
 
         shooterSpeed = controlsTab.add("Shooter Speed", -1)
+                .withPosition(1, 0)
                 .getEntry();
 
         limelightSetpoint = controlsTab.add("Limelight Setpoint", -1)
+                .withPosition(1, 1)
                 .getEntry();
     }
 
@@ -97,7 +107,7 @@ public class Dashboard {
         gyroAngle.setNumber(gyro.getAngle());
         limelightTarget.setBoolean(limelight.canSeeTarget());
         shooterSpeed.setNumber(shooter.getShooterSpeed());
-        limelightTarget.setNumber(limelight.getShooterSetpoint());
+        limelightSetpoint.setNumber(limelight.getShooterSetpoint());
 
         // Controls
         if (resetGyro.getBoolean(false)) {

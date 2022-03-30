@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
     private final int MAX_PRESSURE = 120;
 
     private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
+    private final Dashboard dashboard = Dashboard.getInstance();
     private final Storage storage = Storage.getInstance();
     private final Shooter shooter = Shooter.getInstance();
     private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
@@ -41,7 +42,7 @@ public class Robot extends TimedRobot {
     private final CommandScheduler scheduler = CommandScheduler.getInstance();
     private final AutonSelector autonSelector = AutonSelector.getInstance();
     private final Limelight1038 limelight = Limelight1038.getInstance();
-    private SequentialCommandGroup autonPath;
+    private final Endgame endgame = Endgame.getInstance();
 
     /*
      * This function is run when the robot is first started up and should be used
@@ -55,7 +56,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        Dashboard.getInstance().update();
+        dashboard.update();
     }
 
     public void teleopInit() {
@@ -72,9 +73,11 @@ public class Robot extends TimedRobot {
 
     public void autonomousInit() {
         driveTrain.setBrakeMode();
-        autonPath = autonSelector.chooseAuton();
+        SequentialCommandGroup autonPath = autonSelector.chooseAuton();
         gyroSensor.reset();
-        scheduler.schedule(autonPath);
+        if (autonPath != null) {
+            scheduler.schedule(autonPath);
+        }
     }
 
     public void autonomousPeriodic() {
@@ -83,6 +86,7 @@ public class Robot extends TimedRobot {
     }
 
     public void disabledInit() {
+        endgame.engageRatchet();
     }
 
     public void disabledPeriodic() {

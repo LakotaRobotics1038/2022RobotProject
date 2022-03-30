@@ -6,6 +6,7 @@ import frc.libraries.Dashboard;
 public class AutonSelector {
     // Path Options
     public static final String DriveStraight = "DriveStraight";
+    public static final String Turn90 = "Turn90";
     public static final String None = "None";
 
     public static final String LeftPosition = "L";
@@ -27,15 +28,22 @@ public class AutonSelector {
     }
 
     public SequentialCommandGroup chooseAuton() {
-        String position = Dashboard.getInstance().getSelectedAuton();
-        String autonChooser = Dashboard.getInstance().getPosition();
+        String chosenAuto = Dashboard.getInstance().getSelectedAuton();
+        String position = Dashboard.getInstance().getPosition();
 
         System.out.println("pos: " + position);
-        System.out.println("auto: " + autonChooser);
+        System.out.println("auto: " + chosenAuto);
 
-        switch (autonChooser) {
+        if (chosenAuto == null) {
+            System.out.println("Unable to select auton");
+            return null;
+        }
+
+        switch (chosenAuto) {
             case DriveStraight:
                 return new ForwardAuton();
+            case Turn90:
+                return new TurnAuton();
             default:
             case None:
                 return null;

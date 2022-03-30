@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import frc.libraries.TalonSRX1038;
 import frc.libraries.Limelight1038.LEDStates;
+import frc.robot.Operator;
 import frc.libraries.TalonFX1038;
 import frc.libraries.Limelight1038;
 import frc.subsystem.Storage.ManualStorageModes;
@@ -26,11 +27,14 @@ public class Shooter implements Subsystem {
     // or map.
     // private DriveTrain1038 drive = DriveTrain1038.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
+    // private Gyro1038 gryo = Gyro1038.getInstance();
+    private boolean overrideHoodPID = false;
     private boolean isEnabled = false;
-    private static double swivelSpeed = 0.2;
-    private final static int LEFT_STOP = 684200; // TODO: Need to change both of these to represent where we have to
+    private static double swivelSpeed = 0.35;
+    private final double TURRET_POWER_MULTIPLIER = 0.5;
+    private final static int LEFT_STOP = 684000; // TODO: Need to change both of these to represent where we have to
     // stop the turret.
-    private final static int RIGHT_STOP = -684200;
+    private final static int RIGHT_STOP = -LEFT_STOP;
     // Turret
     private TurretDirections currentTurretDirection = TurretDirections.Left;
 
@@ -139,6 +143,7 @@ public class Shooter implements Subsystem {
         shooterMotor1.stopMotor();
         compressionMotor.stopMotor();
         limelight.changeLEDStatus(LEDStates.Off);
+        shooter.zeroHood();
     }
 
     /**
@@ -158,8 +163,8 @@ public class Shooter implements Subsystem {
 
     /** Aims the hood */
     private void executeHoodPID() {
-        double setPoint = MathUtil.clamp((limelight.getTargetDistance() / 60), 0, hoodMaxDistance);
-        hoodPID.setSetpoint(hoodMaxDistance - setPoint);
+        double setPoint = MathUtil.clamp((limelight.getTargetDistance() / 40), 0, hoodMaxDistance);
+        hoodPID.setSetpoint(setPoint);
 
         double power = hoodPID.calculate(hoodMotorEncoder.getPosition());
         hoodMotor.set(power);
@@ -174,23 +179,24 @@ public class Shooter implements Subsystem {
      */
     private void executeAimPID() {
         double power = turretPID.calculate(limelight.getXOffset());
-        if (turretMotor.getPosition() > LEFT_STOP ||
-                turretMotor.getPosition() < RIGHT_STOP) {
-            turretMotor.set(-power * 0.5);
+        if (turretMotor.getPosition() >= LEFT_STOP) {
+            turretMotor.set(-Math.abs(power * TURRET_POWER_MULTIPLIER));
+        } else if (turretMotor.getPosition() <= RIGHT_STOP) {
+            turretMotor.set(Math.abs(power * TURRET_POWER_MULTIPLIER));
         } else {
-            turretMotor.set(power * 0.5);
+            turretMotor.set(power * TURRET_POWER_MULTIPLIER);
         }
     }
 
     private double getSpeedSetpoint() {
         if (limelight.getTargetDistance() <= 60) {
-            return 500;
+            return 300;
         } else if (limelight.getTargetDistance() <= 120) {
-            return 700;
+            return 600;
         } else if (limelight.getTargetDistance() <= 180) {
-            return 900;
+            return 750;
         } else if (limelight.getTargetDistance() <= 240) {
-            return 1000;
+            return 900;
         } else {
             return limelight.getShooterSetpoint();
         }
@@ -240,7 +246,9 @@ public class Shooter implements Subsystem {
     // Executes the PID
     public void periodic() {
         if (isEnabled) {
-            executeHoodPID();
+            if (!overrideHoodPID) {
+                executeHoodPID();
+            }
             executeSpeedPID();
         }
     }
@@ -320,7 +328,7 @@ public class Shooter implements Subsystem {
     /** This was goToCrashPosition. This has been renamed to codeRed */
     public void returnToZero() {
         zeroHood();
-        if (Math.abs(turretMotor.getPosition()) < 8000) {
+        if (Math.abs(turretMotor.getPosition()) < 12000) {
             stopTurret();
         } else if (turretMotor.getPosition() > 0) {
             currentTurretDirection = TurretDirections.Right;
@@ -360,5 +368,20 @@ public class Shooter implements Subsystem {
      */
     public double getHoodEncoder() {
         return hoodMotorEncoder.getPosition();
+    }
+
+    /**
+     * Stops the hoodPID while the shooter is enabled.
+     */
+    public void disableHoodPID() {
+        overrideHoodPID = true;
+        hoodMotor.stopMotor();
+    }
+
+    /**
+     * Allows the hood to work while the shooter is enabled.
+     */
+    public void enableHoodPID() {
+        overrideHoodPID = false;
     }
 }

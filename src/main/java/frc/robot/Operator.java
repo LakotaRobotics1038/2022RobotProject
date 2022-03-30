@@ -101,6 +101,13 @@ public class Operator {
             shooter.findTarget();
         } else {
             shooter.returnToZero();
+            shooter.zeroHood();
+        }
+
+        if (operatorJoystick.getPOVPosition() == PovPositions.Left) {
+            shooter.disableHoodPID();
+        } else if (operatorJoystick.getPOVPosition() == PovPositions.Right) {
+            shooter.enableHoodPID();
         }
 
         if (operatorJoystick.getPOVPosition() == PovPositions.Up) {
