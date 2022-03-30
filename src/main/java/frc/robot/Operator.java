@@ -101,7 +101,6 @@ public class Operator {
             shooter.findTarget();
         } else {
             shooter.returnToZero();
-            shooter.zeroHood();
         }
 
         if (operatorJoystick.getPOVPosition() == PovPositions.Left) {

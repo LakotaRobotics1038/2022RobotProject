@@ -17,24 +17,16 @@ import frc.libraries.TalonFX1038;
 import frc.libraries.Limelight1038;
 import frc.subsystem.Storage.ManualStorageModes;
 
-//Everything is based off distance and runs in a PID loop, no need for mapping or drivetrain.
-//Best case we can implement math that will allow us to shoot and drive. PID might be able to do that with some extra math
 public class Shooter implements Subsystem {
     private static Shooter shooter;
     private Storage storage = Storage.getInstance();
-    // private Map1038 map = Map1038.getInstance(); Looks like we won't need drive
-    // or map.
-    // private DriveTrain1038 drive = DriveTrain1038.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
-    // private Gyro1038 gryo = Gyro1038.getInstance();
     private boolean overrideHoodPID = false;
     private boolean isEnabled = false;
-    private static double swivelSpeed = 0.35;
+    private static double SWIVEL_SPEED = 0.35;
     private final double TURRET_POWER_MULTIPLIER = 0.5;
-    private final static int LEFT_STOP = 684000; // TODO: Need to change both of these to represent where we have to
-    // stop the turret.
+    private final static int LEFT_STOP = 684000;
     private final static int RIGHT_STOP = -LEFT_STOP;
-    // Turret
     private TurretDirections currentTurretDirection = TurretDirections.Left;
 
     public enum TurretDirections {
@@ -83,7 +75,6 @@ public class Shooter implements Subsystem {
     private PIDController turretPID = new PIDController(turretP, turretI, turretD);
 
     // Speed PID for shooter
-    // private final double speedSetpoint = limelight.getShooterSetpoint();
     private final double speedTolerance = 1;
     private final static double speedP = 0.005;
     private final static double speedI = 0.0;
@@ -113,7 +104,6 @@ public class Shooter implements Subsystem {
         hoodMotor.setInverted(true);
         hoodMotorEncoder.setPositionConversionFactor(1 / encoderCountsPerInch);
         hoodMotorEncoder.setPosition(0);
-
     }
 
     /**
@@ -136,7 +126,6 @@ public class Shooter implements Subsystem {
      * disables speed motors and pid
      */
     public void disable() {
-        // TODO: Fix this
         isEnabled = false;
         speedPID.calculate(0.0);
         shooterMotor1.stopMotor();
@@ -152,7 +141,6 @@ public class Shooter implements Subsystem {
      *          set correctly.
      */
     public void zeroHood() {
-        // TODO: move encoder to a variable up top
         if (hoodMotorEncoder.getPosition() > 0) {
             hoodMotor.set(-.5);
         } else {
@@ -271,10 +259,10 @@ public class Shooter implements Subsystem {
     private void moveTurret() {
         switch (currentTurretDirection) {
             case Left:
-                turretMotor.set(swivelSpeed);
+                turretMotor.set(SWIVEL_SPEED);
                 break;
             case Right:
-                turretMotor.set(-swivelSpeed);
+                turretMotor.set(-SWIVEL_SPEED);
                 break;
         }
     }
@@ -323,11 +311,9 @@ public class Shooter implements Subsystem {
         return currentTurretDirection;
     }
 
-    // code red mountain dew TODO: change this name to code red
-    /** This was goToCrashPosition. This has been renamed to codeRed */
     public void returnToZero() {
         zeroHood();
-        if (Math.abs(turretMotor.getPosition()) < 12000) {
+        if (Math.abs(turretMotor.getPosition()) < 50000) {
             stopTurret();
         } else if (turretMotor.getPosition() > 0) {
             currentTurretDirection = TurretDirections.Right;
@@ -355,7 +341,6 @@ public class Shooter implements Subsystem {
             moveTurret();
         } else if (limelight.canSeeTarget()) {
             executeAimPID();
-            // moveTurret();
         } else {
             moveTurret();
         }
