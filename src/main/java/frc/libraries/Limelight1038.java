@@ -3,7 +3,6 @@ package frc.libraries;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.subsystem.Map1038;
 
 /**
  * Add your docs here.
@@ -11,9 +10,6 @@ import frc.subsystem.Map1038;
 public class Limelight1038 {
     // LimeLight instance
     private static Limelight1038 limelight;
-
-    // Map instance
-    private static Map1038 map = Map1038.getInstance();
 
     // Network table
     private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
