@@ -58,6 +58,8 @@ public class DriveTrain1038 implements Subsystem {
     public DriveTrain1038() {
         leftFrontTalon.setInverted(true);
         leftBackTalon.setInverted(InvertType.FollowMaster);
+        rightFrontTalon.setInverted(false);
+        rightBackTalon.setInverted(InvertType.FollowMaster);
         leftBackTalon.follow(leftFrontTalon);
         rightBackTalon.follow(rightFrontTalon);
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
