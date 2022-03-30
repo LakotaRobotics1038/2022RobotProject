@@ -1,4 +1,4 @@
-package frc.auton.Commands2;
+package frc.auton.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
