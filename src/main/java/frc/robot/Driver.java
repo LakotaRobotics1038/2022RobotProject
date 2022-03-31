@@ -58,7 +58,7 @@ public class Driver {
             multiplier = .8;
             driveTrain.highGear();
         } else {
-            multiplier = .5;
+            multiplier = .6;
             driveTrain.lowGear();
         }
     }
