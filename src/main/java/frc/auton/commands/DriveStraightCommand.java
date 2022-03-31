@@ -36,7 +36,7 @@ public class DriveStraightCommand extends PIDCommand {
                 drive);
 
         System.out.println("SP: " + setpoint);
-        drivePID = getController();
+        drivePID = this.m_controller;
         drivePID.setTolerance(TOLERANCE);
         drivePID.disableContinuousInput();
         drivePID.setSetpoint(setpoint * INCHES_IN_FOOT);
@@ -48,6 +48,7 @@ public class DriveStraightCommand extends PIDCommand {
 
     @Override
     public void initialize() {
+        super.initialize();
         turnPID.setSetpoint(gyroSensor.getAngle());
         drive.resetEncoders();
     }
