@@ -87,7 +87,7 @@ public class DriveTrain1038 implements Subsystem {
      */
     public void highGear() {
         isHighGear = true;
-        GearChangeSolenoid.set(Value.kForward);
+        GearChangeSolenoid.set(Value.kReverse);
     }
 
     /**
@@ -95,7 +95,7 @@ public class DriveTrain1038 implements Subsystem {
      */
     public void lowGear() {
         isHighGear = false;
-        GearChangeSolenoid.set(Value.kReverse);
+        GearChangeSolenoid.set(Value.kForward);
     }
 
     /**
