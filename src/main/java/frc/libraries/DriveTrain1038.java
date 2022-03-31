@@ -24,7 +24,9 @@ public class DriveTrain1038 implements Subsystem {
 
     // Ports for the motors
     private final double WHEEL_DIAMETER = 6;
-    private final int ENCODER_COUNTS_PER_REVOLUTION = 23700;
+    private final double TALON_COUNTS_PER_REVOLUTION = 2048;
+    private final double GEAR_RATIO = 12.3;
+    private final double ENCODER_COUNTS_PER_REVOLUTION = GEAR_RATIO * TALON_COUNTS_PER_REVOLUTION;
     private final int HIGH_GEAR_PORT = 1;
     private final int LOW_GEAR_PORT = 0;
     private final static int RIGHT_FRONT_PORT = 6;
