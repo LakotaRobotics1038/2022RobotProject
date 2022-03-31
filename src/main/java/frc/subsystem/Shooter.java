@@ -56,8 +56,6 @@ public class Shooter implements Subsystem {
     private RelativeEncoder hoodMotorEncoder = hoodMotor.getEncoder();
     public TalonSRX1038 turretMotor = new TalonSRX1038(TURRET_MOTOR_PORT);
 
-    // TODO: map angles to encoder counts, turret should go 160ish degrees both
-    // ways.
     private final double hoodMaxDistance = 5.5; // inches
     private final double hoodMaxEncoder = 88;
     private final double encoderCountsPerInch = hoodMaxEncoder / hoodMaxDistance;
@@ -81,6 +79,7 @@ public class Shooter implements Subsystem {
     private final static double speedD = 0.0;
     private PIDController speedPID = new PIDController(speedP, speedI, speedD);
     private boolean isRunning = false;
+    public double speedMultiplier = 5.65;
 
     private Shooter() {
 
@@ -176,17 +175,8 @@ public class Shooter implements Subsystem {
     }
 
     private double getSpeedSetpoint() {
-        if (limelight.getTargetDistance() <= 60) {
-            return 300;
-        } else if (limelight.getTargetDistance() <= 120) {
-            return 600;
-        } else if (limelight.getTargetDistance() <= 180) {
-            return 750;
-        } else if (limelight.getTargetDistance() <= 240) {
-            return 900;
-        } else {
-            return limelight.getShooterSetpoint();
-        }
+        Double distance = limelight.getTargetDistance();
+        return distance * speedMultiplier;
     }
 
     /**
@@ -267,25 +257,22 @@ public class Shooter implements Subsystem {
         }
     }
 
-    // get's the turret current encoder value
     /**
-     * @return The current direction in degrees of the turret.
+     * @return The current encoder counts of the turret.
      */
     public double getTurretEncoder() {
-        return turretMotor.getPosition();// * 180.00 / 82000.00; // converts radians to degrees
+        return turretMotor.getPosition();
     }
 
-    // gets the current shooter speed
     /**
      * This returns the current shooterSpeed.
      *
      * @return The current shooter speed.
      */
     public double getShooterSpeed() {
-        return shooterMotor1.getSelectedSensorVelocity() / 2048; // converts to speed
+        return shooterMotor1.getSelectedSensorVelocity() / 2048;
     }
 
-    // this sets the turret encoder position to 0
     /**
      * This resets the encoder value back to 0 for the turret encoder.
      */
@@ -293,7 +280,6 @@ public class Shooter implements Subsystem {
         turretMotor.setSelectedSensorPosition(0);
     }
 
-    // stops the turret from moving
     /**
      * Stops the turret from moving.
      */
@@ -301,7 +287,6 @@ public class Shooter implements Subsystem {
         turretMotor.stopMotor();
     }
 
-    // returns the turret directions
     /**
      * Returns the current direction the turret is moving.
      *
@@ -324,12 +309,9 @@ public class Shooter implements Subsystem {
         }
     }
 
-    // moves the turret
     /**
-     * This code used to move the turret via a position PID, use
-     * turnTurret now.
+     * Uses limelight to find target
      */
-
     public void findTarget() {
         limelight.changeLEDStatus(LEDStates.On);
         // System.out.println("Can see target? " + limelight.canSeeTarget());
@@ -347,7 +329,6 @@ public class Shooter implements Subsystem {
     }
 
     /**
-     *
      * @return Hood encoder count in inches.
      */
     public double getHoodEncoder() {
