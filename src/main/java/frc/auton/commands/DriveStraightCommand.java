@@ -9,7 +9,7 @@ import frc.libraries.Gyro1038;
 public class DriveStraightCommand extends PIDCommand {
 
     private final double TOLERANCE = 0;
-    private final double MAX_OUTPUT = .7;
+    private final double MAX_OUTPUT = .5;
     private final static int INCHES_IN_FOOT = 12;
     private final static double dP = 0.100; // .04 proto
     private final static double dI = 0.000;
