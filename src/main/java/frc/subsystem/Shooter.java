@@ -79,7 +79,7 @@ public class Shooter implements Subsystem {
     private final static double speedD = 0.0;
     private PIDController speedPID = new PIDController(speedP, speedI, speedD);
     private boolean isRunning = false;
-    public double speedMultiplier = 5.65;
+    public double speedMultiplier = 5.40;
 
     private Shooter() {
 
