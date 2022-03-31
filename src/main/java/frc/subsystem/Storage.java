@@ -13,6 +13,7 @@ public class Storage implements Subsystem {
     private final int SHUTTLE_MOTOR_ENCODER_COUNTS = 47;
     private final int ENCODER_OFFSET = 500;
     private final double shuttleMotorSpeed = 1.0;
+    private final int LASER_DISTANCE = 12;
 
     // declares storage
     private static Storage storage;
@@ -20,9 +21,6 @@ public class Storage implements Subsystem {
     // Inputs and Outputs
     private CANSparkMax shuttleMotor = new CANSparkMax(SHUTTLE_MOTOR_PORT, MotorType.kBrushless);
     private RelativeEncoder shuttleMotorEncoder = shuttleMotor.getEncoder();
-    private int laserStart = serial.storageLaser1;// new DigitalInput(START_LASER_PORT);
-    private int laserEnd = serial.storageLaser2;
-    private int laserDistance = 12;
 
     // manual drive
     private ManualStorageModes selectedManualStorageMode = ManualStorageModes.None;
@@ -71,14 +69,15 @@ public class Storage implements Subsystem {
      * runs the ball storage
      */
     public void periodic() {
-        // serial.testRead();
+        int laserStart = serial.getStorageLaser1Val();
+        int laserEnd = serial.getStorageLaser2Val();
         switch (selectedManualStorageMode) {
             case None:
                 // If the ball is at the first laser and not the middle laser. Move the ball.
-                if (laserStart < laserDistance && laserEnd > laserDistance) {
+                if (laserStart < LASER_DISTANCE && laserEnd > LASER_DISTANCE) {
                     shuttleMotor.set(shuttleMotorSpeed);
                     // If a ball is not at the first laser and its at the middle laser. Stop it.
-                } else if (laserStart > laserDistance && laserEnd < laserDistance) {
+                } else if (laserStart > LASER_DISTANCE && laserEnd < LASER_DISTANCE) {
                     shuttleMotor.stopMotor();
                 }
                 break;
