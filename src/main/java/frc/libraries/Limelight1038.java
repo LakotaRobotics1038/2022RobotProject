@@ -144,8 +144,6 @@ public class Limelight1038 {
         // trig it out
         double distance = actualHeight
                 / Math.abs(Math.tan(((limelightAngle + getYOffset()) * (Math.PI / 180.0))));
-        // System.out.println(Math.tan((limelightAngle + ty.getDouble(defaultOffset) *
-        // (Math.PI / 180.0))));
         return distance;
     }
 }
