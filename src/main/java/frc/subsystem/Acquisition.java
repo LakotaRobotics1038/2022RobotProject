@@ -48,12 +48,12 @@ public class Acquisition implements Subsystem {
     public void toggleAcqPos() {
         switch (acquisitionState) {
             case In:
-                acquisitionSolenoid.set(Value.kReverse);
+                acquisitionSolenoid.set(Value.kForward);
                 acquisitionState = AcquisitionStates.Out;
                 break;
 
             case Out:
-                acquisitionSolenoid.set(Value.kForward);
+                acquisitionSolenoid.set(Value.kReverse);
                 acquisitionState = AcquisitionStates.In;
                 break;
         }
