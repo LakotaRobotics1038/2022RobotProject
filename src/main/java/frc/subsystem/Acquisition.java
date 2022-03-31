@@ -16,7 +16,7 @@ public class Acquisition implements Subsystem {
     private final int ACQUISITION_MOTOR_PORT = 9;
     private final int PUSH_OUT_ACQUISITION_CHANNEL = 2;
     private final int PULL_IN_ACQUISITION_CHANNEL = 3;
-    private final double ACQUISITION_MOTOR_SPEED = 0.65;
+    private final double ACQUISITION_MOTOR_SPEED = 1.0;
 
     // States
     public AcquisitionStates acquisitionState = AcquisitionStates.In;
