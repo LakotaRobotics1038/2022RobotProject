@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
     private final Shooter shooter = Shooter.getInstance();
     private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
     private final Gyro1038 gyroSensor = Gyro1038.getInstance();
+    private final SerialComs serial = SerialComs.getInstance();
     private final CommandScheduler scheduler = CommandScheduler.getInstance();
     private final AutonSelector autonSelector = AutonSelector.getInstance();
     private final Limelight1038 limelight = Limelight1038.getInstance();
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         dashboard.update();
+        serial.read();
     }
 
     public void teleopInit() {
