@@ -73,7 +73,6 @@ public class DriveTrain1038 implements Subsystem {
      * Get and return distance driven by the left of the robot in inches
      */
     public double getLeftDriveEncoderDistance() {
-        System.out.println("ENCODER " + leftFrontTalon.getPosition());
         return leftFrontTalon.getPosition() / ENCODER_COUNTS_PER_REVOLUTION * Math.PI * WHEEL_DIAMETER;
     }
 
