@@ -1,6 +1,7 @@
 package frc.subsystem;
 
 import java.io.BufferedReader;
+import java.nio.charset.StandardCharsets;
 
 import edu.wpi.first.hal.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -55,6 +56,15 @@ public class SerialComs implements Subsystem {
      * Updates rpi values and reads rpi serial port
      */
     public void read() {
+        String rpiOutput = serialPort.readString();
+        System.out.println("RAW: " + rpiOutput);
+        String outputString = String.format(rpiOutput, StandardCharsets.UTF_8);
+        char[] outputArray = outputString.toCharArray();
+        System.out.println(outputArray);
+    }
+
+    @Deprecated
+    public void oldRead() {
         try {
             stringRead = false;
             if (serialPort.getBytesReceived() != 0) {
