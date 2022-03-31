@@ -8,13 +8,14 @@ import frc.libraries.Gyro1038;
 
 public class DriveStraightCommand extends PIDCommand {
 
-    private final double TOLERANCE = 1.9;
-    private final double MAX_OUTPUT = .8;
-    private final static double dP = 0.150; // .04 proto
+    private final double TOLERANCE = 0;
+    private final double MAX_OUTPUT = .7;
+    private final static int INCHES_IN_FOOT = 12;
+    private final static double dP = 0.100; // .04 proto
     private final static double dI = 0.000;
-    private final static double dD = 0.002;
-    private final static double tP = 0.200; // .23 proto
-    private final static double tI = 0.001;
+    private final static double dD = 0.000;
+    private final static double tP = 0.020; // .23 proto
+    private final static double tI = 0.000;
     private final static double tD = 0.000;
     private static Gyro1038 gyroSensor = Gyro1038.getInstance();
     private static DriveTrain1038 drive = DriveTrain1038.getInstance();
@@ -29,13 +30,16 @@ public class DriveStraightCommand extends PIDCommand {
     public DriveStraightCommand(double setpoint) {
         super(new PIDController(dP, dI, dD),
                 drive::getLeftDriveEncoderDistance,
-                setpoint * 12,
-                null,
+                0,
+                output -> {
+                },
                 drive);
 
+        System.out.println("SP: " + setpoint);
         drivePID = getController();
         drivePID.setTolerance(TOLERANCE);
         drivePID.disableContinuousInput();
+        drivePID.setSetpoint(setpoint * INCHES_IN_FOOT);
 
         // Angle
         turnPID.setTolerance(TOLERANCE);
@@ -55,11 +59,13 @@ public class DriveStraightCommand extends PIDCommand {
 
         double distanceOutput = MathUtil.clamp(distanceOutputRaw, -MAX_OUTPUT, MAX_OUTPUT);
         double angleOutput = MathUtil.clamp(angleOutputRaw, -MAX_OUTPUT, MAX_OUTPUT);
-        System.out.println(
-                "dist out: " + distanceOutput +
-                        " ang out: " + angleOutput +
-                        " ang sp: " + turnPID.getSetpoint() +
-                        "ang: " + gyroSensor.getAngle());
+        // System.out.println(
+        // "dist out: " + distanceOutput +
+        // " dist set: " + drivePID.getSetpoint() +
+        // " dist: " + drive.getLeftDriveEncoderDistance() +
+        // " ang out: " + angleOutput +
+        // " ang sp: " + turnPID.getSetpoint() +
+        // "ang: " + gyroSensor.getAngle());
 
         usePIDOutput(distanceOutput, angleOutput);
     }
