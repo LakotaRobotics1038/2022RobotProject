@@ -11,9 +11,9 @@ public class TurnCommand extends PIDCommand {
     private static Gyro1038 gyroSensor = Gyro1038.getInstance();
     private static DriveTrain1038 drive = DriveTrain1038.getInstance();
     private final double TOLERANCE = 5.0;
-    private final static double P = 0.035;
-    private final static double I = 0.0015;
-    private final static double D = 0.0002;
+    private final static double P = 0.015;
+    private final static double I = 0.000;
+    private final static double D = 0.000;
 
     private PIDController turnPID;
 
