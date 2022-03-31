@@ -48,13 +48,13 @@ public class Driver {
                 break;
         }
 
-        if (driverJoystick.getRightButton() && driverJoystick.getRightTrigger() > .5) {
+        if (driverJoystick.getRightButton() && driverJoystick.getRightTriggerDigital()) {
             multiplier = 1;
             driveTrain.highGear();
         } else if (driverJoystick.getRightButton()) {
             multiplier = 1;
             driveTrain.lowGear();
-        } else if (driverJoystick.getRightTrigger() > .5) {
+        } else if (driverJoystick.getRightTriggerDigital()) {
             multiplier = .8;
             driveTrain.highGear();
         } else {
