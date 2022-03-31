@@ -31,8 +31,9 @@ public class Dashboard {
     private NetworkTableEntry shooterAngle;
     private NetworkTableEntry matchTime;
     private NetworkTableEntry limelightTarget;
-    private NetworkTableEntry limelightSetpoint;
     private NetworkTableEntry shooterSpeed;
+    private NetworkTableEntry distance;
+    private NetworkTableEntry shooterMult;
 
     public static Dashboard getInstance() {
         if (dashboard == null) {
@@ -77,6 +78,9 @@ public class Dashboard {
                 .withWidget(BuiltInWidgets.kBooleanBox)
                 .getEntry();
 
+        shooterMult = driversTab.add("Shooter Mult", shooter.speedMultiplier)
+                .getEntry();
+
         // Controls
         resetGyro = controlsTab.add("Reset Gyro", false)
                 .withPosition(0, 0)
@@ -92,9 +96,7 @@ public class Dashboard {
                 .withPosition(1, 0)
                 .getEntry();
 
-        limelightSetpoint = controlsTab.add("Limelight Setpoint", -1)
-                .withPosition(1, 1)
-                .getEntry();
+        distance = driversTab.add("Target Distance", -1).getEntry();
     }
 
     public void update() {
@@ -107,7 +109,9 @@ public class Dashboard {
         gyroAngle.setNumber(gyro.getAngle());
         limelightTarget.setBoolean(limelight.canSeeTarget());
         shooterSpeed.setNumber(shooter.getShooterSpeed());
-        limelightSetpoint.setNumber(limelight.getShooterSetpoint());
+
+        shooter.speedMultiplier = shooterMult.getDouble(shooter.speedMultiplier);
+        distance.setDouble(limelight.getTargetDistance());
 
         // Controls
         if (resetGyro.getBoolean(false)) {
