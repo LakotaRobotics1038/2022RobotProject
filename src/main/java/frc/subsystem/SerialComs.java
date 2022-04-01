@@ -17,8 +17,8 @@ public class SerialComs implements Subsystem {
     private double number = 0;
 
     // Sensors
-    public int storageLaser1 = 0;
-    public int storageLaser2 = 0;
+    public int storageLaser1 = -1;
+    public int storageLaser2 = -1;
 
     // Objects
     private static SerialPort serialPort;
@@ -67,6 +67,10 @@ public class SerialComs implements Subsystem {
                 storageLaser1 = Integer.parseInt(outputArray[0]);
                 storageLaser2 = Integer.parseInt(outputArray[1]);
             } catch (NumberFormatException e) {
+                // For safety purposes, if we fail to parse the laser data
+                // we set to -1 to ensure storage stops
+                storageLaser1 = -1;
+                storageLaser2 = -1;
                 System.out.println("Failed to parse laser data");
             }
         }
