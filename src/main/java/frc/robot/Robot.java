@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         dashboard.update();
-        // serial.read();
+        serial.read();
     }
 
     public void teleopInit() {

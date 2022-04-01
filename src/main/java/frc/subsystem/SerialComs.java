@@ -49,6 +49,7 @@ public class SerialComs implements Subsystem {
      */
     public void initialize() {
         serialPort = new SerialPort(9600, SerialPort.Port.kMXP);
+        serialPort.enableTermination();
         System.out.println("Created new serial reader");
     }
 
@@ -56,41 +57,13 @@ public class SerialComs implements Subsystem {
      * Updates rpi values and reads rpi serial port
      */
     public void read() {
-        String rpiOutput = serialPort.readString();
-        System.out.println("RAW: " + rpiOutput);
-        String outputString = String.format(rpiOutput, StandardCharsets.UTF_8);
-        char[] outputArray = outputString.toCharArray();
-        System.out.println(outputArray);
-    }
-
-    @Deprecated
-    public void oldRead() {
-        try {
-            stringRead = false;
-            if (serialPort.getBytesReceived() != 0) {
-                rpiOutput = serialPort.readString();
-                inputBuffer = inputBuffer + rpiOutput;
-                stringRead = true;
-            }
-            line = "";
-            if (inputBuffer.indexOf("\r") != -1) {
-                int point = inputBuffer.indexOf("\r");
-                line = inputBuffer.substring(0, point);
-                if (inputBuffer.length() > point + 1) {
-                    inputBuffer = inputBuffer.substring(point + 2, inputBuffer.length());
-                } else {
-                    inputBuffer = "";
-                }
-            }
-            if (line != "") {
-                String[] dataMap = line.split(",");
-                storageLaser1 = Integer.parseInt(dataMap[0]);
-                storageLaser2 = Integer.parseInt(dataMap[1]);
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Serial Number Format Exception" + e);
-        } catch (UncleanStatusException e) {
-            System.out.println("Serial Unclean Status Exception" + e);
+        int bytesToRead = serialPort.getBytesReceived();
+        if (bytesToRead > 1) {
+            byte[] out = serialPort.read(bytesToRead);
+            String outputString = new String(out, 0, out.length, StandardCharsets.UTF_8);
+            String[] outputArray = outputString.split(",");
+            storageLaser1 = Integer.parseInt(outputArray[0]);
+            storageLaser2 = Integer.parseInt(outputArray[1]);
         }
     }
 
