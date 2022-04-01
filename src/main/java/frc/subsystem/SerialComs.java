@@ -58,12 +58,17 @@ public class SerialComs implements Subsystem {
      */
     public void read() {
         int bytesToRead = serialPort.getBytesReceived();
+
         if (bytesToRead > 1) {
             byte[] out = serialPort.read(bytesToRead);
             String outputString = new String(out, 0, out.length, StandardCharsets.UTF_8);
-            String[] outputArray = outputString.split(",");
-            storageLaser1 = Integer.parseInt(outputArray[0]);
-            storageLaser2 = Integer.parseInt(outputArray[1]);
+            String[] outputArray = outputString.replace("\n", "").split(",");
+            try {
+                storageLaser1 = Integer.parseInt(outputArray[0]);
+                storageLaser2 = Integer.parseInt(outputArray[1]);
+            } catch (NumberFormatException e) {
+                System.out.println("Failed to parse laser data");
+            }
         }
     }
 
