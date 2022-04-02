@@ -28,6 +28,7 @@ public class Operator {
     private final Storage storage = Storage.getInstance();
 
     private boolean prevYButtonState = false;
+    private boolean prevUsedLeftJoystick = false;
 
     private Operator() {
 
@@ -90,11 +91,13 @@ public class Operator {
 
         if (operatorJoystick.getLeftJoystickVertical() > .5) {
             storage.setManualStorage(ManualStorageModes.In);
+            prevUsedLeftJoystick = true;
         } else if (operatorJoystick.getLeftJoystickVertical() < -.5) {
             storage.setManualStorage(ManualStorageModes.Out);
-        } else {
-            storage.setManualStorage(ManualStorageModes.Stop);
-            // storage.disableManualStorage();
+            prevUsedLeftJoystick = true;
+        } else if (prevUsedLeftJoystick) {
+            storage.disableManualStorage();
+            prevUsedLeftJoystick = false;
         }
 
         if (operatorJoystick.getAButton()) {

@@ -26,7 +26,7 @@ public class Storage implements Subsystem {
     private ManualStorageModes selectedManualStorageMode = ManualStorageModes.None;
 
     public enum ManualStorageModes {
-        In, Out, None, Stop
+        In, Out, None
     }
 
     /**
@@ -54,6 +54,7 @@ public class Storage implements Subsystem {
 
     public void disableManualStorage() {
         selectedManualStorageMode = ManualStorageModes.None;
+        shuttleMotor.stopMotor();
     }
 
     /**
@@ -73,10 +74,10 @@ public class Storage implements Subsystem {
         int laserEnd = serial.getStorageLaser2Val();
         switch (selectedManualStorageMode) {
             case None:
-                // If the ball is at the first laser and not the middle laser. Move the ball.
+                // If the ball is at the first laser and not the second laser. Move the ball.
                 if (laserStart < LASER_DISTANCE && laserEnd > LASER_DISTANCE) {
                     shuttleMotor.set(shuttleMotorSpeed);
-                    // If a ball is not at the first laser and its at the middle laser. Stop it.
+                    // If a ball is not at the first laser and its at the second laser. Stop it.
                 } else if (laserStart > LASER_DISTANCE && laserEnd < LASER_DISTANCE) {
                     shuttleMotor.stopMotor();
                 }
@@ -89,8 +90,6 @@ public class Storage implements Subsystem {
                 shuttleMotor.set(-shuttleMotorSpeed);
                 shuttleMotorEncoder.setPosition(SHUTTLE_MOTOR_ENCODER_COUNTS + ENCODER_OFFSET);
                 break;
-            case Stop:
-                shuttleMotor.stopMotor();
         }
     }
 }
