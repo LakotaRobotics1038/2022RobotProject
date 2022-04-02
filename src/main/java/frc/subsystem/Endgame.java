@@ -90,7 +90,7 @@ public class Endgame {
     public void lowerElevator() {
         engageRatchet();
         if (elevatorMotor.isRevLimitSwitchClosed() == 1) {
-            elevatorMotor.set(-.8);
+            elevatorMotor.set(-.6);
         } else if (elevatorMotor.isRevLimitSwitchClosed() == 0) {
             elevatorMotor.stopMotor();
             elevatorMotor.resetPosition();
