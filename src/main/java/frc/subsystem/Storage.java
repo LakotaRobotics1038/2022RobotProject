@@ -12,8 +12,8 @@ public class Storage implements Subsystem {
     private final int SHUTTLE_MOTOR_PORT = 17;
     private final int SHUTTLE_MOTOR_ENCODER_COUNTS = 47;
     private final int ENCODER_OFFSET = 500;
-    private final double shuttleMotorSpeed = 1.0;
-    private final int LASER_DISTANCE = 12;
+    private final double shuttleMotorSpeed = 0.7;
+    private final int LASER_DISTANCE = 20;
 
     // declares storage
     private static Storage storage;
@@ -70,15 +70,15 @@ public class Storage implements Subsystem {
      * runs the ball storage
      */
     public void periodic() {
-        int laserStart = serial.getStorageLaser1Val();
-        int laserEnd = serial.getStorageLaser2Val();
+        int laserStart = serial.getStorageLaser2Val();
+        int laserEnd = serial.getStorageLaser1Val();
         switch (selectedManualStorageMode) {
             case None:
                 // If the ball is at the first laser and not the second laser. Move the ball.
                 if (laserStart < LASER_DISTANCE && laserEnd > LASER_DISTANCE) {
                     shuttleMotor.set(shuttleMotorSpeed);
                     // If a ball is not at the first laser and its at the second laser. Stop it.
-                } else if (laserStart > LASER_DISTANCE && laserEnd < LASER_DISTANCE) {
+                } else if (laserStart > LASER_DISTANCE) {
                     shuttleMotor.stopMotor();
                 }
                 break;
