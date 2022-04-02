@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.hal.ControlWord;
+import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -19,6 +21,7 @@ import frc.libraries.Gyro1038;
 import frc.libraries.Limelight1038;
 import frc.libraries.Limelight1038.LEDStates;
 import frc.subsystem.Storage;
+import frc.subsystem.SerialComs.RobotStates;
 import frc.subsystem.*;
 
 /*
@@ -32,6 +35,9 @@ public class Robot extends TimedRobot {
     private final int PH_PORT = 1;
     private final int MIN_PRESSURE = 110;
     private final int MAX_PRESSURE = 120;
+    private ControlWord controlWordCache = new ControlWord();
+    private boolean eStopped = false;
+    private boolean disabled = false;
 
     private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
     private final Dashboard dashboard = Dashboard.getInstance();
@@ -59,12 +65,19 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         dashboard.update();
         serial.read();
+        if (eStopped) {
+            serial.setRobotState(RobotStates.EmergencyStop);
+        } else if (disabled) {
+            serial.setRobotState(RobotStates.Disabled);
+        }
     }
 
+    @Override
     public void teleopInit() {
         driveTrain.setCoastMode();
     }
 
+    @Override
     public void teleopPeriodic() {
         compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
@@ -73,6 +86,7 @@ public class Robot extends TimedRobot {
         shooter.periodic();
     }
 
+    @Override
     public void autonomousInit() {
         driveTrain.setBrakeMode();
         SequentialCommandGroup autonPath = autonSelector.chooseAuton();
@@ -82,15 +96,25 @@ public class Robot extends TimedRobot {
         }
     }
 
+    @Override
     public void autonomousPeriodic() {
         compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         scheduler.run();
     }
 
+    @Override
     public void disabledInit() {
         endgame.engageRatchet();
+        System.out.println("Robot Disabled");
+        HAL.getControlWord(controlWordCache);
+        if (controlWordCache.getEStop()) {
+            eStopped = true;
+        } else {
+            disabled = true;
+        }
     }
 
+    @Override
     public void disabledPeriodic() {
     }
 

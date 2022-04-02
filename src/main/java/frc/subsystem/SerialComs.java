@@ -14,6 +14,18 @@ public class SerialComs implements Subsystem {
     private static SerialPort serialPort;
     private static SerialComs rpiCom;
 
+    public enum RobotStates {
+        Enabled("A"),
+        Disabled("D"),
+        EmergencyStop("E");
+
+        public final String value;
+
+        private RobotStates(String value) {
+            this.value = value;
+        }
+    }
+
     /**
      * Returns the serial coms instance
      *
@@ -49,8 +61,7 @@ public class SerialComs implements Subsystem {
         int bytesToRead = serialPort.getBytesReceived();
 
         if (bytesToRead > 1) {
-            byte[] out = serialPort.read(bytesToRead);
-            String outputString = new String(out, 0, out.length, StandardCharsets.UTF_8);
+            String outputString = serialPort.readString(bytesToRead);
             String[] outputArray = outputString.replace("\n", "").split(",");
             try {
                 storageLaser1 = Integer.parseInt(outputArray[0]);
@@ -60,9 +71,22 @@ public class SerialComs implements Subsystem {
                 // we set to -1 to ensure storage stops
                 storageLaser1 = -1;
                 storageLaser2 = -1;
-                System.out.println("Failed to parse laser data");
+                System.out.println("Failed to parse laser data: NaN");
+            } catch (IndexOutOfBoundsException e) {
+                storageLaser1 = -1;
+                storageLaser2 = -1;
+                System.out.println("Failed to parse laser data: OoB");
             }
         }
+    }
+
+    /**
+     * Use the state of the robot to send a command to the LEDs
+     *
+     * @param state Current state of the robot
+     */
+    public void setRobotState(RobotStates state) {
+        serialPort.writeString(state.value);
     }
 
     /**
