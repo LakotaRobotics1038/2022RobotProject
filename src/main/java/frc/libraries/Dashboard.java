@@ -51,6 +51,7 @@ public class Dashboard {
         autoChooser.setDefaultOption("No Auton", AutonSelector.None);
         autoChooser.addOption("Drive Forward", AutonSelector.ForwardAuto);
         autoChooser.addOption("Drive Backward", AutonSelector.ReverseAuto);
+        autoChooser.addOption("One Ball", AutonSelector.OneBallAuto);
 
         startPosition.setDefaultOption("Center", AutonSelector.CenterPosition);
         startPosition.addOption("Left", AutonSelector.LeftPosition);

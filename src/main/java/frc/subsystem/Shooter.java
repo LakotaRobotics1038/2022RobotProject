@@ -78,7 +78,6 @@ public class Shooter implements Subsystem {
     private final static double speedI = 0.0;
     private final static double speedD = 0.0;
     private PIDController speedPID = new PIDController(speedP, speedI, speedD);
-    private boolean isRunning = false;
     public double speedMultiplier = 5.40;
 
     private Shooter() {
@@ -97,7 +96,6 @@ public class Shooter implements Subsystem {
 
         speedPID.setTolerance(speedTolerance);
         speedPID.disableContinuousInput();
-        // TODO: Figure out what to divide by.
         hoodPID.setTolerance(hoodTolerance);
         hoodPID.disableContinuousInput();
         hoodMotor.setInverted(true);
@@ -183,7 +181,6 @@ public class Shooter implements Subsystem {
      * sets the speed of the shooter
      */
     private void executeSpeedPID() {
-        isRunning = true;
         speedPID.setSetpoint(getSpeedSetpoint());
 
         double power = speedPID.calculate(getShooterSpeed() * 100);
@@ -203,24 +200,24 @@ public class Shooter implements Subsystem {
         return speedPID.atSetpoint();
     }
 
-    // sets the shooter to manual speed, disabling the PID
     /**
      * This is used to shoot manually.
      *
-     *
-     * @param speed the shooter should be at
+     * @param speed motor power to give the shooter
      */
     public void shootManually(double speed) {
         shooterMotor1.set(speed);
         compressionMotor.set(speed);
     }
 
-    // enables the PIDs and what not
+    /**
+     * Enables the hood, turret, and shooter PIDs
+     */
     public void enable() {
         isEnabled = true;
     }
 
-    // Executes the PID
+    @Override
     public void periodic() {
         if (isEnabled) {
             if (!overrideHoodPID) {
@@ -236,16 +233,21 @@ public class Shooter implements Subsystem {
      * @return returns if robot is ready to shoot
      */
     public boolean isFinished() {
-        return turretPID.atSetpoint() && speedPID.atSetpoint() && isRunning;
+        return turretOnTarget() && speedPID.atSetpoint();
     }
 
-    // Returns to see if the turret is aimed that the target
+    /**
+     * Determine if the turret is on target
+     *
+     * @return whether the turret is on target and limelight can see the target
+     */
     public boolean turretOnTarget() {
-        // return false;
         return turretPID.atSetpoint() && limelight.canSeeTarget();
     }
 
-    // switch case for what direction the turret spins
+    /**
+     * Moves the turret according to currentTurretDirection
+     */
     private void moveTurret() {
         switch (currentTurretDirection) {
             case Left:
@@ -296,6 +298,9 @@ public class Shooter implements Subsystem {
         return currentTurretDirection;
     }
 
+    /**
+     * Returns the hood and turret back to starting position
+     */
     public void returnToZero() {
         zeroHood();
         if (Math.abs(turretMotor.getPosition()) < 50000) {

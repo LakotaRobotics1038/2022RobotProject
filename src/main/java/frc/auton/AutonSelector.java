@@ -7,6 +7,7 @@ public class AutonSelector {
     // Path Options
     public static final String ForwardAuto = "ForwardAuto";
     public static final String ReverseAuto = "ReverseAuto";
+    public static final String OneBallAuto = "OneBallAuto";
     public static final String None = "None";
 
     public static final String LeftPosition = "L";
@@ -44,6 +45,8 @@ public class AutonSelector {
                 return new ForwardAuton();
             case ReverseAuto:
                 return new ReverseAuton();
+            case OneBallAuto:
+                return new OneBallAuton();
             default:
             case None:
                 return null;
