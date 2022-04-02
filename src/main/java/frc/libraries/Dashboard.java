@@ -1,7 +1,6 @@
 package frc.libraries;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,18 +21,26 @@ public class Dashboard {
     private String position;
     private String autonChooser;
 
-    private ShuffleboardTab driversTab;
-    private ShuffleboardTab controlsTab;
+    private ShuffleboardTab driversTab = Shuffleboard.getTab("Drivers");
+    private ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
 
-    private NetworkTableEntry resetGyro;
-    private NetworkTableEntry recalGyro;
-    private NetworkTableEntry gyroAngle;
-    private NetworkTableEntry shooterAngle;
-    private NetworkTableEntry matchTime;
-    private NetworkTableEntry limelightTarget;
-    private NetworkTableEntry shooterSpeed;
-    private NetworkTableEntry distance;
-    private NetworkTableEntry shooterMult;
+    // Drivers
+    private NetworkTableEntry shooterMult = driversTab.add("Shooter Mult", shooter.speedMultiplier)
+            .withSize(2, 1)
+            .withPosition(5, 0)
+            .getEntry();
+
+    // Controls
+    private NetworkTableEntry resetGyro = controlsTab.add("Reset Gyro", false)
+            .withSize(1, 1)
+            .withPosition(1, 1)
+            .withWidget(BuiltInWidgets.kToggleButton)
+            .getEntry();
+    private NetworkTableEntry recalibrateGyro = controlsTab.add("Recal Gyro", false)
+            .withSize(1, 1)
+            .withPosition(0, 1)
+            .withWidget(BuiltInWidgets.kToggleButton)
+            .getEntry();
 
     public static Dashboard getInstance() {
         if (dashboard == null) {
@@ -44,9 +51,7 @@ public class Dashboard {
     }
 
     private Dashboard() {
-        driversTab = Shuffleboard.getTab("Drivers");
-        controlsTab = Shuffleboard.getTab("Controls");
-
+        Shuffleboard.selectTab("Drivers");
         // Drivers
         autoChooser.setDefaultOption("No Auton", AutonSelector.None);
         autoChooser.addOption("Drive Forward", AutonSelector.ForwardAuto);
@@ -57,6 +62,7 @@ public class Dashboard {
         startPosition.addOption("Left", AutonSelector.LeftPosition);
         startPosition.addOption("Right", AutonSelector.RightPosition);
 
+        // Drivers
         driversTab.add("Auton Choices", autoChooser)
                 .withPosition(0, 0)
                 .withSize(2, 1);
@@ -64,55 +70,33 @@ public class Dashboard {
                 .withPosition(0, 1)
                 .withSize(2, 1);
 
-        matchTime = driversTab.add("Match Time", -1)
-                .getEntry();
+        driversTab.addNumber("Shooter Angle", shooter::getTurretEncoder)
+                .withPosition(2, 2)
+                .withSize(1, 1);
 
-        shooterAngle = driversTab.add("Shooter Angle", 0)
-                .getEntry();
+        driversTab.addNumber("Gyro", gyro::getAngle)
+                .withPosition(2, 0);
+        // .withWidget(BuiltInWidgets.kGyro);
 
-        gyroAngle = driversTab.add("Gyro", 0)
-                .withPosition(2, 0)
-                .withWidget(BuiltInWidgets.kGyro)
-                .getEntry();
-
-        limelightTarget = controlsTab.add("Limelight Target", false)
-                .withWidget(BuiltInWidgets.kBooleanBox)
-                .getEntry();
-
-        shooterMult = driversTab.add("Shooter Mult", shooter.speedMultiplier)
-                .getEntry();
+        driversTab.addNumber("Target Distance", limelight::getTargetDistance)
+                .withPosition(5, 1)
+                .withSize(2, 1);
 
         // Controls
-        resetGyro = controlsTab.add("Reset Gyro", false)
-                .withPosition(0, 0)
-                .withWidget(BuiltInWidgets.kBooleanBox)
-                .getEntry();
+        controlsTab.addBoolean("Limelight Target", limelight::canSeeTarget)
+                .withWidget(BuiltInWidgets.kBooleanBox);
 
-        recalGyro = controlsTab.add("Recal Gyro", false)
-                .withPosition(0, 1)
-                .withWidget(BuiltInWidgets.kBooleanBox)
-                .getEntry();
+        controlsTab.addNumber("Shooter Speed", shooter::getShooterSpeed)
+                .withPosition(1, 0);
 
-        shooterSpeed = controlsTab.add("Shooter Speed", -1)
-                .withPosition(1, 0)
-                .getEntry();
-
-        distance = driversTab.add("Target Distance", -1).getEntry();
     }
 
     public void update() {
         // Drivers
         autonChooser = autoChooser.getSelected();
         position = startPosition.getSelected();
-        matchTime.setNumber(Timer.getMatchTime());
-
-        shooterAngle.setNumber(shooter.getTurretEncoder());
-        gyroAngle.setNumber(gyro.getAngle());
-        limelightTarget.setBoolean(limelight.canSeeTarget());
-        shooterSpeed.setNumber(shooter.getShooterSpeed());
 
         shooter.speedMultiplier = shooterMult.getDouble(shooter.speedMultiplier);
-        distance.setDouble(limelight.getTargetDistance());
 
         // Controls
         if (resetGyro.getBoolean(false)) {
@@ -120,9 +104,9 @@ public class Dashboard {
             resetGyro.setBoolean(false);
         }
 
-        if (recalGyro.getBoolean(false)) {
+        if (recalibrateGyro.getBoolean(false)) {
             gyro.calibrate();
-            recalGyro.setBoolean(false);
+            recalibrateGyro.setBoolean(false);
         }
     }
 
