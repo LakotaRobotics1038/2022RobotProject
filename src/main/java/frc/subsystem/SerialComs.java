@@ -1,7 +1,5 @@
 package frc.subsystem;
 
-import java.nio.charset.StandardCharsets;
-
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -62,6 +60,7 @@ public class SerialComs implements Subsystem {
 
         if (bytesToRead > 1) {
             String outputString = serialPort.readString(bytesToRead);
+            System.out.println(outputString);
             String[] outputArray = outputString.replace("\n", "").split(",");
             try {
                 storageLaser1 = Integer.parseInt(outputArray[0]);
