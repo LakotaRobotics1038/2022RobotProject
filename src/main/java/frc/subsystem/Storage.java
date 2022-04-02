@@ -74,6 +74,10 @@ public class Storage implements Subsystem {
         int laserEnd = serial.getStorageLaser1Val();
         switch (selectedManualStorageMode) {
             case None:
+                // If the lasers have not been read do not run the auto storage code
+                if (laserStart < 0 || laserEnd < 0) {
+                    return;
+                }
                 // If the ball is at the first laser and not the second laser. Move the ball.
                 if (laserStart < LASER_DISTANCE && laserEnd > LASER_DISTANCE) {
                     shuttleMotor.set(shuttleMotorSpeed);
