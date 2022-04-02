@@ -76,6 +76,7 @@ public class Storage implements Subsystem {
             case None:
                 // If the lasers have not been read do not run the auto storage code
                 if (laserStart < 0 || laserEnd < 0) {
+                    shuttleMotor.stopMotor();
                     return;
                 }
                 // If the ball is at the first laser and not the second laser. Move the ball.
