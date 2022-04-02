@@ -1,21 +1,11 @@
 package frc.subsystem;
 
-import java.io.BufferedReader;
 import java.nio.charset.StandardCharsets;
 
-import edu.wpi.first.hal.util.UncleanStatusException;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class SerialComs implements Subsystem {
-    // Variables
-    private String rpiOutput;
-    public boolean stringRead = false;
-    public BufferedReader bufferedReader;
-    private static String inputBuffer = "";
-    private String line;
-    private double number = 0;
-
     // Sensors
     public int storageLaser1 = -1;
     public int storageLaser2 = -1;
@@ -23,12 +13,11 @@ public class SerialComs implements Subsystem {
     // Objects
     private static SerialPort serialPort;
     private static SerialComs rpiCom;
-    // private Limelight1038 limelight = Limelight1038.getInstance();
 
     /**
-     * Returns the rpi instance created when the robot starts
+     * Returns the serial coms instance
      *
-     * @return rpi instance
+     * @return serial coms instance
      */
     public static SerialComs getInstance() {
         if (rpiCom == null) {
@@ -38,7 +27,7 @@ public class SerialComs implements Subsystem {
     }
 
     /**
-     * Initializes the rpi reader (empty currently)
+     * Initializes the serial communication
      */
     private SerialComs() {
         this.initialize();
@@ -54,7 +43,7 @@ public class SerialComs implements Subsystem {
     }
 
     /**
-     * Updates rpi values and reads rpi serial port
+     * Updates sensor values from serial communication
      */
     public void read() {
         int bytesToRead = serialPort.getBytesReceived();
@@ -85,23 +74,20 @@ public class SerialComs implements Subsystem {
     }
 
     /**
-     * The front laser looking towards the ground
+     * The upper laser in storage
      *
-     * @return Distance to ground from front bottom laser in cm
+     * @return Distance in cm
      */
     public int getStorageLaser1Val() {
         return storageLaser1;
     }
 
     /**
-     * The rear laser looking towards the ground
+     * The lower sensor in storage
      *
-     * @return Distance to ground from rear bottom laser in cm
+     * @return Distance in cm
      */
     public int getStorageLaser2Val() {
-        number = storageLaser2;
-        long longNumber = Math.round(number);
-        int intNumber = Math.toIntExact(longNumber);
-        return intNumber;
+        return storageLaser2;
     }
 }
