@@ -130,7 +130,7 @@ public class Endgame {
      */
     public void rotateForward() {
         if (rotatorMotor.getPosition() < ROTATE_LIMIT_FORWARD) {
-            rotatorMotor.set(.1);
+            rotatorMotor.set(.5);
         } else if (rotatorMotor.getPosition() >= ROTATE_LIMIT_FORWARD) {
             rotatorMotor.stopMotor();
         }
