@@ -61,14 +61,14 @@ public class Acquisition implements Subsystem {
     /**
      * Runs acquisition to acquire balls
      */
-    public void runFwd() {
+    public void acquire() {
         acquisitionMotor.set(ACQUISITION_MOTOR_SPEED);
     }
 
     /**
      * Runs acquisition to spit balls out
      */
-    public void runRev() {
+    public void dispose() {
         acquisitionMotor.set(-ACQUISITION_MOTOR_SPEED);
     }
 

@@ -48,9 +48,9 @@ public class Operator {
         }
 
         if (operatorJoystick.getRightButton()) {
-            acquisition.runFwd();
+            acquisition.acquire();
         } else if (operatorJoystick.getRightTriggerDigital()) {
-            acquisition.runRev();
+            acquisition.dispose();
         } else {
             acquisition.stop();
         }
