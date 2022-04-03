@@ -15,18 +15,13 @@ public class Endgame {
 
     // Ports and Constants
     private final int ELEVATOR_PORT = 62;
-    private final int ROTATOR_PORT = 1;
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
     private final int ENDGAME_TOP = 160000;
-    // TODO: replace this with the actually encoder counts
-    private final int ROTATE_LIMIT_FORWARD = 40000;
-    private final int ROTATE_LIMIT_BACKWARD = -1000;
     private final double RAISE_ELEVATOR_POWER = 0.4;
     private final double LOWER_ELEVATOR_POWER = -0.6;
 
     // Inputs and Outputs
-    private final TalonFX1038 rotatorMotor = new TalonFX1038(ROTATOR_PORT);
     public final TalonFX1038 elevatorMotor = new TalonFX1038(ELEVATOR_PORT);
     private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(
             PneumaticsModuleType.REVPH,
@@ -48,10 +43,6 @@ public class Endgame {
         elevatorMotor.resetPosition();
         elevatorMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
                 LimitSwitchNormal.NormallyClosed, 0);
-        rotatorMotor.resetPosition();
-        rotatorMotor.setInverted(true);
-        rotatorMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-        rotatorMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     /**
@@ -61,15 +52,6 @@ public class Endgame {
      */
     public double getElevatorEncoderPosition() {
         return elevatorMotor.getPosition();
-    }
-
-    /**
-     * Get the current position of the rotator arms
-     *
-     * @return position of the rotator arms in encoder counts
-     */
-    public double getRotatorEncoderPosition() {
-        return rotatorMotor.getPosition();
     }
 
     /**
@@ -123,34 +105,5 @@ public class Endgame {
      */
     public void stopElevator() {
         elevatorMotor.stopMotor();
-    }
-
-    /**
-     * Moves the rotator arms forward (away from the robot)
-     */
-    public void rotateForward() {
-        if (rotatorMotor.getPosition() < ROTATE_LIMIT_FORWARD) {
-            rotatorMotor.set(1);
-        } else if (rotatorMotor.getPosition() >= ROTATE_LIMIT_FORWARD) {
-            rotatorMotor.stopMotor();
-        }
-    }
-
-    /**
-     * Moves the rotator arms backward (toward the robot)
-     */
-    public void rotateBackward() {
-        if (rotatorMotor.getPosition() > ROTATE_LIMIT_BACKWARD) {
-            rotatorMotor.set(-1);
-        } else if (rotatorMotor.getPosition() <= ROTATE_LIMIT_BACKWARD) {
-            rotatorMotor.stopMotor();
-        }
-    }
-
-    /**
-     * Stops the rotator arms in their current location
-     */
-    public void stopRotator() {
-        rotatorMotor.stopMotor();
     }
 }

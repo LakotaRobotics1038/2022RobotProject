@@ -63,18 +63,6 @@ public class Operator {
             endgame.stopElevator();
         }
 
-        if (operatorJoystick.getRightJoystickHorizontal() <= -.5) {
-            endgame.rotateBackward();
-        }
-
-        if (operatorJoystick.getRightJoystickHorizontal() >= .5) {
-            endgame.rotateForward();
-        }
-
-        if (operatorJoystick.getRightJoystickHorizontal() == 0) {
-            endgame.stopRotator();
-        }
-
         if (operatorJoystick.getLeftButton()) {
             shooter.enable();
         } else {
