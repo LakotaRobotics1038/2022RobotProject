@@ -15,12 +15,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.auton.AutonSelector;
-import frc.libraries.Dashboard;
 import frc.libraries.DriveTrain1038;
 import frc.libraries.Gyro1038;
 import frc.libraries.Limelight1038;
 import frc.libraries.Limelight1038.LEDStates;
-import frc.subsystem.Storage;
 import frc.subsystem.SerialComs.RobotStates;
 import frc.subsystem.*;
 
@@ -63,7 +61,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        dashboard.update();
+        dashboard.periodic();
         serial.read();
         if (eStopped) {
             serial.setRobotState(RobotStates.EmergencyStop);

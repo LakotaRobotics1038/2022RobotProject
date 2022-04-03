@@ -1,14 +1,16 @@
-package frc.libraries;
+package frc.subsystem;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.auton.AutonSelector;
-import frc.subsystem.Shooter;
+import frc.libraries.Gyro1038;
+import frc.libraries.Limelight1038;
 
-public class Dashboard {
+public class Dashboard implements Subsystem {
     private static Dashboard dashboard;
 
     private Shooter shooter = Shooter.getInstance();
@@ -91,7 +93,8 @@ public class Dashboard {
 
     }
 
-    public void update() {
+    @Override
+    public void periodic() {
         // Drivers
         autonChooser = autoChooser.getSelected();
         position = startPosition.getSelected();

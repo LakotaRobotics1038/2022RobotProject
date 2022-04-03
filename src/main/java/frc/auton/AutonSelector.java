@@ -1,7 +1,7 @@
 package frc.auton;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.libraries.Dashboard;
+import frc.subsystem.Dashboard;
 
 public class AutonSelector {
     // Path Options
