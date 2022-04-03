@@ -59,11 +59,11 @@ public class Operator {
         }
 
         if (operatorJoystick.getRightJoystickHorizontal() <= -.5) {
-            endgame.rotateRight();
+            endgame.rotateBackward();
         }
 
         if (operatorJoystick.getRightJoystickHorizontal() >= .5) {
-            endgame.rotateLeft();
+            endgame.rotateForward();
         }
 
         if (operatorJoystick.getRightJoystickHorizontal() == 0) {
