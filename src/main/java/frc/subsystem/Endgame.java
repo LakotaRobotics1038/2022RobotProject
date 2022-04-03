@@ -14,17 +14,15 @@ import frc.libraries.TalonFX1038;
 public class Endgame {
 
     // Ports and Constants
-    // Just nakey shafts? --Julian
-    // That's just how I prefer it. --Kristyna
     private final int ELEVATOR_PORT = 62;
     private final int ROTATOR_PORT = 1;
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
     public boolean locked = true;
     private final int ENDGAME_TOP = 160000;
-    // This is from the right side of the robot looking at it with acq facing you.
-    private int rotateLimitLeft = 40000; // TODO: replace this with the actually encoder counts
-    private int rotateLimitRight = -1000;
+    // TODO: replace this with the actually encoder counts
+    private int rotateLimitForward = 40000;
+    private int rotateLimitBackward = -1000;
 
     // Inputs and Outputs
     private final TalonFX1038 rotatorMotor = new TalonFX1038(ROTATOR_PORT);
@@ -103,9 +101,9 @@ public class Endgame {
 
     public void rotateLeft() {
         rotatorMotor.setNeutralMode(NeutralMode.Brake);
-        if (rotatorMotor.getPosition() < rotateLimitLeft) {
+        if (rotatorMotor.getPosition() < rotateLimitForward) {
             rotatorMotor.set(.1);
-        } else if (rotatorMotor.getPosition() >= rotateLimitLeft) {
+        } else if (rotatorMotor.getPosition() >= rotateLimitForward) {
             rotatorMotor.stopMotor();
         }
 
@@ -113,9 +111,9 @@ public class Endgame {
 
     public void rotateRight() {
         rotatorMotor.setNeutralMode(NeutralMode.Brake);
-        if (rotatorMotor.getPosition() > rotateLimitRight) {
+        if (rotatorMotor.getPosition() > rotateLimitBackward) {
             rotatorMotor.set(-.1);
-        } else if (rotatorMotor.getPosition() <= rotateLimitRight) {
+        } else if (rotatorMotor.getPosition() <= rotateLimitBackward) {
             rotatorMotor.stopMotor();
         }
     }
