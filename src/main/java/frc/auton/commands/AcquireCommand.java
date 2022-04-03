@@ -6,43 +6,52 @@ import frc.subsystem.Acquisition;
 import frc.subsystem.Storage;
 
 public class AcquireCommand extends CommandBase {
+    private Acquisition acquisition = Acquisition.getInstance();
+    private Storage storage = Storage.getInstance();
 
-    Acquisition acquisition = Acquisition.getInstance();
-    Storage storage = Storage.getInstance();
+    public enum Modes {
+        Acquire, Dispose
+    };
 
-    private static double END_TIME;
+    private Modes mode;
+    private double acqTime;
+    private boolean timerRunning = false;
+    private Timer timer = new Timer();
 
     /**
-     * Creates a new MoveAcquisitionCommand.
+     * Creates a new Acquire Command
+     *
+     * @param mode    Determines whether the acquisition should acquire or dispose
+     * @param acqTime time to run the wheels for
      */
-    public AcquireCommand(double endTime) {
-        END_TIME = endTime;
+    public AcquireCommand(Modes mode, double acqTime) {
+        this.mode = mode;
+        this.acqTime = acqTime;
+        this.addRequirements(acquisition, storage);
     }
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
-        acquisition.toggleAcqPos();
-    }
-
-    // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if (Timer.getMatchTime() <= 14) {
-            storage.periodic();
-            acquisition.runFwd();
+        switch (mode) {
+            case Acquire:
+                acquisition.acquire();
+            case Dispose:
+                acquisition.dispose();
+        }
+
+        if (!timerRunning) {
+            timerRunning = true;
+            timer.start();
         }
     }
 
-    // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
         acquisition.stop();
     }
 
-    // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Timer.getMatchTime() <= END_TIME;
+        return timer.get() > acqTime;
     }
 }
