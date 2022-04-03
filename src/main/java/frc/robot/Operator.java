@@ -29,11 +29,16 @@ public class Operator {
 
     private boolean prevYButtonState = false;
     private boolean prevUsedLeftJoystick = false;
+    private boolean prevLeftTriggerState = false;
 
     private Operator() {
 
     }
 
+    /**
+     * Add this method to teleopPeriod to receive button presses from the operator
+     * joystick
+     */
     public void periodic() {
         if (operatorJoystick.getYButton() && !prevYButtonState) {
             acquisition.toggleAcqPos();
@@ -72,13 +77,16 @@ public class Operator {
 
         if (operatorJoystick.getLeftButton()) {
             shooter.enable();
-            // shooter.executeHoodPID();
         } else {
             shooter.disable();
         }
 
         if (operatorJoystick.getLeftTriggerDigital()) {
             shooter.feedBall();
+            prevLeftTriggerState = true;
+        } else if (prevLeftTriggerState) {
+            storage.disableManualStorage();
+            prevLeftTriggerState = false;
         }
 
         if (shooter.isFinished() && operatorJoystick.getRightButton()) {

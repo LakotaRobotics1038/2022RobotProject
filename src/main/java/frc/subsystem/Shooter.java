@@ -47,6 +47,7 @@ public class Shooter implements Subsystem {
     private final int COMPRESSION_MOTOR_PORT = 18;
     private final int HOOD_MOTOR_PORT = 12;
     private final int TURRET_MOTOR_PORT = 19;
+    private final double FEED_BALL_SPEED = 0.6;
 
     // Inputs and Outputs
     public TalonFX1038 shooterMotor1 = new TalonFX1038(SHOOTER_MOTOR_PORT1);
@@ -56,15 +57,18 @@ public class Shooter implements Subsystem {
     private RelativeEncoder hoodMotorEncoder = hoodMotor.getEncoder();
     public TalonSRX1038 turretMotor = new TalonSRX1038(TURRET_MOTOR_PORT);
 
-    private final double hoodMaxDistance = 5.5; // inches
-    private final double hoodMaxEncoder = 88;
-    private final double encoderCountsPerInch = hoodMaxEncoder / hoodMaxDistance;
+    // PID Controller Setup
+    // Hood
+    private final double HOOD_MAX_DISTANCE = 5.5; // inches
+    private final double HOOD_MAX_ENCODER = 88;
+    private final double HOOD_ENCODER_COUNTS_PER_INCH = HOOD_MAX_ENCODER / HOOD_MAX_DISTANCE;
     private final double hoodTolerance = .25;
     private final static double hoodP = 0.65;
     private final static double hoodI = 0.03;
     private final static double hoodD = 0.0;
     private PIDController hoodPID = new PIDController(hoodP, hoodI, hoodD);
 
+    // Turret
     private final double positionSetpoint = 0.0;
     private final double positionTolerance = 1;
     private final static double turretP = 0.08; // .15
@@ -72,7 +76,7 @@ public class Shooter implements Subsystem {
     private final static double turretD = 0.0;
     private PIDController turretPID = new PIDController(turretP, turretI, turretD);
 
-    // Speed PID for shooter
+    // Shooter Wheels
     private final double speedTolerance = 1;
     private final static double speedP = 0.005;
     private final static double speedI = 0.0;
@@ -99,7 +103,7 @@ public class Shooter implements Subsystem {
         hoodPID.setTolerance(hoodTolerance);
         hoodPID.disableContinuousInput();
         hoodMotor.setInverted(true);
-        hoodMotorEncoder.setPositionConversionFactor(1 / encoderCountsPerInch);
+        hoodMotorEncoder.setPositionConversionFactor(1 / HOOD_ENCODER_COUNTS_PER_INCH);
         hoodMotorEncoder.setPosition(0);
     }
 
@@ -108,23 +112,16 @@ public class Shooter implements Subsystem {
      */
     public void feedBall() {
         if (isFinished()) {
-            storage.setManualStorage(ManualStorageModes.In);
+            storage.feedShooter(FEED_BALL_SPEED);
         }
     }
 
     /**
-     * stops feeding balls into shooter
-     */
-    public void noFeedBall() {
-        storage.disableManualStorage();
-    }
-
-    /**
-     * disables speed motors and pid
+     * Disables speed motors and pid
      */
     public void disable() {
         isEnabled = false;
-        speedPID.calculate(0.0);
+        speedPID.reset();
         shooterMotor1.stopMotor();
         compressionMotor.stopMotor();
         limelight.changeLEDStatus(LEDStates.Off);
@@ -132,7 +129,7 @@ public class Shooter implements Subsystem {
     }
 
     /**
-     * Zero's the hood
+     * Moves the hood to zero encoder counts
      *
      * @warning Does not reset encoder values; this only works if encoder has been
      *          set correctly.
@@ -145,21 +142,35 @@ public class Shooter implements Subsystem {
         }
     }
 
-    /** Aims the hood */
+    /**
+     * Adjusts the height of the hood based on distance to target
+     */
     private void executeHoodPID() {
-        double setPoint = MathUtil.clamp((limelight.getTargetDistance() / 40), 0, hoodMaxDistance);
+        double setPoint = MathUtil.clamp((limelight.getTargetDistance() / 40), 0, HOOD_MAX_DISTANCE);
         hoodPID.setSetpoint(setPoint);
 
         double power = hoodPID.calculate(hoodMotorEncoder.getPosition());
         hoodMotor.set(power);
     }
 
-    public void moveHoodManually(double speed) {
-        hoodMotor.set(speed);
+    /**
+     * Manually change the position of the hood.
+     * Make sure to call disableHoodPID before using this
+     * or the PID will fight for control
+     *
+     * @param power power to apply to the motor. + goes up, - goes down
+     */
+    public void moveHoodManually(double power) {
+        if (hoodMotorEncoder.getPosition() <= 0 || hoodMotorEncoder.getPosition() >= HOOD_MAX_DISTANCE) {
+            hoodMotor.stopMotor();
+        } else {
+            hoodMotor.set(power);
+        }
     }
 
     /**
-     * aims turret towards target
+     * Use PID and limelight to aim the turret toward the target
+     * This should only be called in shooter.periodic
      */
     private void executeAimPID() {
         double power = turretPID.calculate(limelight.getXOffset());
@@ -172,17 +183,24 @@ public class Shooter implements Subsystem {
         }
     }
 
+    /**
+     * Get the setpoint for the speed PID
+     *
+     * @return the setpoint for the speed PID
+     */
     private double getSpeedSetpoint() {
         Double distance = limelight.getTargetDistance();
         return distance * speedMultiplier;
     }
 
     /**
-     * sets the speed of the shooter
+     * Uses getSpeedSetpoint to get the shooter wheels moving at the appropriate
+     * speed
      */
     private void executeSpeedPID() {
         speedPID.setSetpoint(getSpeedSetpoint());
 
+        // TODO: why is this * 100 here?? - Wes
         double power = speedPID.calculate(getShooterSpeed() * 100);
 
         power = MathUtil.clamp(power, 0, 1);
@@ -190,12 +208,11 @@ public class Shooter implements Subsystem {
         shooterMotor1.set(power);
     }
 
-    // checks if the speedPID is at the setpoint (What speed we want the shooter at)
     /**
+     * Checks if the speedPID is at the setpoint (What speed we want the shooter at)
      *
      * @return if the speed is at it's setpoint.
      */
-
     public boolean speedOnTarget() {
         return speedPID.atSetpoint();
     }
@@ -203,15 +220,15 @@ public class Shooter implements Subsystem {
     /**
      * This is used to shoot manually.
      *
-     * @param speed motor power to give the shooter
+     * @param power motor power to give the shooter
      */
-    public void shootManually(double speed) {
-        shooterMotor1.set(speed);
-        compressionMotor.set(speed);
+    public void shootManually(double power) {
+        shooterMotor1.set(power);
+        compressionMotor.set(power);
     }
 
     /**
-     * Enables the hood, turret, and shooter PIDs
+     * Enables the turret, and shooter PIDs
      */
     public void enable() {
         isEnabled = true;
@@ -228,9 +245,9 @@ public class Shooter implements Subsystem {
     }
 
     /**
-     * decides whether the robot is ready to shoot
+     * Decides whether the robot is ready to shoot
      *
-     * @return returns if robot is ready to shoot
+     * @return is robot ready to shoot
      */
     public boolean isFinished() {
         return turretOnTarget() && speedPID.atSetpoint();
@@ -239,7 +256,7 @@ public class Shooter implements Subsystem {
     /**
      * Determine if the turret is on target
      *
-     * @return whether the turret is on target and limelight can see the target
+     * @return if the turret is on target and limelight can see the target
      */
     public boolean turretOnTarget() {
         return turretPID.atSetpoint() && limelight.canSeeTarget();

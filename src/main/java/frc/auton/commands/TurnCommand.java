@@ -1,8 +1,6 @@
 package frc.auton.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.libraries.DriveTrain1038;
 import frc.libraries.Gyro1038;
@@ -33,9 +31,6 @@ public class TurnCommand extends PIDCommand {
 
         turnPID.enableContinuousInput(0, 360);
         turnPID.setTolerance(TOLERANCE);
-
-        Shuffleboard.getTab("Controls").add("Turn Command PID", turnPID)
-                .withWidget(BuiltInWidgets.kPIDCommand);
     }
 
     @Override

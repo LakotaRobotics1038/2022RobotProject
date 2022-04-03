@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class Acquisition implements Subsystem {
     private static Acquisition acquisition;
 
-    // Motor ports *CHANGE THESE OR ROBOT GETS ANGRY!
     // Ports and Constants
     private final int ACQUISITION_MOTOR_PORT = 9;
     private final int PUSH_OUT_ACQUISITION_CHANNEL = 2;
@@ -20,7 +19,6 @@ public class Acquisition implements Subsystem {
 
     // States
     public AcquisitionStates acquisitionState = AcquisitionStates.In;
-    public boolean XIsPressed = false;
 
     // Inputs and Outputs
     private final CANSparkMax acquisitionMotor = new CANSparkMax(ACQUISITION_MOTOR_PORT, MotorType.kBrushless);
@@ -43,8 +41,9 @@ public class Acquisition implements Subsystem {
         acquisitionSolenoid.set(Value.kReverse);
     }
 
-    // Motor Speeds
-
+    /**
+     * Toggles the extension of acquisition (if in, put out and vise versa)
+     */
     public void toggleAcqPos() {
         switch (acquisitionState) {
             case In:
@@ -59,15 +58,23 @@ public class Acquisition implements Subsystem {
         }
     }
 
+    /**
+     * Runs acquisition to acquire balls
+     */
     public void runFwd() {
-        // If motor is not moving
         acquisitionMotor.set(ACQUISITION_MOTOR_SPEED);
     }
 
+    /**
+     * Runs acquisition to spit balls out
+     */
     public void runRev() {
         acquisitionMotor.set(-ACQUISITION_MOTOR_SPEED);
     }
 
+    /**
+     * Stop running the acquisition
+     */
     public void stop() {
         acquisitionMotor.stopMotor();
     }

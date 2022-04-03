@@ -110,7 +110,7 @@ public class DriveTrain1038 implements Subsystem {
     /**
      * Toggle drive mode between tank, single arcade, and dual arcade
      */
-    public void driveModeToggler() {
+    public void toggleDriveMode() {
         switch (currentDriveMode) {
             case tankDrive:
                 currentDriveMode = DriveModes.singleArcadeDrive;

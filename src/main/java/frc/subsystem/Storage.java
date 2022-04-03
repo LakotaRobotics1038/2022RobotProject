@@ -48,27 +48,36 @@ public class Storage implements Subsystem {
         shuttleMotorEncoder.setPositionConversionFactor(47 / 2);
     }
 
+    /**
+     * Set the mode for manual storage control
+     *
+     * @param mode the mode manual storage should use.
+     *             Do not set ManualStorageModes.None, instead call
+     *             disableManualStorage
+     */
     public void setManualStorage(ManualStorageModes mode) {
         selectedManualStorageMode = mode;
     }
 
+    /**
+     * Sets the manual storage mode to none and stops the shuttle motor.
+     * Make sure this is not called in a loop or it will break automatic storage
+     */
     public void disableManualStorage() {
         selectedManualStorageMode = ManualStorageModes.None;
         shuttleMotor.stopMotor();
     }
 
     /**
-     * feeds the shooter
+     * Feeds balls to the shooter
      *
-     * @param power how fast to feed the shooter
+     * @param power how fast to feed the shooter (always +)
      */
     public void feedShooter(double power) {
-        shuttleMotor.set(power);
+        shuttleMotor.set(Math.abs(power));
     }
 
-    /**
-     * runs the ball storage
-     */
+    @Override
     public void periodic() {
         int laserStart = serial.getStorageLaser2Val();
         int laserEnd = serial.getStorageLaser1Val();

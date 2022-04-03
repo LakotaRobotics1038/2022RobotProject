@@ -32,7 +32,7 @@ public class ShootCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        shooter.noFeedBall();
+        storage.disableManualStorage();
         shooter.disable();
     }
 

@@ -7,9 +7,6 @@ import frc.libraries.Joystick1038;
 public class Driver {
     private static Driver driver;
 
-    private double drivePower = 0;
-    public double multiplier = .5;
-
     public static Driver getInstance() {
         if (driver == null) {
             System.out.println("Creating a new Driver");
@@ -21,10 +18,18 @@ public class Driver {
     public Joystick1038 driverJoystick = new Joystick1038(0);
     private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
 
+    private double drivePower = 0;
+    private double multiplier = .5;
+    private boolean prevSquareButtonState = false;
+
     private Driver() {
 
     }
 
+    /**
+     * Add this method to teleopPeriod to receive button presses from the driver
+     * joystick
+     */
     public void periodic() {
         switch (driveTrain.currentDriveMode) {
             case tankDrive:
@@ -33,6 +38,7 @@ public class Driver {
                 break;
             case dualArcadeDrive:
                 if (driverJoystick.deadband(driverJoystick.getLeftJoystickVertical()) > 0) {
+                    // TODO: What is this extra math for?
                     drivePower = (driverJoystick.getLeftJoystickVertical() - .1) * (1 / .9);
                 } else if (driverJoystick.deadband(driverJoystick.getLeftJoystickVertical()) < 0) {
                     drivePower = (driverJoystick.getLeftJoystickVertical() + .1) * (1 / .9);
@@ -46,6 +52,13 @@ public class Driver {
                 driveTrain.arcadeDrive(driverJoystick.getLeftJoystickVertical() * multiplier,
                         driverJoystick.getLeftJoystickHorizontal() * multiplier);
                 break;
+        }
+
+        if (driverJoystick.getSquareButton() && !prevSquareButtonState) {
+            driveTrain.toggleDriveMode();
+            prevSquareButtonState = true;
+        } else if (prevSquareButtonState && !driverJoystick.getSquareButton()) {
+            prevSquareButtonState = false;
         }
 
         if (driverJoystick.getRightButton() && driverJoystick.getRightTriggerDigital()) {
