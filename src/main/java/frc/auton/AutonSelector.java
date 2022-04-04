@@ -8,6 +8,7 @@ public class AutonSelector {
     public static final String ForwardAuto = "ForwardAuto";
     public static final String ReverseAuto = "ReverseAuto";
     public static final String OneBallAuto = "OneBallAuto";
+    public static final String TwoBallAuto = "TwoBallAuto";
     public static final String None = "None";
 
     public static final String LeftPosition = "L";
@@ -47,6 +48,8 @@ public class AutonSelector {
                 return new ReverseAuton();
             case OneBallAuto:
                 return new OneBallAuton();
+            case TwoBallAuto:
+                return new TwoBallAuton();
             default:
             case None:
                 return null;
