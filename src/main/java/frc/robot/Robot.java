@@ -75,7 +75,9 @@ public class Robot extends TimedRobot {
         driveTrain.setBrakeMode();
         autonPath = autonSelector.chooseAuton();
         gyroSensor.reset();
-        scheduler.schedule(autonPath);
+        if (autonPath != null) {
+            scheduler.schedule(autonPath);
+        }
     }
 
     public void autonomousPeriodic() {

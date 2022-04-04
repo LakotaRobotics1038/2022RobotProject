@@ -30,7 +30,7 @@ public class Shooter implements Subsystem {
     // private Gyro1038 gryo = Gyro1038.getInstance();
     private boolean overrideHoodPID = false;
     private boolean isEnabled = false;
-    private static double swivelSpeed = 0.35;
+    private static double swivelSpeed = 0.2;
     private final double TURRET_POWER_MULTIPLIER = 0.5;
     private final static int LEFT_STOP = 684000; // TODO: Need to change both of these to represent where we have to
     // stop the turret.
@@ -77,7 +77,7 @@ public class Shooter implements Subsystem {
     private PIDController hoodPID = new PIDController(hoodP, hoodI, hoodD);
 
     private final double positionSetpoint = 0.0;
-    private final double positionTolerance = 1;
+    private final double positionTolerance = 10;
     private final static double turretP = 0.08; // .15
     private final static double turretI = 0.0;
     private final static double turretD = 0.0;
@@ -190,11 +190,11 @@ public class Shooter implements Subsystem {
 
     private double getSpeedSetpoint() {
         if (limelight.getTargetDistance() <= 60) {
-            return 300;
+            return 400;
         } else if (limelight.getTargetDistance() <= 120) {
-            return 600;
+            return 700;
         } else if (limelight.getTargetDistance() <= 180) {
-            return 750;
+            return 800;
         } else if (limelight.getTargetDistance() <= 240) {
             return 900;
         } else {
@@ -328,7 +328,7 @@ public class Shooter implements Subsystem {
     /** This was goToCrashPosition. This has been renamed to codeRed */
     public void returnToZero() {
         zeroHood();
-        if (Math.abs(turretMotor.getPosition()) < 12000) {
+        if (Math.abs(turretMotor.getPosition()) < 15000) {
             stopTurret();
         } else if (turretMotor.getPosition() > 0) {
             currentTurretDirection = TurretDirections.Right;
