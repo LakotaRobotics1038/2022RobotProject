@@ -1,6 +1,5 @@
 package frc.subsystem;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -10,30 +9,19 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
-import frc.libraries.DigitalInput1038;
 import frc.libraries.TalonFX1038;
 
 public class Endgame {
 
     // Ports and Constants
-    // Just nakey shafts? --Julian
-    // That's just how I prefer it. --Kristyna
     private final int ELEVATOR_PORT = 62;
-    private final int ROTATOR_PORT = 1;
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
-    public boolean locked = true;
-    private int endgameTop = 160000; // TODO: change encoder counts to correct value
-    private int endgameBottom = 0;
-    private int LIMIT_SWITCH_PORT = 3;
-    // This is from the right side of the robot looking at it with acq facing you.
-    private int rotateLimitLeft = 40000; // TODO: replace this with the actually encoder counts
-    private int rotateLimitRight = -1000;
+    private final int ENDGAME_TOP = 160000;
+    private final double RAISE_ELEVATOR_POWER = 0.4;
+    private final double LOWER_ELEVATOR_POWER = -0.6;
 
     // Inputs and Outputs
-    // private final DigitalInput1038 bottomLimit = new
-    // DigitalInput1038(LIMIT_SWITCH_PORT);
-    private final TalonFX1038 rotatorMotor = new TalonFX1038(ROTATOR_PORT);
     public final TalonFX1038 elevatorMotor = new TalonFX1038(ELEVATOR_PORT);
     private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(
             PneumaticsModuleType.REVPH,
@@ -53,81 +41,69 @@ public class Endgame {
         this.engageRatchet();
         elevatorMotor.setInverted(true);
         elevatorMotor.resetPosition();
-        rotatorMotor.resetPosition();
-        rotatorMotor.setInverted(true);
-        rotatorMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         elevatorMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
                 LimitSwitchNormal.NormallyClosed, 0);
     }
 
-    // Encoders for the Motors
+    /**
+     * Get the current position of the elevator arms
+     *
+     * @return position of the elevator arms in encoder counts
+     */
     public double getElevatorEncoderPosition() {
         return elevatorMotor.getPosition();
     }
 
-    public double getRotatorMotorPosition() {
-        return rotatorMotor.getPosition();
-    }
-
-    public double getRotatorEncoderPosition() {
-        return rotatorMotor.getPosition(); // might need some extra weird math
-    }
-
+    /**
+     * Releases the ratchet the prevents the elevator arms from raising
+     */
     public void releaseRatchet() {
         ratchetSolenoid.set(Value.kForward);
-        locked = false;
     }
 
+    /**
+     * Engages the ratchet the prevents the elevator arms from raising
+     */
     public void engageRatchet() {
         ratchetSolenoid.set(Value.kReverse);
-        locked = true;
     }
 
+    public boolean ratchetIsEngaged() {
+        return ratchetSolenoid.get() == Value.kReverse;
+    }
+
+    /**
+     * Raises the elevator arms after releasing the ratchet,
+     * assuming the arms are not yet at maximum extension
+     */
     public void liftElevator() {
         releaseRatchet();
-        if (!locked && elevatorMotor.getPosition() < endgameTop) {
-            elevatorMotor.set(.4);
+        if (!ratchetIsEngaged() && elevatorMotor.getPosition() < ENDGAME_TOP) {
+            elevatorMotor.set(RAISE_ELEVATOR_POWER);
         } else {
             engageRatchet();
             elevatorMotor.stopMotor();
         }
     }
 
+    /**
+     * Lowers the elevator until it contacts the lower limit switch
+     * and engages the ratchet
+     */
     public void lowerElevator() {
         engageRatchet();
         if (elevatorMotor.isRevLimitSwitchClosed() == 1) {
-            elevatorMotor.set(-.75);
-        } else if (elevatorMotor.isRevLimitSwitchClosed() == 0) {
+            elevatorMotor.set(LOWER_ELEVATOR_POWER);
+        } else {
             elevatorMotor.stopMotor();
             elevatorMotor.resetPosition();
         }
     }
 
+    /**
+     * Stops the elevator motor at its current position
+     */
     public void stopElevator() {
         elevatorMotor.stopMotor();
     }
-
-    public void rotateLeft() {
-        rotatorMotor.setNeutralMode(NeutralMode.Brake);
-        if (rotatorMotor.getPosition() < rotateLimitLeft) {
-            rotatorMotor.set(.1);
-        } else if (rotatorMotor.getPosition() >= rotateLimitLeft) {
-            rotatorMotor.stopMotor();
-        }
-
-    }
-
-    public void rotateRight() {
-        rotatorMotor.setNeutralMode(NeutralMode.Brake);
-        if (rotatorMotor.getPosition() > rotateLimitRight) {
-            rotatorMotor.set(-.1);
-        } else if (rotatorMotor.getPosition() <= rotateLimitRight) {
-            rotatorMotor.stopMotor();
-        }
-    }
-
-    public void stopRotator() {
-        rotatorMotor.stopMotor();
-    }
-
 }

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
@@ -23,7 +24,9 @@ public class DriveTrain1038 implements Subsystem {
 
     // Ports for the motors
     private final double WHEEL_DIAMETER = 6;
-    private final int ENCODER_COUNTS_PER_REVOLUTION = 23700;
+    private final double TALON_COUNTS_PER_REVOLUTION = 2048;
+    private final double GEAR_RATIO = 12.3;
+    private final double ENCODER_COUNTS_PER_REVOLUTION = GEAR_RATIO * TALON_COUNTS_PER_REVOLUTION;
     private final int HIGH_GEAR_PORT = 1;
     private final int LOW_GEAR_PORT = 0;
     private final static int RIGHT_FRONT_PORT = 6;
@@ -56,7 +59,9 @@ public class DriveTrain1038 implements Subsystem {
 
     public DriveTrain1038() {
         leftFrontTalon.setInverted(true);
-        leftBackTalon.setInverted(true);
+        leftBackTalon.setInverted(InvertType.FollowMaster);
+        rightFrontTalon.setInverted(false);
+        rightBackTalon.setInverted(InvertType.FollowMaster);
         leftBackTalon.follow(leftFrontTalon);
         rightBackTalon.follow(rightFrontTalon);
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
@@ -68,7 +73,6 @@ public class DriveTrain1038 implements Subsystem {
      * Get and return distance driven by the left of the robot in inches
      */
     public double getLeftDriveEncoderDistance() {
-        System.out.println("ENCODER " + leftFrontTalon.getPosition());
         return leftFrontTalon.getPosition() / ENCODER_COUNTS_PER_REVOLUTION * Math.PI * WHEEL_DIAMETER;
     }
 
@@ -84,7 +88,7 @@ public class DriveTrain1038 implements Subsystem {
      */
     public void highGear() {
         isHighGear = true;
-        GearChangeSolenoid.set(Value.kForward);
+        GearChangeSolenoid.set(Value.kReverse);
     }
 
     /**
@@ -92,7 +96,7 @@ public class DriveTrain1038 implements Subsystem {
      */
     public void lowGear() {
         isHighGear = false;
-        GearChangeSolenoid.set(Value.kReverse);
+        GearChangeSolenoid.set(Value.kForward);
     }
 
     /**
@@ -106,7 +110,7 @@ public class DriveTrain1038 implements Subsystem {
     /**
      * Toggle drive mode between tank, single arcade, and dual arcade
      */
-    public void driveModeToggler() {
+    public void toggleDriveMode() {
         switch (currentDriveMode) {
             case tankDrive:
                 currentDriveMode = DriveModes.singleArcadeDrive;

@@ -3,7 +3,6 @@ package frc.libraries;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.subsystem.Map1038;
 
 /**
  * Add your docs here.
@@ -11,9 +10,6 @@ import frc.subsystem.Map1038;
 public class Limelight1038 {
     // LimeLight instance
     private static Limelight1038 limelight;
-
-    // Map instance
-    private static Map1038 map = Map1038.getInstance();
 
     // Network table
     private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
@@ -43,16 +39,10 @@ public class Limelight1038 {
         }
     };
 
-    /** Changes the LED state to off. */
     private Limelight1038() {
         changeLEDStatus(LEDStates.Off);
     }
 
-    /**
-     * returns limelight instance when robot is turned on
-     *
-     * @return the limelight instance
-     */
     public static Limelight1038 getInstance() {
         if (limelight == null) {
             System.out.println("Creating limelight");
@@ -67,19 +57,18 @@ public class Limelight1038 {
     }
 
     /**
-     * reads the values from the network table
+     * Reads limelight values from the network table
      */
     public void read() {
         valid_target = tv.getDouble(defaultOffset);
         x = tx.getDouble(defaultOffset);
         y = ty.getDouble(defaultOffset);
-        // System.out.println(valid_target + ", " + x + ", " + y);
     }
 
     /**
-     * tells if robot has acquired the target
+     * Determines if robot has acquired the target
      *
-     * @return whether or not the robot has a target
+     * @return if robot has a target
      */
     public boolean canSeeTarget() {
         valid_target = tv.getDouble(defaultOffset);
@@ -87,7 +76,7 @@ public class Limelight1038 {
     }
 
     /**
-     * how far off center horizontally the robot is
+     * @return How far off center horizontally the robot is
      */
     public double getXOffset() {
         x = tx.getDouble(defaultOffset);
@@ -95,61 +84,30 @@ public class Limelight1038 {
     }
 
     /**
-     * returns how far from center vertically the robot is
-     *
-     * @return distance from center vertically
+     * @return how far from center vertically the robot is
      */
     public double getYOffset() {
-        /*
-         * if they tell me what to do i wont do it
-         * it ha been 5 minutes since they told me to do something
-         * i am starting to wonder if they are all idiots.
-         * drew and sam are talking nerd talk
-         * sam is slacking but still talking nerd
-         * i am very bored and want chocy milk
-         * i won the war over the yard stick
-         * they still have not noticed -Shawn Tomas
-         */
         y = ty.getDouble(defaultOffset);
         return y;
     }
 
-    // public double limelightDistance() {
-    // // gets the angle the limelight is at relative to the hub triangle doohicky
-    // // return map.Z_DIFFERENCE / Math.tan(MOUNTED_ANGLE + getYOffset());
-    // }
-
+    /**
+     * Changes the on/off state of the limelight LEDs
+     *
+     * @param state state to use for the LEDs
+     */
     public void changeLEDStatus(LEDStates state) {
         table.getEntry("ledMode").setDouble(state.value);
     }
 
     /**
-     * @returns the setpoint of the shooter. This is the target value for shooter.
+     * @return the distance from the limelight to the target
      */
-    public double getShooterSetpoint() {
-        // double setpoint = ty.getDouble(defaultOffset);
-        // System.out.println(x);
-        double setpoint = getTargetDistance();
-        // double setpoint = getYOffset();
-
-        return (setpoint);
-    }
-
-    /** @return the motor power that limelight says it should be at. */
-    public double getMotorPower() {
-        double power = ty.getDouble(defaultOffset);
-        // double power = getYOffset();
-        return power * -.00417 + .55;
-    }
-
-    /** @return the distance from the limelight to the target. */
     public double getTargetDistance() {
         // get distance via trig, limelight angle, hub height - limelight height then
         // trig it out
         double distance = actualHeight
                 / Math.abs(Math.tan(((limelightAngle + getYOffset()) * (Math.PI / 180.0))));
-        // System.out.println(Math.tan((limelightAngle + ty.getDouble(defaultOffset) *
-        // (Math.PI / 180.0))));
         return distance;
     }
 }

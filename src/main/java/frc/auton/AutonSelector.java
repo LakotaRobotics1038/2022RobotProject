@@ -1,11 +1,14 @@
 package frc.auton;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.libraries.Dashboard;
+import frc.subsystem.Dashboard;
 
 public class AutonSelector {
     // Path Options
-    public static final String DriveStraight = "DriveStraight";
+    public static final String ForwardAuto = "ForwardAuto";
+    public static final String ReverseAuto = "ReverseAuto";
+    public static final String OneBallAuto = "OneBallAuto";
+    public static final String TwoBallAuto = "TwoBallAuto";
     public static final String None = "None";
 
     public static final String LeftPosition = "L";
@@ -27,15 +30,26 @@ public class AutonSelector {
     }
 
     public SequentialCommandGroup chooseAuton() {
-        String position = Dashboard.getInstance().getSelectedAuton();
-        String autonChooser = Dashboard.getInstance().getPosition();
+        String chosenAuto = Dashboard.getInstance().getSelectedAuton();
+        String position = Dashboard.getInstance().getPosition();
 
         System.out.println("pos: " + position);
-        System.out.println("auto: " + autonChooser);
+        System.out.println("auto: " + chosenAuto);
 
-        switch (autonChooser) {
-            case DriveStraight:
+        if (chosenAuto == null) {
+            System.out.println("Unable to select auton");
+            return null;
+        }
+
+        switch (chosenAuto) {
+            case ForwardAuto:
                 return new ForwardAuton();
+            case ReverseAuto:
+                return new ReverseAuton();
+            case OneBallAuto:
+                return new OneBallAuton();
+            case TwoBallAuto:
+                return new TwoBallAuton();
             default:
             case None:
                 return null;

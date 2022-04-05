@@ -28,11 +28,17 @@ public class Operator {
     private final Storage storage = Storage.getInstance();
 
     private boolean prevYButtonState = false;
+    private boolean prevUsedLeftJoystick = false;
+    private boolean prevLeftTriggerState = false;
 
     private Operator() {
 
     }
 
+    /**
+     * Add this method to teleopPeriod to receive button presses from the operator
+     * joystick
+     */
     public void periodic() {
         if (operatorJoystick.getYButton() && !prevYButtonState) {
             acquisition.toggleAcqPos();
@@ -41,10 +47,10 @@ public class Operator {
             prevYButtonState = false;
         }
 
-        if (operatorJoystick.getLeftButton()) {
-            acquisition.runFwd();
-        } else if (operatorJoystick.getLeftTriggerDigital()) {
-            acquisition.runRev();
+        if (operatorJoystick.getRightButton()) {
+            acquisition.acquire();
+        } else if (operatorJoystick.getRightTriggerDigital()) {
+            acquisition.dispose();
         } else {
             acquisition.stop();
         }
@@ -57,23 +63,18 @@ public class Operator {
             endgame.stopElevator();
         }
 
-        if (operatorJoystick.getRightJoystickHorizontal() <= -.5) {
-            endgame.rotateRight();
-        }
-
-        if (operatorJoystick.getRightJoystickHorizontal() >= .5) {
-            endgame.rotateLeft();
-        }
-
-        if (operatorJoystick.getRightJoystickHorizontal() == 0) {
-            endgame.stopRotator();
-        }
-
-        if (operatorJoystick.getRightButton()) {
+        if (operatorJoystick.getLeftButton()) {
             shooter.enable();
-            // shooter.executeHoodPID();
         } else {
             shooter.disable();
+        }
+
+        if (operatorJoystick.getLeftTriggerDigital()) {
+            shooter.feedBall();
+            prevLeftTriggerState = true;
+        } else if (prevLeftTriggerState) {
+            storage.disableManualStorage();
+            prevLeftTriggerState = false;
         }
 
         if (shooter.isFinished() && operatorJoystick.getRightButton()) {
@@ -84,24 +85,21 @@ public class Operator {
             operatorJoystick.setLeftRumble(0);
         }
 
-        if (operatorJoystick.getRightTriggerDigital()) {
-            shooter.feedBall();
-        }
-
         if (operatorJoystick.getLeftJoystickVertical() > .5) {
             storage.setManualStorage(ManualStorageModes.In);
+            prevUsedLeftJoystick = true;
         } else if (operatorJoystick.getLeftJoystickVertical() < -.5) {
             storage.setManualStorage(ManualStorageModes.Out);
-        } else {
-            storage.setManualStorage(ManualStorageModes.Stop);
-            // storage.disableManualStorage();
+            prevUsedLeftJoystick = true;
+        } else if (prevUsedLeftJoystick) {
+            storage.disableManualStorage();
+            prevUsedLeftJoystick = false;
         }
 
         if (operatorJoystick.getAButton()) {
             shooter.findTarget();
         } else {
             shooter.returnToZero();
-            shooter.zeroHood();
         }
 
         if (operatorJoystick.getPOVPosition() == PovPositions.Left) {

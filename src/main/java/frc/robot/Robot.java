@@ -7,18 +7,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.hal.ControlWord;
+import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.auton.AutonSelector;
-import frc.libraries.Dashboard;
 import frc.libraries.DriveTrain1038;
 import frc.libraries.Gyro1038;
 import frc.libraries.Limelight1038;
 import frc.libraries.Limelight1038.LEDStates;
-import frc.subsystem.Storage;
+import frc.subsystem.SerialComs.RobotStates;
 import frc.subsystem.*;
 
 /*
@@ -32,17 +33,21 @@ public class Robot extends TimedRobot {
     private final int PH_PORT = 1;
     private final int MIN_PRESSURE = 110;
     private final int MAX_PRESSURE = 120;
+    private ControlWord controlWordCache = new ControlWord();
+    private boolean eStopped = false;
+    private boolean disabled = false;
 
     private final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
+    private final Dashboard dashboard = Dashboard.getInstance();
     private final Storage storage = Storage.getInstance();
     private final Shooter shooter = Shooter.getInstance();
     private final DriveTrain1038 driveTrain = DriveTrain1038.getInstance();
     private final Gyro1038 gyroSensor = Gyro1038.getInstance();
+    private final SerialComs serial = SerialComs.getInstance();
     private final CommandScheduler scheduler = CommandScheduler.getInstance();
     private final AutonSelector autonSelector = AutonSelector.getInstance();
     private final Limelight1038 limelight = Limelight1038.getInstance();
     private final Endgame endgame = Endgame.getInstance();
-    private SequentialCommandGroup autonPath;
 
     /*
      * This function is run when the robot is first started up and should be used
@@ -56,13 +61,21 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        Dashboard.getInstance().update();
+        dashboard.periodic();
+        serial.read();
+        if (eStopped) {
+            serial.setRobotState(RobotStates.EmergencyStop);
+        } else if (disabled) {
+            serial.setRobotState(RobotStates.Disabled);
+        }
     }
 
+    @Override
     public void teleopInit() {
         driveTrain.setCoastMode();
     }
 
+    @Override
     public void teleopPeriodic() {
         compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         Driver.getInstance().periodic();
@@ -71,23 +84,35 @@ public class Robot extends TimedRobot {
         shooter.periodic();
     }
 
+    @Override
     public void autonomousInit() {
         driveTrain.setBrakeMode();
-        autonPath = autonSelector.chooseAuton();
+        SequentialCommandGroup autonPath = autonSelector.chooseAuton();
         gyroSensor.reset();
         if (autonPath != null) {
             scheduler.schedule(autonPath);
         }
     }
 
+    @Override
     public void autonomousPeriodic() {
         compressor.enableAnalog(MIN_PRESSURE, MAX_PRESSURE);
         scheduler.run();
     }
 
+    @Override
     public void disabledInit() {
         endgame.engageRatchet();
+        System.out.println("Robot Disabled");
+        HAL.getControlWord(controlWordCache);
+        if (controlWordCache.getEStop()) {
+            eStopped = true;
+        } else {
+            disabled = true;
+        }
     }
+
+    @Override
 
     public void disabledPeriodic() {
     }
