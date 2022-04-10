@@ -223,11 +223,7 @@ public class Joystick1038 extends Joystick {
      * @return value of the left trigger axis
      */
     public boolean getLeftTriggerDigital() {
-        if (getRawAxis(LEFT_TRIGGER) > .5) {
-            return true;
-        } else {
-            return false;
-        }
+        return getRawAxis(LEFT_TRIGGER) > .5;
     }
 
     /**
@@ -236,11 +232,7 @@ public class Joystick1038 extends Joystick {
      * @return value of the right trigger axis
      */
     public boolean getRightTriggerDigital() {
-        if (getRawAxis(RIGHT_TRIGGER) > .5) {
-            return true;
-        } else {
-            return false;
-        }
+        return getRawAxis(RIGHT_TRIGGER) > .5;
     }
 
     /**
@@ -249,9 +241,8 @@ public class Joystick1038 extends Joystick {
      * @param speed the rumble speed between 0.0 and 1.0
      * @return the new speed
      */
-    public double setLeftRumble(double speed) {
+    public void setLeftRumble(double speed) {
         setRumble(GenericHID.RumbleType.kLeftRumble, speed);
-        return speed;
     }
 
     /**
@@ -260,8 +251,7 @@ public class Joystick1038 extends Joystick {
      * @param speed the rumble speed between 0.0 and 1.0
      * @return the new speed
      */
-    public double setRightRumble(double speed) {
+    public void setRightRumble(double speed) {
         setRumble(GenericHID.RumbleType.kRightRumble, speed);
-        return speed;
     }
 }
