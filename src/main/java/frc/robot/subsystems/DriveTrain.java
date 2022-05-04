@@ -20,8 +20,11 @@ public class DriveTrain implements Subsystem {
         tankDrive, singleArcadeDrive, dualArcadeDrive
     }
 
+    public enum GearStates {
+        High, Low
+    }
+
     public DriveModes currentDriveMode = DriveModes.dualArcadeDrive;
-    public boolean isHighGear = false;
 
     // Ports for the motors
     private final double WHEEL_DIAMETER = 6;
@@ -66,7 +69,7 @@ public class DriveTrain implements Subsystem {
         leftBackTalon.follow(leftFrontTalon);
         rightBackTalon.follow(rightFrontTalon);
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
-        this.lowGear();
+        this.setGearState(GearStates.Low);
         this.setCoastMode();
     }
 
@@ -85,19 +88,20 @@ public class DriveTrain implements Subsystem {
     }
 
     /**
-     * Set the drive train to use high gear
+     * Set the gear state to high or low
+     *
+     * @param state the gear state to use
      */
-    public void highGear() {
-        isHighGear = true;
-        GearChangeSolenoid.set(Value.kReverse);
-    }
+    public void setGearState(GearStates state) {
+        switch (state) {
+            case High:
+                GearChangeSolenoid.set(Value.kReverse);
+                break;
+            case Low:
+                GearChangeSolenoid.set(Value.kForward);
+                break;
+        }
 
-    /**
-     * Set the drive train to use low gear
-     */
-    public void lowGear() {
-        isHighGear = false;
-        GearChangeSolenoid.set(Value.kForward);
     }
 
     /**
@@ -109,23 +113,12 @@ public class DriveTrain implements Subsystem {
     }
 
     /**
-     * Toggle drive mode between tank, single arcade, and dual arcade
+     * Sets the current drive mode
+     *
+     * @param newDriveMode the drive mode to be used
      */
-    public void toggleDriveMode() {
-        switch (currentDriveMode) {
-            case tankDrive:
-                currentDriveMode = DriveModes.singleArcadeDrive;
-                break;
-            case singleArcadeDrive:
-                currentDriveMode = DriveModes.dualArcadeDrive;
-                break;
-            case dualArcadeDrive:
-                currentDriveMode = DriveModes.tankDrive;
-                break;
-            default:
-                System.out.println("Help I have fallen and I can't get up!");
-                break;
-        }
+    public void setDriveMode(DriveModes newDriveMode) {
+        currentDriveMode = newDriveMode;
     }
 
     /**

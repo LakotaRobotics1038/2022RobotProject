@@ -2,6 +2,7 @@ package frc.robot.libraries;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Joystick1038 extends XboxController {
     public enum PovPositions {
@@ -13,9 +14,11 @@ public class Joystick1038 extends XboxController {
     public final JoystickButton aButton;
     public final JoystickButton bButton;
     public final JoystickButton leftBumper;
-    public final JoystickButton rightBumper;
     public final JoystickButton leftStick;
+    public final Trigger leftTrigger;
+    public final JoystickButton rightBumper;
     public final JoystickButton rightStick;
+    public final Trigger rightTrigger;
     public final JoystickButton backButton;
     public final JoystickButton startButton;
 
@@ -31,16 +34,18 @@ public class Joystick1038 extends XboxController {
         aButton = new JoystickButton(this, XboxController.Button.kA.value);
         bButton = new JoystickButton(this, XboxController.Button.kB.value);
         leftBumper = new JoystickButton(this, XboxController.Button.kLeftBumper.value);
-        rightBumper = new JoystickButton(this, XboxController.Button.kRightBumper.value);
         leftStick = new JoystickButton(this, XboxController.Button.kLeftStick.value);
+        leftTrigger = new Trigger(this::getLeftTriggerDigital);
+        rightBumper = new JoystickButton(this, XboxController.Button.kRightBumper.value);
         rightStick = new JoystickButton(this, XboxController.Button.kRightStick.value);
+        rightTrigger = new Trigger(this::getRightTriggerDigital);
         backButton = new JoystickButton(this, XboxController.Button.kBack.value);
         startButton = new JoystickButton(this, XboxController.Button.kStart.value);
     }
 
     /**
      * @deprecated
-     * Returns the state of the POV on the controller
+     *             Returns the state of the POV on the controller
      *
      * @return value of POV
      */
