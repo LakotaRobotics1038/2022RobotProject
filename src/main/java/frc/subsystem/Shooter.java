@@ -15,7 +15,6 @@ import frc.libraries.TalonSRX1038;
 import frc.libraries.Limelight1038.LEDStates;
 import frc.libraries.TalonFX1038;
 import frc.libraries.Limelight1038;
-import frc.subsystem.Storage.ManualStorageModes;
 
 public class Shooter implements Subsystem {
     private static Shooter shooter;
@@ -70,7 +69,7 @@ public class Shooter implements Subsystem {
 
     // Turret
     private final double positionSetpoint = 0.0;
-    private final double positionTolerance = 1;
+    private final double positionTolerance = 10;
     private final static double turretP = 0.08; // .15
     private final static double turretI = 0.0;
     private final static double turretD = 0.0;
