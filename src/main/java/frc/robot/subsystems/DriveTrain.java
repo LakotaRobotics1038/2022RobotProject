@@ -51,14 +51,14 @@ public class DriveTrain implements Subsystem {
             HIGH_GEAR_PORT);
 
     private DifferentialDrive differentialDrive;
-    private static DriveTrain driveTrain;
+    private static DriveTrain instance;
 
     public static DriveTrain getInstance() {
-        if (driveTrain == null) {
+        if (instance == null) {
             System.out.println("Creating a new DriveTrain");
-            driveTrain = new DriveTrain();
+            instance = new DriveTrain();
         }
-        return driveTrain;
+        return instance;
     }
 
     private DriveTrain() {

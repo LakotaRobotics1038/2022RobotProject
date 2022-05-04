@@ -22,7 +22,7 @@ public class Gyro1038 implements Gyro {
 
     // Objects
     private I2C I2CBus;
-    private static Gyro1038 gyroSensor;
+    private static Gyro1038 instance;
 
     /**
      * Initializes the gyro to listen to the onboard I2C port at the set address and
@@ -40,11 +40,11 @@ public class Gyro1038 implements Gyro {
      * @return Gyro instance
      */
     public static Gyro1038 getInstance() {
-        if (gyroSensor == null) {
+        if (instance == null) {
             System.out.println("Creating a new Gyro");
-            gyroSensor = new Gyro1038();
+            instance = new Gyro1038();
         }
-        return gyroSensor;
+        return instance;
     }
 
     @Override

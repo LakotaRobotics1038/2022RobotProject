@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  */
 public class Limelight1038 {
     // LimeLight instance
-    private static Limelight1038 limelight;
+    private static Limelight1038 instance;
 
     // Network table
     private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
@@ -44,16 +44,16 @@ public class Limelight1038 {
     }
 
     public static Limelight1038 getInstance() {
-        if (limelight == null) {
+        if (instance == null) {
             System.out.println("Creating limelight");
             try {
-                limelight = new Limelight1038();
+                instance = new Limelight1038();
                 System.out.println("Limelight has been created.");
             } catch (NullPointerException e) {
                 System.out.println("uh-oh " + e);
             }
         }
-        return limelight;
+        return instance;
     }
 
     /**

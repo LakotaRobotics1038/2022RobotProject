@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Acquisition implements Subsystem {
-    private static Acquisition acquisition;
+    private static Acquisition instance;
 
     // Ports and Constants
     private final int ACQUISITION_MOTOR_PORT = 9;
@@ -30,11 +30,11 @@ public class Acquisition implements Subsystem {
     }
 
     public static Acquisition getInstance() {
-        if (acquisition == null) {
+        if (instance == null) {
             System.out.println("Creating a new Acquisition");
-            acquisition = new Acquisition();
+            instance = new Acquisition();
         }
-        return acquisition;
+        return instance;
     }
 
     private Acquisition() {

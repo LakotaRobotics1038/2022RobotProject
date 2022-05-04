@@ -10,7 +10,7 @@ public class SerialComs implements Subsystem {
 
     // Objects
     private static SerialPort serialPort;
-    private static SerialComs rpiCom;
+    private static SerialComs instance;
 
     public enum RobotStates {
         Enabled("A"),
@@ -30,10 +30,10 @@ public class SerialComs implements Subsystem {
      * @return serial coms instance
      */
     public static SerialComs getInstance() {
-        if (rpiCom == null) {
-            rpiCom = new SerialComs();
+        if (instance == null) {
+            instance = new SerialComs();
         }
-        return rpiCom;
+        return instance;
     }
 
     /**

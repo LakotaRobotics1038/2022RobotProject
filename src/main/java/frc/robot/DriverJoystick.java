@@ -8,14 +8,14 @@ import frc.robot.commands.ToggleDriveModeCommand;
 import frc.robot.libraries.Joystick1038;
 
 public class DriverJoystick {
-    private static DriverJoystick driver;
+    private static DriverJoystick instance;
 
     public static DriverJoystick getInstance() {
-        if (driver == null) {
+        if (instance == null) {
             System.out.println("Creating a new Driver");
-            driver = new DriverJoystick();
+            instance = new DriverJoystick();
         }
-        return driver;
+        return instance;
     }
 
     public Joystick1038 driverJoystick = new Joystick1038(0);

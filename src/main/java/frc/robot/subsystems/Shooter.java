@@ -17,7 +17,7 @@ import frc.robot.libraries.TalonFX1038;
 import frc.robot.libraries.Limelight1038;
 
 public class Shooter implements Subsystem {
-    private static Shooter shooter;
+    private static Shooter instance;
     private Storage storage = Storage.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
     private boolean overrideHoodPID = false;
@@ -33,11 +33,11 @@ public class Shooter implements Subsystem {
     }
 
     public static Shooter getInstance() {
-        if (shooter == null) {
+        if (instance == null) {
             System.out.println("Creating a new Shooter");
-            shooter = new Shooter();
+            instance = new Shooter();
         }
-        return shooter;
+        return instance;
     }
 
     // Ports and Constants
@@ -124,7 +124,7 @@ public class Shooter implements Subsystem {
         shooterMotor1.stopMotor();
         compressionMotor.stopMotor();
         limelight.changeLEDStatus(LEDStates.Off);
-        shooter.zeroHood();
+        instance.zeroHood();
     }
 
     /**

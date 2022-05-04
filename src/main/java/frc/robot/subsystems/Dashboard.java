@@ -11,7 +11,7 @@ import frc.robot.libraries.Gyro1038;
 import frc.robot.libraries.Limelight1038;
 
 public class Dashboard implements Subsystem {
-    private static Dashboard dashboard;
+    private static Dashboard instance;
 
     private Shooter shooter = Shooter.getInstance();
     private Gyro1038 gyro = Gyro1038.getInstance();
@@ -45,11 +45,11 @@ public class Dashboard implements Subsystem {
             .getEntry();
 
     public static Dashboard getInstance() {
-        if (dashboard == null) {
+        if (instance == null) {
             System.out.println("Creating a new Dashboard");
-            dashboard = new Dashboard();
+            instance = new Dashboard();
         }
-        return dashboard;
+        return instance;
     }
 
     private Dashboard() {

@@ -25,14 +25,14 @@ public class Endgame {
             PneumaticsModuleType.REVPH,
             RATCHET_ON_PORT,
             RATCHET_OFF_PORT);
-    public static Endgame endgame;
+    public static Endgame instance;
 
     public static Endgame getInstance() {
-        if (endgame == null) {
+        if (instance == null) {
             System.out.println("Creating a new Dashboard");
-            endgame = new Endgame();
+            instance = new Endgame();
         }
-        return endgame;
+        return instance;
     }
 
     private Endgame() {

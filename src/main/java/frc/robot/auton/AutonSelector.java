@@ -16,14 +16,14 @@ public class AutonSelector {
     public static final String RightPosition = "R";
 
     // Fields
-    private static AutonSelector autonSelector;
+    private static AutonSelector instance;
 
     public static AutonSelector getInstance() {
-        if (autonSelector == null) {
+        if (instance == null) {
             System.out.println("Creating new AutonSelector");
-            autonSelector = new AutonSelector();
+            instance = new AutonSelector();
         }
-        return autonSelector;
+        return instance;
     }
 
     private AutonSelector() {

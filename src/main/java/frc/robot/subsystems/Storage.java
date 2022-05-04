@@ -16,7 +16,7 @@ public class Storage implements Subsystem {
     private final int LASER_DISTANCE = 20;
 
     // declares storage
-    private static Storage storage;
+    private static Storage instance;
 
     // Inputs and Outputs
     private CANSparkMax shuttleMotor = new CANSparkMax(SHUTTLE_MOTOR_PORT, MotorType.kBrushless);
@@ -35,11 +35,11 @@ public class Storage implements Subsystem {
      * @return storage instance
      */
     public static Storage getInstance() {
-        if (storage == null) {
+        if (instance == null) {
             System.out.println("creating a new storage");
-            storage = new Storage();
+            instance = new Storage();
         }
-        return storage;
+        return instance;
     }
 
     private Storage() {

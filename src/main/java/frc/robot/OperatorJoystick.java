@@ -9,14 +9,14 @@ import frc.robot.subsystems.Storage;
 import frc.robot.subsystems.Storage.ManualStorageModes;
 
 public class OperatorJoystick {
-    private static OperatorJoystick operator;
+    private static OperatorJoystick instance;
 
     public static OperatorJoystick getInstance() {
-        if (operator == null) {
+        if (instance == null) {
             System.out.println("Creating a new Operator");
-            operator = new OperatorJoystick();
+            instance = new OperatorJoystick();
         }
-        return operator;
+        return instance;
     }
 
     private final int OPERATOR_JOYSTICK_PORT = 1;

@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    private static RobotContainer container;
+    private static RobotContainer instance;
 
     private final int PH_PORT = 1;
     private final int MIN_PRESSURE = 110;
@@ -45,11 +45,11 @@ public class RobotContainer {
     public final Endgame endgame = Endgame.getInstance();
 
     public static RobotContainer getInstance() {
-        if (container == null) {
+        if (instance == null) {
             System.out.println("Creating a new RobotContainer");
-            container = new RobotContainer();
+            instance = new RobotContainer();
         }
-        return container;
+        return instance;
     }
 
     /**
