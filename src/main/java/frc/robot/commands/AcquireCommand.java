@@ -7,7 +7,6 @@ import frc.robot.subsystems.Storage;
 
 public class AcquireCommand extends CommandBase {
     private Acquisition acquisition = Acquisition.getInstance();
-    private Storage storage = Storage.getInstance();
 
     public enum Modes {
         Acquire, Dispose
@@ -27,7 +26,18 @@ public class AcquireCommand extends CommandBase {
     public AcquireCommand(Modes mode, double acqTime) {
         this.mode = mode;
         this.acqTime = acqTime;
-        this.addRequirements(acquisition, storage);
+        this.addRequirements(acquisition);
+    }
+
+    /**
+     * Creates a new Acquire Command
+     *
+     * @param mode    Determines whether the acquisition should acquire or dispose
+     * @param acqTime time to run the wheels for
+     */
+    public AcquireCommand(Modes mode) {
+        this.mode = mode;
+        this.addRequirements(acquisition);
     }
 
     @Override
@@ -39,7 +49,7 @@ public class AcquireCommand extends CommandBase {
                 acquisition.dispose();
         }
 
-        if (!timerRunning) {
+        if (acqTime != 0 && !timerRunning) {
             timerRunning = true;
             timer.start();
         }
@@ -52,6 +62,9 @@ public class AcquireCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.get() > acqTime;
+        if (acqTime != 0) {
+            return timer.get() > acqTime;
+        }
+        return false;
     }
 }

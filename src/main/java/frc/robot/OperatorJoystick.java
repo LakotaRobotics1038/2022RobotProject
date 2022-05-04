@@ -1,8 +1,10 @@
 package frc.robot;
 
+import frc.robot.commands.AcquireCommand;
+import frc.robot.commands.AcquisitionPositionCommand;
+import frc.robot.commands.AcquireCommand.Modes;
 import frc.robot.libraries.Joystick1038;
 import frc.robot.libraries.Joystick1038.PovPositions;
-import frc.robot.subsystems.Acquisition;
 import frc.robot.subsystems.Endgame;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
@@ -22,17 +24,17 @@ public class OperatorJoystick {
     private final int OPERATOR_JOYSTICK_PORT = 1;
 
     public Joystick1038 operatorJoystick = new Joystick1038(OPERATOR_JOYSTICK_PORT);
-    private final Acquisition acquisition = Acquisition.getInstance();
     private final Endgame endgame = Endgame.getInstance();
     private final Shooter shooter = Shooter.getInstance();
     private final Storage storage = Storage.getInstance();
 
-    private boolean prevYButtonState = false;
     private boolean prevUsedLeftJoystick = false;
     private boolean prevLeftTriggerState = false;
 
     private OperatorJoystick() {
-
+        operatorJoystick.yButton.whenPressed(new AcquisitionPositionCommand());
+        operatorJoystick.rightBumper.whileHeld(new AcquireCommand(Modes.Acquire));
+        operatorJoystick.rightTrigger.whileActiveContinuous(new AcquireCommand(Modes.Dispose));
     }
 
     /**
@@ -40,21 +42,6 @@ public class OperatorJoystick {
      * joystick
      */
     public void periodic() {
-        if (operatorJoystick.getYButton() && !prevYButtonState) {
-            acquisition.toggleAcqPos();
-            prevYButtonState = true;
-        } else if (!operatorJoystick.getYButton()) {
-            prevYButtonState = false;
-        }
-
-        if (operatorJoystick.getRightBumper()) {
-            acquisition.acquire();
-        } else if (operatorJoystick.getRightTriggerDigital()) {
-            acquisition.dispose();
-        } else {
-            acquisition.stop();
-        }
-
         if (operatorJoystick.getBButton()) {
             endgame.liftElevator();
         } else if (operatorJoystick.getXButton()) {

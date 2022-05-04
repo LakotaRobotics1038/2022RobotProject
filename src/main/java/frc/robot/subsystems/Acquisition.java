@@ -42,20 +42,20 @@ public class Acquisition implements Subsystem {
     }
 
     /**
-     * Toggles the extension of acquisition (if in, put out and vise versa)
+     * Sets the extension of acquisition
      */
-    public void toggleAcqPos() {
-        switch (acquisitionState) {
+    public void setAcqPos(AcquisitionStates state) {
+        switch (state) {
             case In:
-                acquisitionSolenoid.set(Value.kForward);
-                acquisitionState = AcquisitionStates.Out;
+                acquisitionSolenoid.set(Value.kReverse);
                 break;
 
             case Out:
-                acquisitionSolenoid.set(Value.kReverse);
-                acquisitionState = AcquisitionStates.In;
+                acquisitionSolenoid.set(Value.kForward);
                 break;
         }
+
+        acquisitionState = state;
     }
 
     /**
