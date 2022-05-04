@@ -53,9 +53,9 @@ public class DriverJoystick {
                         },
                         driveTrain));
 
-        driverJoystick.backButton.whenPressed(new ToggleDriveModeCommand(driveTrain));
-        driverJoystick.rightBumper.whenPressed(new SetDriveGearStateCommand(driveTrain, GearStates.High));
-        driverJoystick.rightBumper.whenReleased(new SetDriveGearStateCommand(driveTrain, GearStates.Low));
+        driverJoystick.backButton.whenPressed(new ToggleDriveModeCommand());
+        driverJoystick.rightBumper.whenPressed(new SetDriveGearStateCommand(GearStates.High));
+        driverJoystick.rightBumper.whenReleased(new SetDriveGearStateCommand(GearStates.Low));
         driverJoystick.rightTrigger
                 .and(driverJoystick.rightBumper.negate())
                 .whenActive(() -> multiplier = 0.8);

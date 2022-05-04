@@ -5,10 +5,9 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrain.DriveModes;
 
 public class ToggleDriveModeCommand extends CommandBase {
-    private DriveTrain driveTrain;
+    private DriveTrain driveTrain = DriveTrain.getInstance();
 
-    public ToggleDriveModeCommand(DriveTrain driveTrain) {
-        this.driveTrain = driveTrain;
+    public ToggleDriveModeCommand() {
         this.addRequirements(driveTrain);
     }
 
