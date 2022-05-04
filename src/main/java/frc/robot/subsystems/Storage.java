@@ -36,7 +36,7 @@ public class Storage implements Subsystem {
      */
     public static Storage getInstance() {
         if (instance == null) {
-            System.out.println("creating a new storage");
+            System.out.println("Creating a new storage");
             instance = new Storage();
         }
         return instance;

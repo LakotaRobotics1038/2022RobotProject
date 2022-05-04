@@ -335,7 +335,7 @@ public class Shooter implements Subsystem {
      */
     public void findTarget() {
         limelight.changeLEDStatus(LEDStates.On);
-        // System.out.println("Can see target? " + limelight.canSeeTarget());
+
         if (turretMotor.getPosition() <= RIGHT_STOP) {
             currentTurretDirection = TurretDirections.Left;
             moveTurret();

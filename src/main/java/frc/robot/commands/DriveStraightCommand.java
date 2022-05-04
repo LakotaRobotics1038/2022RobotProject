@@ -35,7 +35,6 @@ public class DriveStraightCommand extends PIDCommand {
                 },
                 drive);
 
-        System.out.println("SP: " + setpoint);
         drivePID = this.m_controller;
         drivePID.setTolerance(TOLERANCE);
         drivePID.disableContinuousInput();
