@@ -15,7 +15,6 @@ import frc.libraries.TalonSRX1038;
 import frc.libraries.Limelight1038.LEDStates;
 import frc.libraries.TalonFX1038;
 import frc.libraries.Limelight1038;
-import frc.subsystem.Storage.ManualStorageModes;
 
 public class Shooter implements Subsystem {
     private static Shooter shooter;
@@ -23,7 +22,6 @@ public class Shooter implements Subsystem {
     private Limelight1038 limelight = Limelight1038.getInstance();
     private boolean overrideHoodPID = false;
     private boolean isEnabled = false;
-    private static double swivelSpeed = 0.2;
     private static double SWIVEL_SPEED = 0.35;
     private final double TURRET_POWER_MULTIPLIER = 0.5;
     private final static int LEFT_STOP = 684000;
