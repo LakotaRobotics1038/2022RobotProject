@@ -46,7 +46,7 @@ public class RobotContainer {
 
     public static RobotContainer getInstance() {
         if (container == null) {
-            System.out.println("Creating a new DriveTrain");
+            System.out.println("Creating a new RobotContainer");
             container = new RobotContainer();
         }
         return container;
