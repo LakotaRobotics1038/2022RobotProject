@@ -24,7 +24,7 @@ import frc.robot.subsystems.SerialComs.RobotStates;
 public class Robot extends TimedRobot {
     private Command autonomousCommand;
 
-    private RobotContainer robotContainer;
+    private RobotContainer robotContainer = RobotContainer.getInstance();
     private ControlWord controlWordCache = new ControlWord();
     private boolean eStopped = false;
     private boolean disabled = false;
@@ -35,9 +35,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        // Instantiate our RobotContainer. This will perform all our button bindings,
-        // and put our autonomous chooser on the dashboard.
-        robotContainer = RobotContainer.getInstance();
         robotContainer.shooter.resetTurretEncoder();
         robotContainer.limelight.changeLEDStatus(LEDStates.Off);
     }
