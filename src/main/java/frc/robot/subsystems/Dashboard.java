@@ -13,6 +13,7 @@ import frc.robot.libraries.Limelight1038;
 public class Dashboard implements Subsystem {
     private static Dashboard instance;
 
+    private Turret turret = Turret.getInstance();
     private Shooter shooter = Shooter.getInstance();
     private Gyro1038 gyro = Gyro1038.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
@@ -72,7 +73,7 @@ public class Dashboard implements Subsystem {
                 .withPosition(0, 1)
                 .withSize(2, 1);
 
-        driversTab.addNumber("Shooter Angle", shooter::getTurretEncoder)
+        driversTab.addNumber("Shooter Angle", turret::getTurretEncoder)
                 .withPosition(2, 2)
                 .withSize(1, 1);
 

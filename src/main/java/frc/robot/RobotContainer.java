@@ -15,6 +15,7 @@ import frc.robot.subsystems.Endgame;
 import frc.robot.subsystems.SerialComs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
+import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
@@ -36,6 +37,7 @@ public class RobotContainer {
     // Subsystems
     public final Dashboard dashboard = Dashboard.getInstance();
     public final Storage storage = Storage.getInstance();
+    public final Turret turret = Turret.getInstance();
     public final Shooter shooter = Shooter.getInstance();
     public final DriveTrain driveTrain = DriveTrain.getInstance();
     public final Gyro1038 gyroSensor = Gyro1038.getInstance();

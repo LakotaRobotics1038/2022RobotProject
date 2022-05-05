@@ -8,6 +8,7 @@ import frc.robot.libraries.Joystick1038.PovPositions;
 import frc.robot.subsystems.Endgame;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
+import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Storage.ManualStorageModes;
 
 public class OperatorJoystick {
@@ -26,6 +27,7 @@ public class OperatorJoystick {
     public Joystick1038 operatorJoystick = new Joystick1038(OPERATOR_JOYSTICK_PORT);
     private final Endgame endgame = Endgame.getInstance();
     private final Shooter shooter = Shooter.getInstance();
+    private final Turret turret = Turret.getInstance();
     private final Storage storage = Storage.getInstance();
 
     private boolean prevUsedLeftJoystick = false;
@@ -84,9 +86,9 @@ public class OperatorJoystick {
         }
 
         if (operatorJoystick.getAButton()) {
-            shooter.findTarget();
+            turret.findTarget();
         } else {
-            shooter.returnToZero();
+            turret.returnToZero();
         }
 
         if (operatorJoystick.getPOVPosition() == PovPositions.Left) {

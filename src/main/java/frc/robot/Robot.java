@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        robotContainer.shooter.resetTurretEncoder();
+        robotContainer.turret.resetTurretEncoder();
         robotContainer.limelight.changeLEDStatus(LEDStates.Off);
     }
 
