@@ -60,6 +60,7 @@ public class RobotContainer {
      */
     private RobotContainer() {
         serial.register();
+        dashboard.register();
         storage.setDefaultCommand(new DefaultStorageCommand());
     }
 
