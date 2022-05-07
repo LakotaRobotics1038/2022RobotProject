@@ -12,7 +12,7 @@ import frc.robot.libraries.Gyro1038;
 import frc.robot.libraries.Limelight1038;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Endgame;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SerialComs;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
@@ -45,7 +45,7 @@ public class RobotContainer {
     public final SerialComs serial = SerialComs.getInstance();
     public final AutonSelector autonSelector = AutonSelector.getInstance();
     public final Limelight1038 limelight = Limelight1038.getInstance();
-    public final Endgame endgame = Endgame.getInstance();
+    public final Elevator elevator = Elevator.getInstance();
 
     public static RobotContainer getInstance() {
         if (instance == null) {

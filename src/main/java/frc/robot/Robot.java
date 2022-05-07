@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
     /** This function is called once each time the robot enters Disabled mode. */
     @Override
     public void disabledInit() {
-        robotContainer.endgame.engageRatchet();
+        robotContainer.elevator.engageRatchet();
         System.out.println("Robot Disabled");
         HAL.getControlWord(controlWordCache);
         if (controlWordCache.getEStop()) {
