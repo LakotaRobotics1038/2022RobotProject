@@ -4,11 +4,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
-import frc.robot.subsystems.Turret;
 
 public class ShootCommand extends CommandBase {
     private final int SECONDS_TO_SHOOT = 3;
-    private Turret turret = Turret.getInstance();
     private Shooter shooter = Shooter.getInstance();
     private Storage storage = Storage.getInstance();
 
@@ -25,7 +23,6 @@ public class ShootCommand extends CommandBase {
 
     @Override
     public void execute() {
-        turret.findTarget();
         shooter.feedBall();
         if (shooter.isFinished()) {
             startTime = Timer.getFPGATimestamp();
