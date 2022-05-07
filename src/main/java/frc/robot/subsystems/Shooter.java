@@ -100,7 +100,7 @@ public class Shooter implements Subsystem {
         shooterMotor1.stopMotor();
         compressionMotor.stopMotor();
         limelight.changeLEDStatus(LEDStates.Off);
-        instance.zeroHood();
+        zeroHood();
     }
 
     /**
