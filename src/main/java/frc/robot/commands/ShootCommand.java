@@ -31,7 +31,7 @@ public class ShootCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        storage.disableManualStorage();
+        storage.stop();
         shooter.disable();
     }
 

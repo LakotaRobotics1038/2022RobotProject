@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.auton.AutonSelector;
+import frc.robot.commands.DefaultStorageCommand;
 import frc.robot.libraries.Gyro1038;
 import frc.robot.libraries.Limelight1038;
 import frc.robot.subsystems.Dashboard;
@@ -58,6 +59,8 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     private RobotContainer() {
+        serial.register();
+        storage.setDefaultCommand(new DefaultStorageCommand());
     }
 
     public SequentialCommandGroup getSelectedAuton() {

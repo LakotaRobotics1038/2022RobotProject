@@ -55,7 +55,8 @@ public class SerialComs implements Subsystem {
     /**
      * Updates sensor values from serial communication
      */
-    public void read() {
+    @Override
+    public void periodic() {
         int bytesToRead = serialPort.getBytesReceived();
 
         if (bytesToRead > 1) {

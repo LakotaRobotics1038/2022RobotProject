@@ -1,17 +1,19 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AcquireCommand;
 import frc.robot.commands.AcquisitionPositionCommand;
 import frc.robot.commands.AimTurretCommand;
+import frc.robot.commands.ManualStorageCommand;
 import frc.robot.commands.ZeroTurretCommand;
 import frc.robot.commands.AcquireCommand.Modes;
+import frc.robot.commands.ManualStorageCommand.ManualStorageModes;
 import frc.robot.libraries.Joystick1038;
 import frc.robot.libraries.Joystick1038.PovPositions;
 import frc.robot.subsystems.Endgame;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
 import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Storage.ManualStorageModes;
 
 public class OperatorJoystick {
     private static OperatorJoystick instance;
@@ -32,7 +34,6 @@ public class OperatorJoystick {
     private final Turret turret = Turret.getInstance();
     private final Storage storage = Storage.getInstance();
 
-    private boolean prevUsedLeftJoystick = false;
     private boolean prevLeftTriggerState = false;
 
     private OperatorJoystick() {
@@ -40,6 +41,10 @@ public class OperatorJoystick {
         operatorJoystick.rightBumper.whileHeld(new AcquireCommand(Modes.Acquire));
         operatorJoystick.rightTrigger.whileActiveContinuous(new AcquireCommand(Modes.Dispose));
         operatorJoystick.aButton.whileHeld(new AimTurretCommand());
+        new Trigger(() -> operatorJoystick.getLeftY() > 0.5)
+                .whileActiveContinuous(new ManualStorageCommand(ManualStorageModes.In));
+        new Trigger(() -> operatorJoystick.getLeftY() < -0.5)
+                .whileActiveContinuous(new ManualStorageCommand(ManualStorageModes.Out));
 
         turret.setDefaultCommand(new ZeroTurretCommand());
     }
@@ -67,7 +72,7 @@ public class OperatorJoystick {
             shooter.feedBall();
             prevLeftTriggerState = true;
         } else if (prevLeftTriggerState) {
-            storage.disableManualStorage();
+            storage.stop();
             prevLeftTriggerState = false;
         }
 
@@ -77,17 +82,6 @@ public class OperatorJoystick {
         } else {
             operatorJoystick.setRightRumble(0);
             operatorJoystick.setLeftRumble(0);
-        }
-
-        if (operatorJoystick.getLeftY() > .5) {
-            storage.setManualStorage(ManualStorageModes.In);
-            prevUsedLeftJoystick = true;
-        } else if (operatorJoystick.getLeftY() < -.5) {
-            storage.setManualStorage(ManualStorageModes.Out);
-            prevUsedLeftJoystick = true;
-        } else if (prevUsedLeftJoystick) {
-            storage.disableManualStorage();
-            prevUsedLeftJoystick = false;
         }
 
         if (operatorJoystick.getPOVPosition() == PovPositions.Left) {
