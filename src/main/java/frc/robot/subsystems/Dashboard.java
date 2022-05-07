@@ -73,7 +73,7 @@ public class Dashboard implements Subsystem {
                 .withPosition(0, 1)
                 .withSize(2, 1);
 
-        driversTab.addNumber("Shooter Angle", turret::getTurretEncoder)
+        driversTab.addNumber("Shooter Angle", turret::getPosition)
                 .withPosition(2, 2)
                 .withSize(1, 1);
 

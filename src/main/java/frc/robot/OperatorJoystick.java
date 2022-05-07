@@ -2,6 +2,8 @@ package frc.robot;
 
 import frc.robot.commands.AcquireCommand;
 import frc.robot.commands.AcquisitionPositionCommand;
+import frc.robot.commands.AimTurretCommand;
+import frc.robot.commands.ZeroTurretCommand;
 import frc.robot.commands.AcquireCommand.Modes;
 import frc.robot.libraries.Joystick1038;
 import frc.robot.libraries.Joystick1038.PovPositions;
@@ -37,6 +39,9 @@ public class OperatorJoystick {
         operatorJoystick.yButton.whenPressed(new AcquisitionPositionCommand());
         operatorJoystick.rightBumper.whileHeld(new AcquireCommand(Modes.Acquire));
         operatorJoystick.rightTrigger.whileActiveContinuous(new AcquireCommand(Modes.Dispose));
+        operatorJoystick.aButton.whileHeld(new AimTurretCommand());
+
+        turret.setDefaultCommand(new ZeroTurretCommand());
     }
 
     /**
@@ -83,12 +88,6 @@ public class OperatorJoystick {
         } else if (prevUsedLeftJoystick) {
             storage.disableManualStorage();
             prevUsedLeftJoystick = false;
-        }
-
-        if (operatorJoystick.getAButton()) {
-            turret.findTarget();
-        } else {
-            turret.returnToZero();
         }
 
         if (operatorJoystick.getPOVPosition() == PovPositions.Left) {

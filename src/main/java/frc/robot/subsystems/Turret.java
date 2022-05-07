@@ -1,20 +1,16 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import frc.robot.libraries.TalonSRX1038;
-import frc.robot.libraries.Limelight1038.LEDStates;
-import frc.robot.libraries.Limelight1038;
 
 public class Turret implements Subsystem {
     private static Turret instance;
-    private Limelight1038 limelight = Limelight1038.getInstance();
     private static double SWIVEL_SPEED = 0.35;
-    private final double TURRET_POWER_MULTIPLIER = 0.5;
     private final static int LEFT_STOP = 684000;
     private final static int RIGHT_STOP = -LEFT_STOP;
-    private TurretDirections currentTurretDirection = TurretDirections.Left;
+    private TurretDirections currentDirection = TurretDirections.Left;
 
     public enum TurretDirections {
         Left, Right
@@ -34,56 +30,20 @@ public class Turret implements Subsystem {
     // Inputs and Outputs
     public TalonSRX1038 turretMotor = new TalonSRX1038(TURRET_MOTOR_PORT);
 
-    // PID Controller Setup
-    // Turret
-    private final double positionSetpoint = 0.0;
-    private final double positionTolerance = 10;
-    private final static double turretP = 0.08; // .15
-    private final static double turretI = 0.0;
-    private final static double turretD = 0.0;
-    private PIDController turretPID = new PIDController(turretP, turretI, turretD);
-
     private Turret() {
-        turretPID.setSetpoint(positionSetpoint);
-        turretPID.setTolerance(positionTolerance);
-        turretPID.disableContinuousInput();
         turretMotor.setSelectedSensorPosition(0);
-    }
-
-    /**
-     * Use PID and limelight to aim the turret toward the target
-     * This should only be called in shooter.periodic
-     */
-    private void executeAimPID() {
-        double power = turretPID.calculate(limelight.getXOffset());
-        if (turretMotor.getPosition() >= LEFT_STOP) {
-            turretMotor.set(-Math.abs(power * TURRET_POWER_MULTIPLIER));
-        } else if (turretMotor.getPosition() <= RIGHT_STOP) {
-            turretMotor.set(Math.abs(power * TURRET_POWER_MULTIPLIER));
-        } else {
-            turretMotor.set(power * TURRET_POWER_MULTIPLIER);
-        }
-    }
-
-    /**
-     * Determine if the turret is on target
-     *
-     * @return if the turret is on target and limelight can see the target
-     */
-    public boolean turretOnTarget() {
-        return turretPID.atSetpoint() && limelight.canSeeTarget();
     }
 
     /**
      * Moves the turret according to currentTurretDirection
      */
-    private void moveTurret() {
-        switch (currentTurretDirection) {
+    public void move() {
+        switch (currentDirection) {
             case Left:
-                turretMotor.set(SWIVEL_SPEED);
+                setPower(SWIVEL_SPEED);
                 break;
             case Right:
-                turretMotor.set(-SWIVEL_SPEED);
+                setPower(-SWIVEL_SPEED);
                 break;
         }
     }
@@ -91,7 +51,7 @@ public class Turret implements Subsystem {
     /**
      * @return The current encoder counts of the turret.
      */
-    public double getTurretEncoder() {
+    public double getPosition() {
         return turretMotor.getPosition();
     }
 
@@ -105,8 +65,27 @@ public class Turret implements Subsystem {
     /**
      * Stops the turret from moving.
      */
-    private void stopTurret() {
+    public void stop() {
         turretMotor.stopMotor();
+    }
+
+    /**
+     * Set the turret motor power.
+     *
+     * @param power
+     */
+    public void setPower(double power) {
+        power = MathUtil.clamp(power, -1, 1);
+
+        if (turretMotor.getPosition() >= LEFT_STOP) {
+            currentDirection = TurretDirections.Right;
+            turretMotor.set(-Math.abs(power));
+        } else if (turretMotor.getPosition() <= RIGHT_STOP) {
+            currentDirection = TurretDirections.Left;
+            turretMotor.set(Math.abs(power));
+        } else {
+            turretMotor.set(power);
+        }
     }
 
     /**
@@ -114,41 +93,16 @@ public class Turret implements Subsystem {
      *
      * @return The turret Direction.
      */
-    public TurretDirections getTurretDirection() {
-        return currentTurretDirection;
+    public TurretDirections getDirection() {
+        return currentDirection;
     }
 
     /**
-     * Returns the hood and turret back to starting position
+     * Sets a new direction for the turret to move
+     *
+     * @param direction
      */
-    public void returnToZero() {
-        if (Math.abs(turretMotor.getPosition()) < 50000) {
-            stopTurret();
-        } else if (turretMotor.getPosition() > 0) {
-            currentTurretDirection = TurretDirections.Right;
-            moveTurret();
-        } else if (turretMotor.getPosition() < 0) {
-            currentTurretDirection = TurretDirections.Left;
-            moveTurret();
-        }
-    }
-
-    /**
-     * Uses limelight to find target
-     */
-    public void findTarget() {
-        limelight.changeLEDStatus(LEDStates.On);
-
-        if (turretMotor.getPosition() <= RIGHT_STOP) {
-            currentTurretDirection = TurretDirections.Left;
-            moveTurret();
-        } else if (turretMotor.getPosition() >= LEFT_STOP) {
-            currentTurretDirection = TurretDirections.Right;
-            moveTurret();
-        } else if (limelight.canSeeTarget()) {
-            executeAimPID();
-        } else {
-            moveTurret();
-        }
+    public void setDirection(TurretDirections direction) {
+        currentDirection = direction;
     }
 }
