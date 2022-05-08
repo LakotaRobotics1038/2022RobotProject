@@ -8,17 +8,15 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
-import frc.robot.libraries.Limelight1038.LEDStates;
 import frc.robot.libraries.TalonFX1038;
 import frc.robot.libraries.Limelight1038;
 
-public class Shooter implements Subsystem {
+public class Shooter extends PIDSubsystem {
     private static Shooter instance;
     private Storage storage = Storage.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
-    private boolean isEnabled = false;
 
     public static Shooter getInstance() {
         if (instance == null) {
@@ -41,14 +39,17 @@ public class Shooter implements Subsystem {
 
     // PID Controller Setup
     // Shooter Wheels
-    private final double speedTolerance = 1;
-    private final static double speedP = 0.005;
-    private final static double speedI = 0.0;
-    private final static double speedD = 0.0;
-    private PIDController speedPID = new PIDController(speedP, speedI, speedD);
+    private final double TOLERANCE = 1;
+    private final static double P = 0.005;
+    private final static double I = 0.0;
+    private final static double D = 0.0;
     public double speedMultiplier = 5.40;
 
     private Shooter() {
+        super(new PIDController(P, I, D));
+        getController().setTolerance(TOLERANCE);
+        getController().disableContinuousInput();
+
         shooterMotor1.setNeutralMode(NeutralMode.Coast);
         shooterMotor2.setNeutralMode(NeutralMode.Coast);
         compressionMotor.setIdleMode(IdleMode.kCoast);
@@ -57,28 +58,15 @@ public class Shooter implements Subsystem {
         shooterMotor2.setInverted(InvertType.OpposeMaster);
         compressionMotor.setInverted(false);
 
-        speedPID.setTolerance(speedTolerance);
-        speedPID.disableContinuousInput();
     }
 
     /**
      * Feeds ball into shooter
      */
     public void feedBall() {
-        if (isFinished()) {
+        if (atSetpoint()) {
             storage.feedShooter(FEED_BALL_SPEED);
         }
-    }
-
-    /**
-     * Disables speed motors and pid
-     */
-    public void disable() {
-        isEnabled = false;
-        speedPID.reset();
-        shooterMotor1.stopMotor();
-        compressionMotor.stopMotor();
-        limelight.changeLEDStatus(LEDStates.Off);
     }
 
     /**
@@ -86,24 +74,21 @@ public class Shooter implements Subsystem {
      *
      * @return the setpoint for the speed PID
      */
-    private double getSpeedSetpoint() {
+    public double getSpeedSetpoint() {
         Double distance = limelight.getTargetDistance();
         return distance * speedMultiplier;
     }
 
-    /**
-     * Uses getSpeedSetpoint to get the shooter wheels moving at the appropriate
-     * speed
-     */
-    private void executeSpeedPID() {
-        speedPID.setSetpoint(getSpeedSetpoint());
+    @Override
+    protected void useOutput(double output, double setpoint) {
+        double power = MathUtil.clamp(output, 0, 1);
+        shootManually(power);
+    }
 
+    @Override
+    protected double getMeasurement() {
         // TODO: why is this * 100 here?? - Wes
-        double power = speedPID.calculate(getShooterSpeed() * 100);
-
-        power = MathUtil.clamp(power, 0, 1);
-        compressionMotor.set(power * .5);
-        shooterMotor1.set(power);
+        return getShooterSpeed() * 100;
     }
 
     /**
@@ -111,8 +96,8 @@ public class Shooter implements Subsystem {
      *
      * @return if the speed is at it's setpoint.
      */
-    public boolean speedOnTarget() {
-        return speedPID.atSetpoint();
+    public boolean atSetpoint() {
+        return getController().atSetpoint();
     }
 
     /**
@@ -121,31 +106,8 @@ public class Shooter implements Subsystem {
      * @param power motor power to give the shooter
      */
     public void shootManually(double power) {
+        compressionMotor.set(power * 0.5);
         shooterMotor1.set(power);
-        compressionMotor.set(power);
-    }
-
-    /**
-     * Enables the shooter PIDs
-     */
-    public void enable() {
-        isEnabled = true;
-    }
-
-    @Override
-    public void periodic() {
-        if (isEnabled) {
-            executeSpeedPID();
-        }
-    }
-
-    /**
-     * Decides whether the shooter wheels are at speed
-     *
-     * @return are shooter wheels at speed
-     */
-    public boolean isFinished() {
-        return speedPID.atSetpoint();
     }
 
     /**
