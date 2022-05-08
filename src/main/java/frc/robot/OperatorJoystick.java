@@ -37,16 +37,23 @@ public class OperatorJoystick {
     private boolean prevLeftTriggerState = false;
 
     private OperatorJoystick() {
+        // Acquisition
         operatorJoystick.yButton.whenPressed(new AcquisitionPositionCommand());
-        operatorJoystick.rightBumper.whileHeld(new AcquireCommand(Modes.Acquire));
-        operatorJoystick.rightTrigger.whileActiveContinuous(new AcquireCommand(Modes.Dispose));
-        operatorJoystick.aButton.whileHeld(new AimTurretCommand());
-        operatorJoystick.bButton.whileHeld(new ElevatorCommand(ManualElevatorModes.Up));
-        operatorJoystick.xButton.whileHeld(new ElevatorCommand(ManualElevatorModes.Down));
+        operatorJoystick.rightBumper.whenHeld(new AcquireCommand(Modes.Acquire));
+        operatorJoystick.rightTrigger.whileActiveOnce(new AcquireCommand(Modes.Dispose));
+
+        // Turret
+        operatorJoystick.aButton.whenHeld(new AimTurretCommand());
+
+        // Elevator
+        operatorJoystick.bButton.whenHeld(new ElevatorCommand(ManualElevatorModes.Up));
+        operatorJoystick.xButton.whenHeld(new ElevatorCommand(ManualElevatorModes.Down));
+
+        // Storage
         new Trigger(() -> operatorJoystick.getLeftY() > 0.5)
-                .whileActiveContinuous(new ManualStorageCommand(ManualStorageModes.In));
+                .whileActiveOnce(new ManualStorageCommand(ManualStorageModes.In));
         new Trigger(() -> operatorJoystick.getLeftY() < -0.5)
-                .whileActiveContinuous(new ManualStorageCommand(ManualStorageModes.Out));
+                .whileActiveOnce(new ManualStorageCommand(ManualStorageModes.Out));
 
         turret.setDefaultCommand(new ZeroTurretCommand());
     }
