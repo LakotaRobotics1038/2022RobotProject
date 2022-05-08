@@ -5,6 +5,7 @@ import frc.robot.commands.AcquireCommand;
 import frc.robot.commands.AcquisitionPositionCommand;
 import frc.robot.commands.AimTurretCommand;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.ManualHoodCommand;
 import frc.robot.commands.ManualStorageCommand;
 import frc.robot.commands.ZeroTurretCommand;
 import frc.robot.commands.AcquireCommand.Modes;
@@ -12,6 +13,7 @@ import frc.robot.commands.ElevatorCommand.ManualElevatorModes;
 import frc.robot.commands.ManualStorageCommand.ManualStorageModes;
 import frc.robot.libraries.Joystick1038;
 import frc.robot.libraries.Joystick1038.PovPositions;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
 import frc.robot.subsystems.Turret;
@@ -28,13 +30,16 @@ public class OperatorJoystick {
     }
 
     private final int OPERATOR_JOYSTICK_PORT = 1;
+    private final double MANUAL_HOOD_INCREMENT = 0.25;
 
     public Joystick1038 operatorJoystick = new Joystick1038(OPERATOR_JOYSTICK_PORT);
     private final Shooter shooter = Shooter.getInstance();
     private final Turret turret = Turret.getInstance();
     private final Storage storage = Storage.getInstance();
+    private final Hood hood = Hood.getInstance();
 
     private boolean prevLeftTriggerState = false;
+    private boolean useManualHood = false;
 
     private OperatorJoystick() {
         // Acquisition
@@ -54,6 +59,16 @@ public class OperatorJoystick {
                 .whileActiveOnce(new ManualStorageCommand(ManualStorageModes.In));
         new Trigger(() -> operatorJoystick.getLeftY() < -0.5)
                 .whileActiveOnce(new ManualStorageCommand(ManualStorageModes.Out));
+
+        // Hood
+        new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Left)
+                .whenActive(() -> useManualHood = true);
+        new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Right)
+                .whenActive(() -> useManualHood = false);
+        new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Up)
+                .whenActive(new ManualHoodCommand(hood.getSetpoint() + MANUAL_HOOD_INCREMENT));
+        new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Down)
+                .whenActive(new ManualHoodCommand(hood.getSetpoint() - MANUAL_HOOD_INCREMENT));
 
         turret.setDefaultCommand(new ZeroTurretCommand());
     }
@@ -83,20 +98,6 @@ public class OperatorJoystick {
         } else {
             operatorJoystick.setRightRumble(0);
             operatorJoystick.setLeftRumble(0);
-        }
-
-        if (operatorJoystick.getPOVPosition() == PovPositions.Left) {
-            shooter.disableHoodPID();
-        } else if (operatorJoystick.getPOVPosition() == PovPositions.Right) {
-            shooter.enableHoodPID();
-        }
-
-        if (operatorJoystick.getPOVPosition() == PovPositions.Up) {
-            shooter.moveHoodManually(0.5);
-        } else if (operatorJoystick.getPOVPosition() == PovPositions.Down) {
-            shooter.moveHoodManually(-0.5);
-        } else {
-            shooter.moveHoodManually(0);
         }
     }
 }

@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -19,7 +18,6 @@ public class Shooter implements Subsystem {
     private static Shooter instance;
     private Storage storage = Storage.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
-    private boolean overrideHoodPID = false;
     private boolean isEnabled = false;
 
     public static Shooter getInstance() {
@@ -34,27 +32,14 @@ public class Shooter implements Subsystem {
     private final int SHOOTER_MOTOR_PORT1 = 14;
     private final int SHOOTER_MOTOR_PORT2 = 13;
     private final int COMPRESSION_MOTOR_PORT = 18;
-    private final int HOOD_MOTOR_PORT = 12;
     private final double FEED_BALL_SPEED = 0.6;
 
     // Inputs and Outputs
     public TalonFX1038 shooterMotor1 = new TalonFX1038(SHOOTER_MOTOR_PORT1);
     public TalonFX1038 shooterMotor2 = new TalonFX1038(SHOOTER_MOTOR_PORT2);
     public CANSparkMax compressionMotor = new CANSparkMax(COMPRESSION_MOTOR_PORT, MotorType.kBrushed);
-    private CANSparkMax hoodMotor = new CANSparkMax(HOOD_MOTOR_PORT, MotorType.kBrushless);
-    private RelativeEncoder hoodMotorEncoder = hoodMotor.getEncoder();
 
     // PID Controller Setup
-    // Hood
-    private final double HOOD_MAX_DISTANCE = 5.5; // inches
-    private final double HOOD_MAX_ENCODER = 88;
-    private final double HOOD_ENCODER_COUNTS_PER_INCH = HOOD_MAX_ENCODER / HOOD_MAX_DISTANCE;
-    private final double hoodTolerance = .25;
-    private final static double hoodP = 0.65;
-    private final static double hoodI = 0.03;
-    private final static double hoodD = 0.0;
-    private PIDController hoodPID = new PIDController(hoodP, hoodI, hoodD);
-
     // Shooter Wheels
     private final double speedTolerance = 1;
     private final static double speedP = 0.005;
@@ -64,7 +49,6 @@ public class Shooter implements Subsystem {
     public double speedMultiplier = 5.40;
 
     private Shooter() {
-
         shooterMotor1.setNeutralMode(NeutralMode.Coast);
         shooterMotor2.setNeutralMode(NeutralMode.Coast);
         compressionMotor.setIdleMode(IdleMode.kCoast);
@@ -75,11 +59,6 @@ public class Shooter implements Subsystem {
 
         speedPID.setTolerance(speedTolerance);
         speedPID.disableContinuousInput();
-        hoodPID.setTolerance(hoodTolerance);
-        hoodPID.disableContinuousInput();
-        hoodMotor.setInverted(true);
-        hoodMotorEncoder.setPositionConversionFactor(1 / HOOD_ENCODER_COUNTS_PER_INCH);
-        hoodMotorEncoder.setPosition(0);
     }
 
     /**
@@ -100,47 +79,6 @@ public class Shooter implements Subsystem {
         shooterMotor1.stopMotor();
         compressionMotor.stopMotor();
         limelight.changeLEDStatus(LEDStates.Off);
-        zeroHood();
-    }
-
-    /**
-     * Moves the hood to zero encoder counts
-     *
-     * @warning Does not reset encoder values; this only works if encoder has been
-     *          set correctly.
-     */
-    public void zeroHood() {
-        if (hoodMotorEncoder.getPosition() > 0) {
-            hoodMotor.set(-.5);
-        } else {
-            hoodMotor.stopMotor();
-        }
-    }
-
-    /**
-     * Adjusts the height of the hood based on distance to target
-     */
-    private void executeHoodPID() {
-        double setPoint = MathUtil.clamp((limelight.getTargetDistance() / 40), 0, HOOD_MAX_DISTANCE);
-        hoodPID.setSetpoint(setPoint);
-
-        double power = hoodPID.calculate(hoodMotorEncoder.getPosition());
-        hoodMotor.set(power);
-    }
-
-    /**
-     * Manually change the position of the hood.
-     * Make sure to call disableHoodPID before using this
-     * or the PID will fight for control
-     *
-     * @param power power to apply to the motor. + goes up, - goes down
-     */
-    public void moveHoodManually(double power) {
-        if (hoodMotorEncoder.getPosition() <= 0 || hoodMotorEncoder.getPosition() >= HOOD_MAX_DISTANCE) {
-            hoodMotor.stopMotor();
-        } else {
-            hoodMotor.set(power);
-        }
     }
 
     /**
@@ -197,9 +135,6 @@ public class Shooter implements Subsystem {
     @Override
     public void periodic() {
         if (isEnabled) {
-            if (!overrideHoodPID) {
-                executeHoodPID();
-            }
             executeSpeedPID();
         }
     }
@@ -220,27 +155,5 @@ public class Shooter implements Subsystem {
      */
     public double getShooterSpeed() {
         return shooterMotor1.getSelectedSensorVelocity() / 2048;
-    }
-
-    /**
-     * @return Hood encoder count in inches.
-     */
-    public double getHoodEncoder() {
-        return hoodMotorEncoder.getPosition();
-    }
-
-    /**
-     * Stops the hoodPID while the shooter is enabled.
-     */
-    public void disableHoodPID() {
-        overrideHoodPID = true;
-        hoodMotor.stopMotor();
-    }
-
-    /**
-     * Allows the hood to work while the shooter is enabled.
-     */
-    public void enableHoodPID() {
-        overrideHoodPID = false;
     }
 }
