@@ -31,17 +31,16 @@ public class Hood extends PIDSubsystem {
     private final double HOOD_MAX_DISTANCE = 5.5; // inches
     private final double HOOD_MAX_ENCODER = 88;
     private final double HOOD_ENCODER_COUNTS_PER_INCH = HOOD_MAX_ENCODER / HOOD_MAX_DISTANCE;
-    private final double hoodTolerance = .25;
-    private final static double hoodP = 0.65;
-    private final static double hoodI = 0.03;
-    private final static double hoodD = 0.0;
-    private PIDController hoodPID;
+    private final double TOLERANCE = .25;
+    private final static double P = 0.65;
+    private final static double I = 0.03;
+    private final static double D = 0.0;
 
     private Hood() {
-        super(new PIDController(hoodP, hoodI, hoodD));
-        hoodPID = getController();
-        hoodPID.setTolerance(hoodTolerance);
-        hoodPID.disableContinuousInput();
+        super(new PIDController(P, I, D));
+        getController().setTolerance(TOLERANCE);
+        getController().disableContinuousInput();
+
         hoodMotor.setInverted(true);
         hoodMotorEncoder.setPositionConversionFactor(1 / HOOD_ENCODER_COUNTS_PER_INCH);
         hoodMotorEncoder.setPosition(0);
