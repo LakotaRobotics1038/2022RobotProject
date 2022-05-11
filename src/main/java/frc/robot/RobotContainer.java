@@ -46,6 +46,8 @@ public class RobotContainer {
     public final AutonSelector autonSelector = AutonSelector.getInstance();
     public final Limelight1038 limelight = Limelight1038.getInstance();
     public final Elevator elevator = Elevator.getInstance();
+    public final DriverJoystick driverJoystick = DriverJoystick.getInstance();
+    public final OperatorJoystick operatorJoystick = OperatorJoystick.getInstance();
 
     public static RobotContainer getInstance() {
         if (instance == null) {
