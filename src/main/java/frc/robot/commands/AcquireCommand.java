@@ -45,8 +45,10 @@ public class AcquireCommand extends CommandBase {
         switch (mode) {
             case Acquire:
                 acquisition.acquire();
+                break;
             case Dispose:
                 acquisition.dispose();
+                break;
         }
 
         if (acqTime != 0 && !timerRunning) {
