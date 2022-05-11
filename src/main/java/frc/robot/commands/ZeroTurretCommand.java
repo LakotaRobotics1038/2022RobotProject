@@ -15,7 +15,9 @@ public class ZeroTurretCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (turret.getPosition() > 0) {
+        if (Math.abs(turret.getPosition()) < TOLERANCE) {
+            turret.stop();
+        } else if (turret.getPosition() > 0) {
             turret.setDirection(TurretDirections.Right);
             turret.move();
         } else if (turret.getPosition() < 0) {
@@ -25,12 +27,7 @@ public class ZeroTurretCommand extends CommandBase {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        turret.stop();
-    }
-
-    @Override
     public boolean isFinished() {
-        return Math.abs(turret.getPosition()) < TOLERANCE;
+        return false;
     }
 }
