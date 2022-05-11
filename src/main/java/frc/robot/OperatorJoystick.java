@@ -73,7 +73,7 @@ public class OperatorJoystick {
                 .whenActive(new ManualHoodCommand(hood.getSetpoint() - MANUAL_HOOD_INCREMENT));
 
         // Shooter
-        operatorJoystick.rightBumper.and(new Trigger(shooter::atSetpoint))
+        operatorJoystick.leftBumper.and(new Trigger(shooter::atSetpoint))
                 .whenActive(() -> {
                     operatorJoystick.setLeftRumble(1);
                     operatorJoystick.setRightRumble(1);
