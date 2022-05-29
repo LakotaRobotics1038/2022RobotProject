@@ -62,6 +62,6 @@ public class DriverJoystick {
         driverJoystick.rightBumper.whenPressed(() -> multiplier = 1.0);
         driverJoystick.rightBumper
                 .and(driverJoystick.rightTrigger)
-                .whenInactive(() -> multiplier = 0.6);
+                .whenInactive(() -> multiplier = 0.5);
     }
 }
