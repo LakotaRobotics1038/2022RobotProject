@@ -23,22 +23,28 @@ public class DriverJoystick {
     private final DriveTrain driveTrain = DriveTrain.getInstance();
 
     private DriverJoystick() {
-        SlewRateLimiter filter = new SlewRateLimiter(0.5);
+        SlewRateLimiter driveFilter = new SlewRateLimiter(0.7);
 
         driveTrain.setDefaultCommand(
                 new RunCommand(
                         () -> {
+                            double leftY = driverJoystick.getLeftY();
+                            if (leftY == 0) {
+                                driveFilter.reset(0);
+                            }
+                            double limitedLeftY = driveFilter.calculate(leftY);
+
                             switch (driveTrain.currentDriveMode) {
                                 case tankDrive:
-                                    driveTrain.tankDrive(filter.calculate(driverJoystick.getLeftY()),
+                                    driveTrain.tankDrive(limitedLeftY,
                                             driverJoystick.getRightY());
                                     break;
                                 case dualArcadeDrive:
-                                    driveTrain.arcadeDrive(filter.calculate(driverJoystick.getLeftY()),
+                                    driveTrain.arcadeDrive(limitedLeftY,
                                             driverJoystick.getRightX());
                                     break;
                                 case singleArcadeDrive:
-                                    driveTrain.arcadeDrive(filter.calculate(driverJoystick.getLeftY()),
+                                    driveTrain.arcadeDrive(limitedLeftY,
                                             driverJoystick.getLeftX());
                                     break;
                             }
