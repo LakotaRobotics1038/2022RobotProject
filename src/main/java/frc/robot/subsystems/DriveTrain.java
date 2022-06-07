@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -68,6 +69,20 @@ public class DriveTrain implements Subsystem {
         rightBackTalon.setInverted(InvertType.FollowMaster);
         leftBackTalon.follow(leftFrontTalon);
         rightBackTalon.follow(rightFrontTalon);
+
+        double currentLimit = 25.0;
+        double triggerThreshholdCurrent = 30.0;
+        double triggerThreshold = 1.0;
+
+        leftBackTalon.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThreshholdCurrent, triggerThreshold));
+        leftFrontTalon.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThreshholdCurrent, triggerThreshold));
+        rightBackTalon.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThreshholdCurrent, triggerThreshold));
+        rightFrontTalon.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThreshholdCurrent, triggerThreshold));
+
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
         this.setGearState(GearStates.Low);
         this.setCoastMode();
