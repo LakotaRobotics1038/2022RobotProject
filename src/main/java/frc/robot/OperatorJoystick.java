@@ -68,8 +68,10 @@ public class OperatorJoystick {
         new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Right)
                 .whenActive(() -> useManualHood = false);
         new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Up)
+                .and(new Trigger(() -> useManualHood))
                 .whenActive(new ManualHoodCommand(ManualHoodModes.Up));
         new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Down)
+                .and(new Trigger(() -> useManualHood))
                 .whenActive(new ManualHoodCommand(ManualHoodModes.Down));
 
         // Shooter
