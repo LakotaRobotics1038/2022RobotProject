@@ -14,6 +14,7 @@ import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ZeroTurretCommand;
 import frc.robot.commands.AcquireCommand.Modes;
 import frc.robot.commands.ElevatorCommand.ManualElevatorModes;
+import frc.robot.commands.ManualHoodCommand.ManualHoodModes;
 import frc.robot.commands.ManualStorageCommand.ManualStorageModes;
 
 import frc.robot.libraries.Joystick1038;
@@ -34,7 +35,6 @@ public class OperatorJoystick {
     }
 
     private final int OPERATOR_JOYSTICK_PORT = 1;
-    private final double MANUAL_HOOD_INCREMENT = 0.25;
 
     public Joystick1038 operatorJoystick = new Joystick1038(OPERATOR_JOYSTICK_PORT);
     private final Shooter shooter = Shooter.getInstance();
@@ -68,9 +68,9 @@ public class OperatorJoystick {
         new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Right)
                 .whenActive(() -> useManualHood = false);
         new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Up)
-                .whenActive(new ManualHoodCommand(hood.getSetpoint() + MANUAL_HOOD_INCREMENT));
+                .whenActive(new ManualHoodCommand(ManualHoodModes.Up));
         new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Down)
-                .whenActive(new ManualHoodCommand(hood.getSetpoint() - MANUAL_HOOD_INCREMENT));
+                .whenActive(new ManualHoodCommand(ManualHoodModes.Down));
 
         // Shooter
         operatorJoystick.leftBumper.and(new Trigger(shooter::atSetpoint))
