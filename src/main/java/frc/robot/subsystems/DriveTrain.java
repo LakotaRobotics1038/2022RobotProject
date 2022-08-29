@@ -71,17 +71,17 @@ public class DriveTrain implements Subsystem {
         rightBackTalon.follow(rightFrontTalon);
 
         double currentLimit = 25.0;
-        double triggerThreshholdCurrent = 30.0;
+        double triggerThresholdCurrent = 30.0;
         double triggerThreshold = 1.0;
 
         leftBackTalon.configStatorCurrentLimit(
-                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThreshholdCurrent, triggerThreshold));
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThresholdCurrent, triggerThreshold));
         leftFrontTalon.configStatorCurrentLimit(
-                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThreshholdCurrent, triggerThreshold));
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThresholdCurrent, triggerThreshold));
         rightBackTalon.configStatorCurrentLimit(
-                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThreshholdCurrent, triggerThreshold));
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThresholdCurrent, triggerThreshold));
         rightFrontTalon.configStatorCurrentLimit(
-                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThreshholdCurrent, triggerThreshold));
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThresholdCurrent, triggerThreshold));
 
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
         this.setGearState(GearStates.Low);
