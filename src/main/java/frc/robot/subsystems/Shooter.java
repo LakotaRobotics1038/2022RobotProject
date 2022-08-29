@@ -57,7 +57,6 @@ public class Shooter extends PIDSubsystem {
         shooterMotor2.follow(shooterMotor1);
         shooterMotor2.setInverted(InvertType.OpposeMaster);
         compressionMotor.setInverted(false);
-
     }
 
     /**
@@ -74,7 +73,8 @@ public class Shooter extends PIDSubsystem {
      *
      * @return the setpoint for the speed PID
      */
-    public double getSpeedSetpoint() {
+    @Override
+    public double getSetpoint() {
         Double distance = limelight.getTargetDistance();
         return distance * speedMultiplier;
     }
