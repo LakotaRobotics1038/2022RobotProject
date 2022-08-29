@@ -85,9 +85,9 @@ public class OperatorJoystick {
                     operatorJoystick.setRightRumble(0);
                 });
         operatorJoystick.leftBumper.and(new Trigger(() -> useManualHood))
-                .whenActive(new ShootCommand());
+                .whileActiveOnce(new ShootCommand());
         operatorJoystick.leftBumper.and(new Trigger(() -> !useManualHood))
-                .whenActive(new ParallelCommandGroup(
+                .whileActiveOnce(new ParallelCommandGroup(
                         new ShootCommand(),
                         new AutomaticHoodCommand()));
         operatorJoystick.leftTrigger.and(operatorJoystick.leftBumper)
