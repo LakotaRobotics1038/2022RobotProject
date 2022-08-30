@@ -83,13 +83,14 @@ public class Elevator implements Subsystem {
      */
     public void setPower(double power) {
         power = MathUtil.clamp(power, -1, 1);
+        boolean limit = getLimitSwitch();
 
         if ((power > 0 && !ratchetIsEngaged() && elevatorMotor.getPosition() < ELEVATOR_TOP) ||
-                (power < 0 && !getLimitSwitch())) {
+                (power < 0 && !limit)) {
             elevatorMotor.set(power);
         } else {
             stop();
-            if (getLimitSwitch()) {
+            if (limit) {
                 elevatorMotor.resetPosition();
             }
         }
