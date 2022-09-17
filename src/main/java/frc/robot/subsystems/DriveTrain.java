@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -70,9 +71,22 @@ public class DriveTrain implements Subsystem {
         leftBackTalon.follow(leftFrontTalon);
         rightBackTalon.follow(rightFrontTalon);
 
-        leftFrontTalon.configOpenloopRamp(SECONDS_FROM_NEUTRAL_TO_FULL);
-        rightFrontTalon.configOpenloopRamp(SECONDS_FROM_NEUTRAL_TO_FULL);
+        double currentLimit = 25.0;
+        double triggerThresholdCurrent = 30.0;
+        double triggerThreshold = 1.0;
 
+        leftBackTalon.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThresholdCurrent, triggerThreshold));
+        leftFrontTalon.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThresholdCurrent, triggerThreshold));
+        rightBackTalon.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThresholdCurrent, triggerThreshold));
+        rightFrontTalon.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, currentLimit, triggerThresholdCurrent, triggerThreshold));
+       
+       leftFrontTalon.configOpenloopRamp(SECONDS_FROM_NEUTRAL_TO_FULL);
+        rightFrontTalon.configOpenloopRamp(SECONDS_FROM_NEUTRAL_TO_FULL);
+        
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
         this.setGearState(GearStates.Low);
         this.setCoastMode();
