@@ -75,7 +75,7 @@ public class DriveTrain implements Subsystem {
 
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
         this.setGearState(GearStates.Low);
-        this.setCoastMode();
+        this.setBrakeMode();
     }
 
     /**
