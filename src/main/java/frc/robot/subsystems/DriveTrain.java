@@ -131,7 +131,7 @@ public class DriveTrain implements Subsystem {
      *                        (-1 to 1)
      */
     public void tankDrive(double leftStickInput, double rightStickInput) {
-        differentialDrive.tankDrive(Math.pow(leftStickInput, 3), Math.pow(rightStickInput, 3), false);
+        differentialDrive.tankDrive(leftStickInput, rightStickInput, true);
     }
 
     /**
@@ -141,7 +141,7 @@ public class DriveTrain implements Subsystem {
      * @param turnValue The turn speed of the robot (-1 to 1)
      */
     public void arcadeDrive(double speed, double turnValue) {
-        differentialDrive.arcadeDrive(Math.pow(speed, 3), Math.pow(turnValue, 3), false);
+        differentialDrive.arcadeDrive(speed, turnValue, true);
     }
 
     /**
