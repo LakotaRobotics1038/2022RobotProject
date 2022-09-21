@@ -43,7 +43,6 @@ public class DriveTrain implements Subsystem {
     final TalonFX1038 rightFrontTalon = new TalonFX1038(RIGHT_FRONT_PORT);
     final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT);
     final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT);
-    private final int SECONDS_FROM_NEUTRAL_TO_FULL = 1;
     private Accelerometer accelerometer = new BuiltInAccelerometer();
 
     public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(
@@ -69,9 +68,6 @@ public class DriveTrain implements Subsystem {
         rightBackTalon.setInverted(InvertType.FollowMaster);
         leftBackTalon.follow(leftFrontTalon);
         rightBackTalon.follow(rightFrontTalon);
-
-        leftFrontTalon.configOpenloopRamp(SECONDS_FROM_NEUTRAL_TO_FULL);
-        rightFrontTalon.configOpenloopRamp(SECONDS_FROM_NEUTRAL_TO_FULL);
 
         differentialDrive = new DifferentialDrive(leftFrontTalon, rightFrontTalon);
         this.setGearState(GearStates.Low);
