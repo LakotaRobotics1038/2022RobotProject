@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrain.GearStates;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.SetDriveGearStateCommand;
 import frc.robot.commands.ToggleDriveModeCommand;
@@ -22,20 +23,28 @@ public class DriverJoystick {
     private final DriveTrain driveTrain = DriveTrain.getInstance();
 
     private DriverJoystick() {
+        SlewRateLimiter driveFilter = new SlewRateLimiter(0.7);
+
         driveTrain.setDefaultCommand(
                 new RunCommand(
                         () -> {
+                            double leftY = driverJoystick.getLeftY();
+                            if (leftY == 0) {
+                                driveFilter.reset(0);
+                            }
+                            double limitedLeftY = driveFilter.calculate(leftY);
+
                             switch (driveTrain.currentDriveMode) {
                                 case tankDrive:
-                                    driveTrain.tankDrive(driverJoystick.getLeftY(),
+                                    driveTrain.tankDrive(limitedLeftY,
                                             driverJoystick.getRightY());
                                     break;
                                 case dualArcadeDrive:
-                                    driveTrain.arcadeDrive(driverJoystick.getLeftY(),
+                                    driveTrain.arcadeDrive(limitedLeftY,
                                             driverJoystick.getRightX());
                                     break;
                                 case singleArcadeDrive:
-                                    driveTrain.arcadeDrive(driverJoystick.getLeftY(),
+                                    driveTrain.arcadeDrive(limitedLeftY,
                                             driverJoystick.getLeftX());
                                     break;
                             }
