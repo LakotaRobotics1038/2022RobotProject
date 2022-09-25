@@ -32,13 +32,13 @@ public class DriverJoystick {
                 new RunCommand(
                         () -> {
                             double leftY = driverJoystick.getLeftY();
-                            if (signChange(leftY, prevLeftY)) {
+                            if (leftY == 0 || signChange(leftY, prevLeftY)) {
                                 driveFilter.reset(0);
                             }
                             double limitedLeftY = driveFilter.calculate(leftY);
 
                             double rightX = driverJoystick.getRightX();
-                            if (signChange(rightX, prevRightX)) {
+                            if (rightX == 0 || signChange(rightX, prevRightX)) {
                                 turnFilter.reset(0);
                             }
                             double limitedRightX = turnFilter.calculate(rightX);
