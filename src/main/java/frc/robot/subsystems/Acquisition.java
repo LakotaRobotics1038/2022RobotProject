@@ -9,25 +9,27 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Acquisition implements Subsystem {
-    private static Acquisition instance;
-
     // Ports and Constants
     private final int ACQUISITION_MOTOR_PORT = 9;
     private final int PUSH_OUT_ACQUISITION_CHANNEL = 2;
     private final int PULL_IN_ACQUISITION_CHANNEL = 3;
     private final double ACQUISITION_MOTOR_SPEED = 1.0;
 
-    // States
-    public AcquisitionStates acquisitionState = AcquisitionStates.In;
-
-    // Inputs and Outputs
+    // Outputs
     private final CANSparkMax acquisitionMotor = new CANSparkMax(ACQUISITION_MOTOR_PORT, MotorType.kBrushless);
     private DoubleSolenoid acquisitionSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
             PUSH_OUT_ACQUISITION_CHANNEL, PULL_IN_ACQUISITION_CHANNEL);
 
+    // Enums
     public enum AcquisitionStates {
         In, Out
     }
+
+    // States
+    public AcquisitionStates acquisitionState = AcquisitionStates.In;
+
+    // Singleton Setup
+    private static Acquisition instance;
 
     public static Acquisition getInstance() {
         if (instance == null) {

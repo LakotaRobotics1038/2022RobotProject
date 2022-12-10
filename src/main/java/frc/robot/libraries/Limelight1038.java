@@ -8,27 +8,24 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  * Add your docs here.
  */
 public class Limelight1038 {
-    // LimeLight instance
-    private static Limelight1038 instance;
+    // Ports and Constants
+    private final double actualHeight = 68; // Inches
+    private final double limelightAngle = 30; // Degrees
+    private final double defaultOffset = 0.0;
 
-    // Network table
+    // Inputs and Outputs
     private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
-    private static NetworkTable table = tableInstance.getTable("limelight");
 
-    // Network table values
+    // States
+    private static NetworkTable table = tableInstance.getTable("limelight");
     private NetworkTableEntry tv = table.getEntry("tv");
     private NetworkTableEntry tx = table.getEntry("tx");
     private NetworkTableEntry ty = table.getEntry("ty");
-
     private double valid_target;
     private double x;
     private double y;
-    private double actualHeight = 68; // Inches
-    private double limelightAngle = 30; // Degrees
 
-    // Offset default value
-    private double defaultOffset = 0.0;
-
+    // Enums
     public enum LEDStates {
         On(0), Off(1);
 
@@ -39,9 +36,8 @@ public class Limelight1038 {
         }
     };
 
-    private Limelight1038() {
-        changeLEDStatus(LEDStates.Off);
-    }
+    // Singleton Setup
+    private static Limelight1038 instance;
 
     public static Limelight1038 getInstance() {
         if (instance == null) {
@@ -53,6 +49,10 @@ public class Limelight1038 {
             }
         }
         return instance;
+    }
+
+    private Limelight1038() {
+        changeLEDStatus(LEDStates.Off);
     }
 
     /**

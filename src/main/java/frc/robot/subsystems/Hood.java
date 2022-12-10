@@ -9,6 +9,25 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 public class Hood extends PIDSubsystem {
+    // Ports and Constants
+    private final int HOOD_MOTOR_PORT = 12;
+
+    // Outputs
+    private CANSparkMax hoodMotor = new CANSparkMax(HOOD_MOTOR_PORT, MotorType.kBrushless);
+
+    // Inputs
+    private RelativeEncoder hoodMotorEncoder = hoodMotor.getEncoder();
+
+    // PID Controller Setup
+    private final double HOOD_MAX_DISTANCE = 5.5; // inches
+    private final double HOOD_MAX_ENCODER = 88;
+    private final double HOOD_ENCODER_COUNTS_PER_INCH = HOOD_MAX_ENCODER / HOOD_MAX_DISTANCE;
+    private final double TOLERANCE = .25;
+    private final static double P = 0.65;
+    private final static double I = 0.03;
+    private final static double D = 0.0;
+
+    // Singleton Setup
     private static Hood instance;
 
     public static Hood getInstance() {
@@ -18,23 +37,6 @@ public class Hood extends PIDSubsystem {
         }
         return instance;
     }
-
-    // Ports and Constants
-    private final int HOOD_MOTOR_PORT = 12;
-
-    // Inputs and Outputs
-    private CANSparkMax hoodMotor = new CANSparkMax(HOOD_MOTOR_PORT, MotorType.kBrushless);
-    private RelativeEncoder hoodMotorEncoder = hoodMotor.getEncoder();
-
-    // PID Controller Setup
-    // Hood
-    private final double HOOD_MAX_DISTANCE = 5.5; // inches
-    private final double HOOD_MAX_ENCODER = 88;
-    private final double HOOD_ENCODER_COUNTS_PER_INCH = HOOD_MAX_ENCODER / HOOD_MAX_DISTANCE;
-    private final double TOLERANCE = .25;
-    private final static double P = 0.65;
-    private final static double I = 0.03;
-    private final static double D = 0.0;
 
     private Hood() {
         super(new PIDController(P, I, D));

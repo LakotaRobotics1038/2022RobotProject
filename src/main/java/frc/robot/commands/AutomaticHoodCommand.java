@@ -6,6 +6,7 @@ import frc.robot.libraries.Limelight1038;
 import frc.robot.subsystems.Hood;
 
 public class AutomaticHoodCommand extends CommandBase {
+    // Subsystem Dependencies
     private Hood hood = Hood.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
 

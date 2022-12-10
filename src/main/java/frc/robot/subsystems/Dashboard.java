@@ -11,29 +11,31 @@ import frc.robot.libraries.Gyro1038;
 import frc.robot.libraries.Limelight1038;
 
 public class Dashboard implements Subsystem {
-    private static Dashboard instance;
-
+    // Inputs
     private Turret turret = Turret.getInstance();
     private Shooter shooter = Shooter.getInstance();
     private Gyro1038 gyro = Gyro1038.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
 
+    // Choosers
     public SendableChooser<String> autoChooser = new SendableChooser<>();
     public SendableChooser<String> startPosition = new SendableChooser<>();
 
+    // Chooser States
     private String position;
     private String autonChooser;
 
+    // Tabs
     private ShuffleboardTab driversTab = Shuffleboard.getTab("Drivers");
     private ShuffleboardTab controlsTab = Shuffleboard.getTab("Controls");
 
-    // Drivers
-    private NetworkTableEntry shooterMult = driversTab.add("Shooter Mult", shooter.speedMultiplier)
+    // Drivers Tab Inputs
+    private NetworkTableEntry shooterMult = driversTab.add("Shooter Mult", shooter.getSpeedMultiplier())
             .withSize(2, 1)
             .withPosition(5, 0)
             .getEntry();
 
-    // Controls
+    // Controls Tab Inputs
     private NetworkTableEntry resetGyro = controlsTab.add("Reset Gyro", false)
             .withSize(1, 1)
             .withPosition(1, 1)
@@ -45,6 +47,9 @@ public class Dashboard implements Subsystem {
             .withWidget(BuiltInWidgets.kToggleButton)
             .getEntry();
 
+    // Singleton Setup
+    private static Dashboard instance;
+
     public static Dashboard getInstance() {
         if (instance == null) {
             System.out.println("Creating a new Dashboard");
@@ -55,7 +60,7 @@ public class Dashboard implements Subsystem {
 
     private Dashboard() {
         Shuffleboard.selectTab("Drivers");
-        // Drivers
+        // Drivers Tab
         autoChooser.setDefaultOption("No Auton", AutonSelector.None);
         autoChooser.addOption("Drive Forward", AutonSelector.ForwardAuto);
         autoChooser.addOption("Drive Backward", AutonSelector.ReverseAuto);
@@ -65,7 +70,6 @@ public class Dashboard implements Subsystem {
         startPosition.addOption("Left", AutonSelector.LeftPosition);
         startPosition.addOption("Right", AutonSelector.RightPosition);
 
-        // Drivers
         driversTab.add("Auton Choices", autoChooser)
                 .withPosition(0, 0)
                 .withSize(2, 1);
@@ -85,7 +89,7 @@ public class Dashboard implements Subsystem {
                 .withPosition(5, 1)
                 .withSize(2, 1);
 
-        // Controls
+        // Controls Tab
         controlsTab.addBoolean("Limelight Target", limelight::canSeeTarget)
                 .withWidget(BuiltInWidgets.kBooleanBox);
 
@@ -96,13 +100,13 @@ public class Dashboard implements Subsystem {
 
     @Override
     public void periodic() {
-        // Drivers
+        // Drivers Tab
         autonChooser = autoChooser.getSelected();
         position = startPosition.getSelected();
 
-        shooter.speedMultiplier = shooterMult.getDouble(shooter.speedMultiplier);
+        shooter.setSpeedMultiplier(shooterMult.getDouble(shooter.getSpeedMultiplier()));
 
-        // Controls
+        // Controls Tab
         if (resetGyro.getBoolean(false)) {
             gyro.reset();
             resetGyro.setBoolean(false);

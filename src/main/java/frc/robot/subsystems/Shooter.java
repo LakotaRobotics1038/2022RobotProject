@@ -14,9 +14,32 @@ import frc.robot.libraries.TalonFX1038;
 import frc.robot.libraries.Limelight1038;
 
 public class Shooter extends PIDSubsystem {
-    private static Shooter instance;
+    // Ports and Constants
+    private final int SHOOTER_MOTOR_PORT1 = 14;
+    private final int SHOOTER_MOTOR_PORT2 = 13;
+    private final int COMPRESSION_MOTOR_PORT = 18;
+    private final double FEED_BALL_SPEED = 0.6;
+
+    // Outputs
+    public TalonFX1038 shooterMotor1 = new TalonFX1038(SHOOTER_MOTOR_PORT1);
+    public TalonFX1038 shooterMotor2 = new TalonFX1038(SHOOTER_MOTOR_PORT2);
+    public CANSparkMax compressionMotor = new CANSparkMax(COMPRESSION_MOTOR_PORT, MotorType.kBrushed);
+
+    // States
+    private double speedMultiplier = 5.40;
+
+    // PID Controller Setup
+    private final double TOLERANCE = 1;
+    private final static double P = 0.005;
+    private final static double I = 0.0;
+    private final static double D = 0.0;
+
+    // Subsystem Dependencies
     private Storage storage = Storage.getInstance();
     private Limelight1038 limelight = Limelight1038.getInstance();
+
+    // Singleton Setup
+    private static Shooter instance;
 
     public static Shooter getInstance() {
         if (instance == null) {
@@ -25,25 +48,6 @@ public class Shooter extends PIDSubsystem {
         }
         return instance;
     }
-
-    // Ports and Constants
-    private final int SHOOTER_MOTOR_PORT1 = 14;
-    private final int SHOOTER_MOTOR_PORT2 = 13;
-    private final int COMPRESSION_MOTOR_PORT = 18;
-    private final double FEED_BALL_SPEED = 0.6;
-
-    // Inputs and Outputs
-    public TalonFX1038 shooterMotor1 = new TalonFX1038(SHOOTER_MOTOR_PORT1);
-    public TalonFX1038 shooterMotor2 = new TalonFX1038(SHOOTER_MOTOR_PORT2);
-    public CANSparkMax compressionMotor = new CANSparkMax(COMPRESSION_MOTOR_PORT, MotorType.kBrushed);
-
-    // PID Controller Setup
-    // Shooter Wheels
-    private final double TOLERANCE = 1;
-    private final static double P = 0.005;
-    private final static double I = 0.0;
-    private final static double D = 0.0;
-    public double speedMultiplier = 5.40;
 
     private Shooter() {
         super(new PIDController(P, I, D));
@@ -117,5 +121,21 @@ public class Shooter extends PIDSubsystem {
      */
     public double getShooterSpeed() {
         return shooterMotor1.getSelectedSensorVelocity() / 2048;
+    }
+
+    /**
+     * Gets the current shooter speed multiplier
+     */
+    public double getSpeedMultiplier() {
+        return speedMultiplier;
+    }
+
+    /**
+     * Sets the multiplier for the shooter speed based off limelight distance
+     *
+     * @param multiplier
+     */
+    public void setSpeedMultiplier(double multiplier) {
+        speedMultiplier = multiplier;
     }
 }

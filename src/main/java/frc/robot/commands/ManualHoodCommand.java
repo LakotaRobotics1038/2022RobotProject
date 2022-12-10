@@ -5,15 +5,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 
 public class ManualHoodCommand extends CommandBase {
-    private Hood hood = Hood.getInstance();
-
-    private ManualHoodModes direction;
-
+    // Constants
     private final double MANUAL_HOOD_INCREMENT = 0.25;
 
+    // Subsystem Dependencies
+    private Hood hood = Hood.getInstance();
+
+    // Enums
     public enum ManualHoodModes {
         Up, Down
     }
+
+    // States
+    private ManualHoodModes direction;
 
     public ManualHoodCommand(ManualHoodModes direction) {
         this.direction = direction;

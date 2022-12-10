@@ -6,7 +6,10 @@ import frc.robot.subsystems.Acquisition;
 import frc.robot.subsystems.Acquisition.AcquisitionStates;
 
 public class AcquisitionPositionCommand extends CommandBase {
+    // Subsystem Dependencies
     private Acquisition acquisition = Acquisition.getInstance();
+
+    // States
     private AcquisitionStates state;
 
     /**

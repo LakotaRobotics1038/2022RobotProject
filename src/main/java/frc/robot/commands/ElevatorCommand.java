@@ -5,16 +5,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
 
 public class ElevatorCommand extends CommandBase {
-    private Elevator elevator = Elevator.getInstance();
-
+    // Constants
     private final double RAISE_ELEVATOR_POWER = 0.4;
     private final double LOWER_ELEVATOR_POWER = -0.6;
 
-    private ManualElevatorModes selectedMode;
+    // Subsystem Dependencies
+    private Elevator elevator = Elevator.getInstance();
 
+    // Enums
     public enum ManualElevatorModes {
         Up, Down
     }
+
+    // States
+    private ManualElevatorModes selectedMode;
 
     public ElevatorCommand(ManualElevatorModes mode) {
         this.selectedMode = mode;

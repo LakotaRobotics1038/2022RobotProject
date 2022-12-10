@@ -7,9 +7,11 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
 
 public class ShootCommand extends CommandBase {
+    // Subsystem Dependencies
     private Shooter shooter = Shooter.getInstance();
     private Storage storage = Storage.getInstance();
 
+    // States
     private double startTime = -1;
     private int secondsToShoot = -1;
 

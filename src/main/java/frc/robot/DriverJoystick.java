@@ -9,6 +9,20 @@ import frc.robot.commands.ToggleDriveModeCommand;
 import frc.robot.libraries.Joystick1038;
 
 public class DriverJoystick {
+    // Ports and Constants
+    private final int DRIVER_JOYSTICK_PORT = 0;
+
+    // Inputs
+    public Joystick1038 driverJoystick = new Joystick1038(DRIVER_JOYSTICK_PORT);
+
+    // Subsystem Dependencies
+    private final DriveTrain driveTrain = DriveTrain.getInstance();
+
+    // Previous Status
+    private double prevLeftY = 0;
+    private double prevRightX = 0;
+
+    // Singleton Setup
     private static DriverJoystick instance;
 
     public static DriverJoystick getInstance() {
@@ -18,11 +32,6 @@ public class DriverJoystick {
         }
         return instance;
     }
-
-    public Joystick1038 driverJoystick = new Joystick1038(0);
-    private final DriveTrain driveTrain = DriveTrain.getInstance();
-    private double prevLeftY = 0;
-    private double prevRightX = 0;
 
     private DriverJoystick() {
         SlewRateLimiter driveFilter = new SlewRateLimiter(1.0);
@@ -67,6 +76,14 @@ public class DriverJoystick {
         driverJoystick.rightBumper.whenReleased(new SetDriveGearStateCommand(GearStates.Low));
     }
 
+    /**
+     * Determines if the two given values are opposite signs
+     * (one positive one negative)
+     *
+     * @param a first value to check sign
+     * @param b second value to check sign
+     * @return are the provided values different signs
+     */
     private boolean signChange(double a, double b) {
         return a > 0 && b < 0 || b > 0 && a < 0;
     }

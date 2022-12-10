@@ -5,15 +5,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Storage;
 
 public class ManualStorageCommand extends CommandBase {
-    private Storage storage = Storage.getInstance();
-
+    // Constants
     private final double SHUTTLE_MOTOR_SPEED = 0.7;
 
-    private ManualStorageModes selectedMode;
+    // Subsystem Dependencies
+    private Storage storage = Storage.getInstance();
 
+    // Enums
     public enum ManualStorageModes {
         In, Out
     }
+
+    // States
+    private ManualStorageModes selectedMode;
 
     public ManualStorageCommand(ManualStorageModes mode) {
         this.selectedMode = mode;

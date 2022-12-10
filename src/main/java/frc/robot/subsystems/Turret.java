@@ -6,15 +6,25 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.libraries.TalonSRX1038;
 
 public class Turret implements Subsystem {
-    private static Turret instance;
-    private static double SWIVEL_SPEED = 0.35;
-    private final static int LEFT_STOP = 684000;
-    private final static int RIGHT_STOP = -LEFT_STOP;
-    private TurretDirections currentDirection = TurretDirections.Left;
+    // Ports and Constants
+    private final int TURRET_MOTOR_PORT = 19;
+    private final double SWIVEL_SPEED = 0.35;
+    private final int LEFT_STOP = 684000;
+    private final int RIGHT_STOP = -LEFT_STOP;
 
+    // Outputs
+    public TalonSRX1038 turretMotor = new TalonSRX1038(TURRET_MOTOR_PORT);
+
+    // Enums
     public enum TurretDirections {
         Left, Right
     }
+
+    // States
+    private TurretDirections currentDirection = TurretDirections.Left;
+
+    // Singleton Setup
+    private static Turret instance;
 
     public static Turret getInstance() {
         if (instance == null) {
@@ -23,12 +33,6 @@ public class Turret implements Subsystem {
         }
         return instance;
     }
-
-    // Ports and Constants
-    private final int TURRET_MOTOR_PORT = 19;
-
-    // Inputs and Outputs
-    public TalonSRX1038 turretMotor = new TalonSRX1038(TURRET_MOTOR_PORT);
 
     private Turret() {
         turretMotor.setSelectedSensorPosition(0);

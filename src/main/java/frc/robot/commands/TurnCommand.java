@@ -7,14 +7,18 @@ import frc.robot.libraries.Gyro1038;
 import frc.robot.subsystems.DriveTrain;
 
 public class TurnCommand extends PIDCommand {
-    private static Gyro1038 gyroSensor = Gyro1038.getInstance();
+    // Subsystem Dependencies
     private static DriveTrain drive = DriveTrain.getInstance();
+
+    // Inputs
+    private static Gyro1038 gyroSensor = Gyro1038.getInstance();
+
+    // PID Controller Setup
+    private PIDController turnPID;
     private final double TOLERANCE = 3.0;
     private final static double P = 0.015;
     private final static double I = 0.000;
     private final static double D = 0.000;
-
-    private PIDController turnPID;
 
     /**
      * Turns to robot to the specified angle.

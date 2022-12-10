@@ -6,11 +6,13 @@ import frc.robot.subsystems.SerialComs;
 import frc.robot.subsystems.Storage;
 
 public class DefaultStorageCommand extends CommandBase {
-    private Storage storage = Storage.getInstance();
-    private SerialComs serial = SerialComs.getInstance();
-
+    // Constants
     private final int LASER_DISTANCE = 20;
     private final double SHUTTLE_MOTOR_SPEED = 0.7;
+
+    // Subsystem Dependencies
+    private Storage storage = Storage.getInstance();
+    private SerialComs serial = SerialComs.getInstance();
 
     public DefaultStorageCommand() {
         this.addRequirements(storage);

@@ -11,20 +11,20 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.libraries.TalonFX1038;
 
 public class Elevator implements Subsystem {
-
     // Ports and Constants
     private final int ELEVATOR_MOTOR_PORT = 62;
     private final int RATCHET_ON_PORT = 4;
     private final int RATCHET_OFF_PORT = 5;
     private final int ELEVATOR_TOP = 160000;
 
-    // Inputs and Outputs
+    // Outputs
     public final TalonFX1038 elevatorMotor = new TalonFX1038(ELEVATOR_MOTOR_PORT);
     private final DoubleSolenoid ratchetSolenoid = new DoubleSolenoid(
             PneumaticsModuleType.REVPH,
             RATCHET_ON_PORT,
             RATCHET_OFF_PORT);
 
+    // Singleton Setup
     public static Elevator instance;
 
     public static Elevator getInstance() {

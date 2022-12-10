@@ -8,20 +8,26 @@ import frc.robot.libraries.Gyro1038;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveStraightCommand extends PIDCommand {
-
+    // Constants
+    private final static int INCHES_IN_FOOT = 12;
     private final double TOLERANCE = 0;
     private final double MAX_OUTPUT = .5;
-    private final static int INCHES_IN_FOOT = 12;
+
+    // Subsystem Dependencies
+    private static Gyro1038 gyroSensor = Gyro1038.getInstance();
+    private static DriveTrain drive = DriveTrain.getInstance();
+
+    // PID Controller Setup (Drive)
+    private PIDController drivePID;
     private final static double dP = 0.100; // .04 proto
     private final static double dI = 0.000;
     private final static double dD = 0.000;
+
+    // PID Controller Setup (Turn)
+    private PIDController turnPID = new PIDController(tP, tI, tD);
     private final static double tP = 0.020; // .23 proto
     private final static double tI = 0.000;
     private final static double tD = 0.000;
-    private static Gyro1038 gyroSensor = Gyro1038.getInstance();
-    private static DriveTrain drive = DriveTrain.getInstance();
-    private PIDController drivePID;
-    private PIDController turnPID = new PIDController(tP, tI, tD);
 
     /**
      * Drive the robot straight

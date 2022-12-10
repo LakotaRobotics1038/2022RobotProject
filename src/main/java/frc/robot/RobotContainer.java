@@ -27,15 +27,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    private static RobotContainer instance;
-
+    // Ports and Constants
     private final int PH_PORT = 1;
     private final int MIN_PRESSURE = 110;
     private final int MAX_PRESSURE = 120;
 
+    // Compressor Setup
     public final Compressor compressor = new Compressor(PH_PORT, PneumaticsModuleType.REVPH);
 
-    // Subsystems
+    // Subsystem Dependencies
     public final Dashboard dashboard = Dashboard.getInstance();
     public final Storage storage = Storage.getInstance();
     public final Turret turret = Turret.getInstance();
@@ -48,6 +48,9 @@ public class RobotContainer {
     public final Elevator elevator = Elevator.getInstance();
     public final DriverJoystick driverJoystick = DriverJoystick.getInstance();
     public final OperatorJoystick operatorJoystick = OperatorJoystick.getInstance();
+
+    // Singleton Setup
+    private static RobotContainer instance;
 
     public static RobotContainer getInstance() {
         if (instance == null) {

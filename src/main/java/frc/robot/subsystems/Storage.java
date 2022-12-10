@@ -11,18 +11,15 @@ public class Storage implements Subsystem {
     // Ports and Constants
     private final int SHUTTLE_MOTOR_PORT = 17;
 
-    // declares storage
-    private static Storage instance;
-
-    // Inputs and Outputs
+    // Outputs
     private CANSparkMax shuttleMotor = new CANSparkMax(SHUTTLE_MOTOR_PORT, MotorType.kBrushless);
+
+    // Inputs
     private RelativeEncoder shuttleMotorEncoder = shuttleMotor.getEncoder();
 
-    /**
-     * returns the storage instance when the robot starts
-     *
-     * @return storage instance
-     */
+    // Singleton Setup
+    private static Storage instance;
+
     public static Storage getInstance() {
         if (instance == null) {
             System.out.println("Creating a new storage");

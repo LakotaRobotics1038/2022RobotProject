@@ -4,14 +4,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class SerialComs implements Subsystem {
-    // Sensors
-    public int storageLaser1 = -1;
-    public int storageLaser2 = -1;
-
-    // Objects
-    private static SerialPort serialPort;
-    private static SerialComs instance;
-
+    // Enums
     public enum RobotStates {
         Enabled("A"),
         Disabled("D"),
@@ -24,11 +17,16 @@ public class SerialComs implements Subsystem {
         }
     }
 
-    /**
-     * Returns the serial coms instance
-     *
-     * @return serial coms instance
-     */
+    // Sensor States
+    public int storageLaser1 = -1;
+    public int storageLaser2 = -1;
+
+    // Inputs and Outputs
+    private SerialPort serialPort;
+
+    // Singleton Setup
+    private static SerialComs instance;
+
     public static SerialComs getInstance() {
         if (instance == null) {
             instance = new SerialComs();

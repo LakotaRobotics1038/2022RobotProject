@@ -6,7 +6,10 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrain.GearStates;
 
 public class SetDriveGearStateCommand extends CommandBase {
+    // Subsystem Dependencies
     private DriveTrain driveTrain = DriveTrain.getInstance();
+
+    // States
     private GearStates state;
 
     public SetDriveGearStateCommand(GearStates state) {

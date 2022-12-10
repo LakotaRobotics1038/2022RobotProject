@@ -22,12 +22,14 @@ import frc.robot.subsystems.SerialComs.RobotStates;
  * project.
  */
 public class Robot extends TimedRobot {
-    private Command autonomousCommand;
-
-    private RobotContainer robotContainer = RobotContainer.getInstance();
-    private ControlWord controlWordCache = new ControlWord();
+    // States
+    private Command selectedAutonomousCommand;
     private boolean eStopped = false;
     private boolean disabled = false;
+    private ControlWord controlWordCache = new ControlWord();
+
+    // Robot Container
+    private RobotContainer robotContainer = RobotContainer.getInstance();
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -88,11 +90,11 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        autonomousCommand = robotContainer.getSelectedAuton();
+        selectedAutonomousCommand = robotContainer.getSelectedAuton();
 
         // schedule the autonomous command (example)
-        if (autonomousCommand != null) {
-            autonomousCommand.schedule();
+        if (selectedAutonomousCommand != null) {
+            selectedAutonomousCommand.schedule();
         }
     }
 
@@ -108,8 +110,8 @@ public class Robot extends TimedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (autonomousCommand != null) {
-            autonomousCommand.cancel();
+        if (selectedAutonomousCommand != null) {
+            selectedAutonomousCommand.cancel();
         }
     }
 

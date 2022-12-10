@@ -6,15 +6,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Acquisition;
 
 public class AcquireCommand extends CommandBase {
+    // Subsystem Dependencies
     private Acquisition acquisition = Acquisition.getInstance();
 
+    // Enums
     public enum Modes {
         Acquire, Dispose
     };
 
+    // States
     private Modes mode;
     private double acqTime;
     private boolean timerRunning = false;
+
+    // Timer
     private Timer timer = new Timer();
 
     /**

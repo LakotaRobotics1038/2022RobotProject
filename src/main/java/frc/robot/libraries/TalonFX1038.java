@@ -18,10 +18,6 @@ public class TalonFX1038 extends TalonFX implements MotorController {
         this.setStatusFramePeriod(StatusFrame.Status_17_Targets1, 255);
     }
 
-    public void pidWrite(double output) {
-        set(output);
-    }
-
     @Override
     public void set(double speed) {
         super.set(super.getControlMode(), speed);
@@ -52,14 +48,27 @@ public class TalonFX1038 extends TalonFX implements MotorController {
         super.set(super.getControlMode(), 0);
     }
 
+    /**
+     * Gets the position of the built-in encoder
+     * 
+     * @return current position of the built-in encoder
+     */
     public double getPosition() {
         return super.getSelectedSensorPosition();
     }
 
+    /**
+     * Sets the position of the built-in encoder
+     * 
+     * @param i number of counts to set the encoder to
+     */
     public void setPosition(int i) {
         super.setSelectedSensorPosition(i);
     }
 
+    /**
+     * Resets the position of the built-in encoder to 0
+     */
     public void resetPosition() {
         setPosition(0);
     }

@@ -6,8 +6,11 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Turret.TurretDirections;
 
 public class ZeroTurretCommand extends CommandBase {
-    private Turret turret = Turret.getInstance();
+    // Constants
     private static final int TOLERANCE = 50000;
+
+    // Subsystem Dependencies
+    private Turret turret = Turret.getInstance();
 
     public ZeroTurretCommand() {
         this.addRequirements(turret);

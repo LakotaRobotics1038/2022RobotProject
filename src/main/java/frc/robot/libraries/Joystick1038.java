@@ -5,10 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Joystick1038 extends XboxController {
-    public enum PovPositions {
-        Up, Down, Left, Right, None
-    }
-
+    // Buttons
     public final JoystickButton xButton;
     public final JoystickButton yButton;
     public final JoystickButton aButton;
@@ -21,6 +18,11 @@ public class Joystick1038 extends XboxController {
     public final Trigger rightTrigger;
     public final JoystickButton backButton;
     public final JoystickButton startButton;
+
+    // Enums
+    public enum PovPositions {
+        Up, Down, Left, Right, None
+    }
 
     /**
      * Creates a new Xbox joystick object

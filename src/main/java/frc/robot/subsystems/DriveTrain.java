@@ -26,23 +26,25 @@ public class DriveTrain implements Subsystem {
 
     public DriveModes currentDriveMode = DriveModes.dualArcadeDrive;
 
-    // Ports for the motors
+    // Ports and Constants
     private final double WHEEL_DIAMETER = 6;
     private final double TALON_COUNTS_PER_REVOLUTION = 2048;
     private final double GEAR_RATIO = 12.3;
     private final double ENCODER_COUNTS_PER_REVOLUTION = GEAR_RATIO * TALON_COUNTS_PER_REVOLUTION;
     private final int HIGH_GEAR_PORT = 1;
     private final int LOW_GEAR_PORT = 0;
-    private final static int RIGHT_FRONT_PORT = 6;
-    private final static int RIGHT_BACK_PORT = 7;
-    private final static int LEFT_FRONT_PORT = 4;
-    private final static int LEFT_BACK_PORT = 5;
+    private final int RIGHT_FRONT_PORT = 6;
+    private final int RIGHT_BACK_PORT = 7;
+    private final int LEFT_FRONT_PORT = 4;
+    private final int LEFT_BACK_PORT = 5;
 
-    // Wheel Motors
-    final TalonFX1038 leftFrontTalon = new TalonFX1038(LEFT_FRONT_PORT);
-    final TalonFX1038 rightFrontTalon = new TalonFX1038(RIGHT_FRONT_PORT);
-    final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT);
-    final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT);
+    // Outputs
+    private final TalonFX1038 leftFrontTalon = new TalonFX1038(LEFT_FRONT_PORT);
+    private final TalonFX1038 rightFrontTalon = new TalonFX1038(RIGHT_FRONT_PORT);
+    private final TalonFX1038 leftBackTalon = new TalonFX1038(LEFT_BACK_PORT);
+    private final TalonFX1038 rightBackTalon = new TalonFX1038(RIGHT_BACK_PORT);
+
+    // Inputs
     private Accelerometer accelerometer = new BuiltInAccelerometer();
 
     public DoubleSolenoid GearChangeSolenoid = new DoubleSolenoid(

@@ -19,11 +19,23 @@ import frc.robot.commands.ManualStorageCommand.ManualStorageModes;
 
 import frc.robot.libraries.Joystick1038;
 import frc.robot.libraries.Joystick1038.PovPositions;
-import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
 public class OperatorJoystick {
+    // Ports and Constants
+    private final int OPERATOR_JOYSTICK_PORT = 1;
+
+    // Inputs
+    public Joystick1038 operatorJoystick = new Joystick1038(OPERATOR_JOYSTICK_PORT);
+
+    // Subsystem Dependencies
+    private final Shooter shooter = Shooter.getInstance();
+    private final Turret turret = Turret.getInstance();
+
+    private boolean useManualHood = false;
+
+    // Singleton Setup
     private static OperatorJoystick instance;
 
     public static OperatorJoystick getInstance() {
@@ -33,15 +45,6 @@ public class OperatorJoystick {
         }
         return instance;
     }
-
-    private final int OPERATOR_JOYSTICK_PORT = 1;
-
-    public Joystick1038 operatorJoystick = new Joystick1038(OPERATOR_JOYSTICK_PORT);
-    private final Shooter shooter = Shooter.getInstance();
-    private final Turret turret = Turret.getInstance();
-    private final Hood hood = Hood.getInstance();
-
-    private boolean useManualHood = false;
 
     private OperatorJoystick() {
         // Acquisition
