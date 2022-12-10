@@ -37,7 +37,7 @@ public class DriveStraightCommand extends PIDCommand {
     public DriveStraightCommand(double setpoint) {
         super(new PIDController(dP, dI, dD),
                 drive::getLeftDriveEncoderDistance,
-                0,
+                setpoint * INCHES_IN_FOOT,
                 output -> {
                 },
                 drive);
@@ -45,7 +45,6 @@ public class DriveStraightCommand extends PIDCommand {
         drivePID = this.m_controller;
         drivePID.setTolerance(TOLERANCE);
         drivePID.disableContinuousInput();
-        drivePID.setSetpoint(setpoint * INCHES_IN_FOOT);
 
         // Angle
         turnPID.setTolerance(TOLERANCE);
