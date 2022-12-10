@@ -50,7 +50,7 @@ public class TalonFX1038 extends TalonFX implements MotorController {
 
     /**
      * Gets the position of the built-in encoder
-     * 
+     *
      * @return current position of the built-in encoder
      */
     public double getPosition() {
@@ -59,7 +59,7 @@ public class TalonFX1038 extends TalonFX implements MotorController {
 
     /**
      * Sets the position of the built-in encoder
-     * 
+     *
      * @param i number of counts to set the encoder to
      */
     public void setPosition(int i) {

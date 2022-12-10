@@ -33,6 +33,7 @@ public class OperatorJoystick {
     private final Shooter shooter = Shooter.getInstance();
     private final Turret turret = Turret.getInstance();
 
+    // States
     private boolean useManualHood = false;
 
     // Singleton Setup
