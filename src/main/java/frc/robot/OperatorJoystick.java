@@ -1,17 +1,20 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+// import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.AcquireCommand;
 import frc.robot.commands.AcquisitionPositionCommand;
-import frc.robot.commands.AimTurretCommand;
-import frc.robot.commands.AutomaticHoodCommand;
+// import frc.robot.commands.AimTurretCommand;
+// import frc.robot.commands.AutomaticHoodCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ManualHoodCommand;
 import frc.robot.commands.ManualStorageCommand;
 import frc.robot.commands.ShootCommand;
-import frc.robot.commands.ZeroTurretCommand;
+// import frc.robot.commands.ZeroTurretCommand;
 import frc.robot.commands.AcquireCommand.Modes;
 import frc.robot.commands.ElevatorCommand.ManualElevatorModes;
 import frc.robot.commands.ManualHoodCommand.ManualHoodModes;
@@ -34,7 +37,8 @@ public class OperatorJoystick {
     private final Turret turret = Turret.getInstance();
 
     // States
-    private boolean useManualHood = false;
+    // private boolean useManualHood = true;
+    private double shooterSpeed = 0.5;
 
     // Singleton Setup
     private static OperatorJoystick instance;
@@ -54,7 +58,7 @@ public class OperatorJoystick {
         operatorJoystick.rightTrigger.whileActiveOnce(new AcquireCommand(Modes.Dispose));
 
         // Turret
-        operatorJoystick.aButton.whenHeld(new AimTurretCommand());
+        // operatorJoystick.aButton.whenHeld(new AimTurretCommand());
 
         // Elevator
         operatorJoystick.bButton.whenHeld(new ElevatorCommand(ManualElevatorModes.Up));
@@ -67,15 +71,15 @@ public class OperatorJoystick {
                 .whileActiveOnce(new ManualStorageCommand(ManualStorageModes.Out));
 
         // Hood
-        new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Left)
-                .whenActive(() -> useManualHood = true);
-        new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Right)
-                .whenActive(() -> useManualHood = false);
+        // new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Left)
+        // .whenActive(() -> useManualHood = true);
+        // new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Right)
+        // .whenActive(() -> useManualHood = false);
         new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Up)
-                .and(new Trigger(() -> useManualHood))
+                // .and(new Trigger(() -> useManualHood))
                 .whenActive(new ManualHoodCommand(ManualHoodModes.Up));
         new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Down)
-                .and(new Trigger(() -> useManualHood))
+                // .and(new Trigger(() -> useManualHood))
                 .whenActive(new ManualHoodCommand(ManualHoodModes.Down));
 
         // Shooter
@@ -88,15 +92,29 @@ public class OperatorJoystick {
                     operatorJoystick.setLeftRumble(0);
                     operatorJoystick.setRightRumble(0);
                 });
-        operatorJoystick.leftBumper.and(new Trigger(() -> useManualHood))
-                .whileActiveOnce(new ShootCommand());
-        operatorJoystick.leftBumper.and(new Trigger(() -> !useManualHood))
-                .whileActiveOnce(new ParallelCommandGroup(
-                        new ShootCommand(),
-                        new AutomaticHoodCommand()));
+        // operatorJoystick.leftBumper.and(new Trigger(() -> useManualHood))
+        // .whileActiveOnce(new ShootCommand());
+        operatorJoystick.leftBumper
+                .whileHeld(new RunCommand(() -> shooter.shootManually(shooterSpeed), shooter))
+                .whenReleased(new InstantCommand(() -> shooter.shootManually(0), shooter));
+        // operatorJoystick.leftBumper.and(new Trigger(() -> !useManualHood))
+        // .whileActiveOnce(new ParallelCommandGroup(
+        // new ShootCommand(),
+        // new AutomaticHoodCommand()));
         operatorJoystick.leftTrigger.and(operatorJoystick.leftBumper)
                 .whileActiveContinuous(() -> shooter.feedBall());
+        new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Right)
+                .whenActive(new InstantCommand(() -> setShooterSpeed(shooterSpeed + 0.05)));
+        new Trigger(() -> operatorJoystick.getPOVPosition() == PovPositions.Left)
+                .whenActive(new InstantCommand(() -> setShooterSpeed(shooterSpeed - 0.05)));
 
-        turret.setDefaultCommand(new ZeroTurretCommand());
+        // turret.setDefaultCommand(new ZeroTurretCommand());
+        turret.setDefaultCommand(new RunCommand(() -> {
+            turret.setPower(-operatorJoystick.getRightX());
+        }, turret));
+    }
+
+    private void setShooterSpeed(double speed) {
+        this.shooterSpeed = MathUtil.clamp(speed, 0.05, 1);
     }
 }
