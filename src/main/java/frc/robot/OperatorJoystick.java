@@ -115,6 +115,6 @@ public class OperatorJoystick {
     }
 
     private void setShooterSpeed(double speed) {
-        this.shooterSpeed = MathUtil.clamp(speed, 0.05, 1);
+        this.shooterSpeed = MathUtil.clamp(speed, 0.3, 1);
     }
 }
