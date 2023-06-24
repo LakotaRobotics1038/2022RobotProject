@@ -83,15 +83,15 @@ public class OperatorJoystick {
                 .whenActive(new ManualHoodCommand(ManualHoodModes.Down));
 
         // Shooter
-        operatorJoystick.leftBumper.and(new Trigger(shooter::atSetpoint))
-                .whenActive(() -> {
-                    operatorJoystick.setLeftRumble(1);
-                    operatorJoystick.setRightRumble(1);
-                })
-                .whenInactive(() -> {
-                    operatorJoystick.setLeftRumble(0);
-                    operatorJoystick.setRightRumble(0);
-                });
+        // operatorJoystick.leftBumper.and(new Trigger(shooter::atSetpoint))
+        // .whenActive(() -> {
+        // operatorJoystick.setLeftRumble(1);
+        // operatorJoystick.setRightRumble(1);
+        // })
+        // .whenInactive(() -> {
+        // operatorJoystick.setLeftRumble(0);
+        // operatorJoystick.setRightRumble(0);
+        // });
         // operatorJoystick.leftBumper.and(new Trigger(() -> useManualHood))
         // .whileActiveOnce(new ShootCommand());
         operatorJoystick.leftBumper
